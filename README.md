@@ -1,7 +1,7 @@
 #ARSIPin_Mobile_Apps
 
 Note for Development :
-- Node.js v18.15.0 `[Download here](https://nodejs.org/dist/v18.15.0/node-v18.15.0-x64.msi){:target="_blank"}`
+- Node.js v18.15.0 [Download here](https://nodejs.org/dist/v18.15.0/node-v18.15.0-x64.msi){:target="_blank"}
 - Latest Expo GO App on Android
 - Expo 48.0.18 SDK 
 
