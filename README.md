@@ -15,7 +15,7 @@ Note for Development :
 
 After clone this repo, you must run :
 ```
-npx expo install
+npm install
 ```
 
 While developing this app, all node packages or expo packages must be install using command
