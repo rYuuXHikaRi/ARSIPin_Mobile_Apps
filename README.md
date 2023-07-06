@@ -1,14 +1,14 @@
 # ARSIPin_Mobile_Apps
 
 Note for Development :
-- Node.js v18.15.0 [Download here](https://nodejs.org/dist/v18.15.0/node-v18.15.0-x64.msi)
+- Node.js v18.15.0 [Download here](https://nodejs.org/dist/v18.15.0/node-v18.15.0-x64.msi)<br>
   Step uninstall previous Node version:
-  First, clear all npm cache using :
-  ```
-  npm cache clean -f
-  ```
+  - First, clear all npm cache using :
+    ```
+    npm cache clean -f
+    ```
 
-  And then, install the Node.js that you have download before.
+  - And then, install the Node.js that you have download before.
   
 - Latest Expo GO App on Android
 - Expo 48.0.18 SDK 
