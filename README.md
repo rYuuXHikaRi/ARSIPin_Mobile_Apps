@@ -23,9 +23,11 @@ While developing this app, all node packages or expo packages must be install us
 npx expo install {name_package}
 ```
 
+```/assets/``` is directory used for store all assets file on this project, for icon and splash you can put on root of this directory<br>
+```/components```  is directory for unsee component (like: AndroidSafeArea)<br>
 ```/components/screens```   is directory for page that have different function (like: login,home, etc) <br>
 ```/components/partials```   is directory for part of mobile have pages that have same function on every pages (like: navbar, header, etc)<br>
-```/components/middlerware```  is directory for middleware 
+```/components/middlerware```  is directory for middleware <br>
 
 Rule of name :
 - for '.js. file use this format ' homePage.js ' or ' sagas.js '
