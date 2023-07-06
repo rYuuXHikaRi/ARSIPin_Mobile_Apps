@@ -23,8 +23,8 @@ While developing this app, all node packages or expo packages must be install us
 npx expo install {name_package}
 ```
 
-```/components/screens```   is directory for page that have different function (like: login,home, etc)
-```/components/partials```   is directory for part of mobile have pages that have same function on every pages (like: navbar, header, etc)
+```/components/screens```   is directory for page that have different function (like: login,home, etc) <br>
+```/components/partials```   is directory for part of mobile have pages that have same function on every pages (like: navbar, header, etc)<br>
 ```/components/middlerware```  is directory for middleware 
 
 Rule of name :
