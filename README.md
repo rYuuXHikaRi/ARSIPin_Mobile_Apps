@@ -11,11 +11,13 @@ npx expo install
 ```
 
 While developing this app, all node packages or expo packages must be install using command
-```npx expo install {name_package}```
+```
+npx expo install {name_package}
+```
 
-```/components/screens``` is directory for page that have different function (like: login,home, etc)
-```/components/partials`` is directory for part of mobile have pages that have same function on every pages (like: navbar, header, etc)
-```/components/middlerware``` is directory for middleware 
+```/components/screens```   is directory for page that have different function (like: login,home, etc)
+```/components/partials```   is directory for part of mobile have pages that have same function on every pages (like: navbar, header, etc)
+```/components/middlerware```  is directory for middleware 
 
 Rule of name :
 - for '.js. file use this format ' homePage.js ' or ' sagas.js '
