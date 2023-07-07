@@ -5,13 +5,20 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 import DashBoard from './components/screens/dashBoard';
-
+import ManajemenBerkas from './components/screens/manajemenBerkas';
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
     <Stack.Navigator>
+    <Stack.Screen
+
+        name="manajemenberkas"
+        component={ManajemenBerkas}
+
+        options={{ headerShown: false}}
+        />
       <Stack.Screen
 
           name="dashboard"
@@ -19,6 +26,7 @@ export default function App() {
 
           options={{ headerShown: false}}
       />
+            
     </Stack.Navigator>
 </NavigationContainer>
   );

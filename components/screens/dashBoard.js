@@ -4,13 +4,41 @@ import { View, Text, StyleSheet } from 'react-native';
 const DashBoard = () => {
   return (
     <View style={styles.container}>
-      <Text style={styles.greetingText}>Halo, Administrator</Text>
-      <View style={styles.statistikBar}>
-        <Text style={styles.statistikText}>Statistik</Text>
+      <Text style={styles.title}>Halo, {'\n'}Administrator</Text>
+      <View style={styles.card}>
+        <Text style={styles.cardTitle}>Statistik</Text>
       </View>
-      <View style={styles.borderRight}></View>
-      <View style={styles.borderLeftTop}></View>
-      <View style={styles.borderLeftBottom}></View>
+      <View style={styles.row}>
+        <View style={styles.column}>
+          <View style={[styles.card1, { height: 300 }]}>
+            <Text style={styles.cardTitle}>Jumlah Akun</Text>
+            <Text style={styles.cardTitle}>{'\n'}Admin</Text>
+            <Text style={styles.cardValue}>1</Text>
+            <Text style={styles.cardTitle}>{'\n'}{'\n'}Petugas</Text>
+            <Text style={styles.cardValue}>1</Text>
+          </View>
+        </View>
+        <View style={styles.column2}>
+          <View style={styles.card2}>
+            <Text style={styles.cardTitle}>Kategori Arsip</Text>
+          </View>
+          <View style={styles.card3}>
+            <Text style={[styles.cardValue, { color: '#FBA919' }]}>6</Text>
+          </View>
+          <View style={styles.card2}>
+            <Text style={styles.cardTitle}>Jumlah Arsip</Text>
+          </View>
+          <View style={styles.card3}>
+            <Text style={[styles.cardValue, { color: '#FBA919' }]}>27</Text>
+          </View>
+        </View>
+      </View>
+      <View style={styles.card4}>
+            <Text style={styles.cardTitle}>Jumlah Arsip Diunduh</Text>
+          </View>
+          <View style={styles.card5}>
+            <Text style={[styles.cardValue, { color: '#FBA919' }]}>627</Text>
+          </View>
     </View>
   );
 };
@@ -18,49 +46,92 @@ const DashBoard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-    paddingHorizontal: 20,
+    padding: 16,
+    backgroundColor: '#F0E5E5',
   },
-  greetingText: {
-    fontSize: 20,
-    marginBottom: 20,
-  },
-  statistikBar: {
-    width: 352,
-    height: 43,
-    borderRadius: 10,
-    backgroundColor: 'linear-gradient(90deg, #197B40 0%, #79B33B 43.66%, #A6CE39 100%)',
-    marginBottom: 20,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  statistikText: {
-    color: 'white',
-    fontSize: 16,
+  title: {
+    marginTop: 40,
+    marginBottom:30,
+    fontSize: 32,
     fontWeight: 'bold',
+    color: '#6EAD3B',
   },
-  borderRight: {
-    width: 171,
-    height: 246,
-    backgroundColor: 'green',
-    marginRight: 10,
-    flexShrink: 0,
+  card: {
+    backgroundColor: '#6EAD3B',
+    borderRadius: 8,
+    padding: 16,
+    marginTop: 30,
   },
-  borderLeftTop: {
-    width: 159,
-    height: 66,
-    backgroundColor: 'gray',
-    marginRight: 10,
+  card1: {
+    backgroundColor: '#6EAD3B',
+    borderRadius: 8,
+    padding: 16,
     marginBottom: 10,
-    flexShrink: 0,
   },
-  borderLeftBottom: {
-    width: 159,
-    height: 66,
-    backgroundColor: 'gray',
-    marginRight: 10,
-    flexShrink: 0,
+  card2: {
+    backgroundColor: '#25AAE2',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 5,
+  },
+  card3: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 16,
+    width: 160,
+    marginBottom:20,
+  },
+  card4: {
+    backgroundColor: '#25AAE2',
+    borderRadius: 8,
+    padding: 16,
+    marginBottom: 5,
+    marginTop:10,
+    height:70
+  },
+  card5: {
+    backgroundColor: 'white',
+    borderRadius: 8,
+    padding: 16,
+    width: 360,
+    height:80
+  },
+  cardTitle: {
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'white',
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  cardValue: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    color: 'white',
+    textAlign: 'center',
+    justifyContent: 'center',
+  },
+  row: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 30,
+    height:300,
+    marginBottom:10,
+  },
+  column: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 8,
+  },
+  column2: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginHorizontal: 8,
+    height:300,
   },
 });
 
