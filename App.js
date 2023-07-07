@@ -6,12 +6,21 @@ import { createStackNavigator } from "@react-navigation/stack";
 
 import DashBoard from './components/screens/dashBoard';
 import ManajemenBerkas from './components/screens/manajemenBerkas';
+import ManajemenAkun from './components/screens/manajemenAkun';
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
     <Stack.Navigator>
+    <Stack.Screen
+
+        name="manajemenakun"
+        component={ManajemenAkun}
+
+        options={{ headerShown: false}}
+      />
+      
     <Stack.Screen
 
         name="manajemenberkas"

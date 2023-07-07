@@ -2,24 +2,21 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 
-const ManajemenBerkas = () => {
+const ManajemenAkun = () => {
   return (
     <View style={styles.container}>
       <View style={styles.card}>
-        <Text style={styles.cardTitle}>Manajemen Berkas</Text>
+        <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </View>
       <View style={styles.card2}>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2, styles.bottomLine]}>Kategori Arsip</Text>
-          <Text style={[styles.cardTitle3, styles.bottomLine]}>Data Arsip</Text>
+          <Text style={[styles.cardTitle2, styles.bottomLine]}>Admin</Text>
+          <Text style={[styles.cardTitle3, styles.bottomLine]}>Petugas</Text>
         </View>
       </View>
       <View style={styles.row}>
           <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>+ Tambah Kategori Arsip</Text>
-          </TouchableOpacity>
-          <TouchableOpacity style={styles.button}>
-            <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
+            <Text style={styles.buttonText}>+ Tambah Akun</Text>
           </TouchableOpacity>
         </View>
       <View style={styles.row}>
@@ -32,7 +29,7 @@ const ManajemenBerkas = () => {
   );
 };
 
-export default ManajemenBerkas;
+export default ManajemenAkun;
 
 const styles = StyleSheet.create({
   container: {
@@ -71,6 +68,7 @@ const styles = StyleSheet.create({
     color: '#6EAD3B',
     height: 30,
     justifyContent: 'center',
+    alignContent:'center',
     flex: 1,
   },
   cardTitle3: {
@@ -106,6 +104,7 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     justifyContent: 'center',
+    marginTop:10,
   },
   searchButton: {
     backgroundColor: 'white',
