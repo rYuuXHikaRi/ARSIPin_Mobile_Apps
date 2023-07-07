@@ -7,12 +7,24 @@ import { createStackNavigator } from "@react-navigation/stack";
 import DashBoard from './components/screens/dashBoard';
 import ManajemenBerkas from './components/screens/manajemenBerkas';
 import ManajemenAkun from './components/screens/manajemenAkun';
+import RiwayatUnduhan from './components/screens/riwayatUnduhan';
+
 const Stack = createStackNavigator();
 
 export default function App() {
   return (
     <NavigationContainer>
     <Stack.Navigator>
+
+
+    <Stack.Screen
+
+        name="riwayatunduhan"
+        component={RiwayatUnduhan}
+
+        options={{ headerShown: false}}
+      />
+
     <Stack.Screen
 
         name="manajemenakun"
