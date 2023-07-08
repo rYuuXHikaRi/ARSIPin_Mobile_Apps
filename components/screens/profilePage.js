@@ -13,26 +13,38 @@ const ProfilePage = () => {
           <Text style={styles.changePhotoButtonText}>Ganti Foto</Text>
         </TouchableOpacity>
       </View>
+      
       <View style={styles.attributeContainer}>
         <Text style={styles.attributeTitle}>Nama:</Text>
-        <TextInput style={styles.attributeValue} placeholder="Masukkan Nama" />
+        <View style={styles.attributeValueContainer}>
+          <TextInput style={styles.attributeValue} placeholder="Masukkan Nama" />
+        </View>
       </View>
       <View style={styles.attributeContainer}>
         <Text style={styles.attributeTitle}>Username:</Text>
-        <TextInput style={styles.attributeValue} placeholder="Masukkan Username" />
+        <View style={styles.attributeValueContainer}>
+          <TextInput style={styles.attributeValue} placeholder="Masukkan Username" />
+        </View>
       </View>
       <View style={styles.attributeContainer}>
         <Text style={styles.attributeTitle}>No HP:</Text>
-        <TextInput style={styles.attributeValue} placeholder="Masukkan No HP" />
+        <View style={styles.attributeValueContainer}>
+          <TextInput style={styles.attributeValue} placeholder="Masukkan No HP" />
+        </View>
       </View>
       <View style={styles.attributeContainer}>
         <Text style={styles.attributeTitle}>Password Lama:</Text>
-        <TextInput style={styles.attributeValue} placeholder="Masukkan Password Lama" secureTextEntry={true} />
+        <View style={styles.attributeValueContainer}>
+          <TextInput style={styles.attributeValue} placeholder="Masukkan Password Lama" secureTextEntry={true} />
+        </View>
       </View>
       <View style={styles.attributeContainer}>
         <Text style={styles.attributeTitle}>Password Baru:</Text>
-        <TextInput style={styles.attributeValue} placeholder="Masukkan Password Baru" secureTextEntry={true} />
+        <View style={styles.attributeValueContainer}>
+          <TextInput style={styles.attributeValue} placeholder="Masukkan Password Baru" secureTextEntry={true} />
+        </View>
       </View>
+
       <TouchableOpacity style={styles.saveButton}>
         <Text style={styles.saveButtonText}>Simpan</Text>
       </TouchableOpacity>
@@ -45,12 +57,11 @@ const styles = StyleSheet.create({
     flex: 1,
     padding: 16,
     backgroundColor: '#F0E5E5',
-    
   },
   profileImageContainer: {
     alignItems: 'center',
-    marginBottom: 20,
-    marginTop:50,
+    marginBottom: 40,
+    marginTop: 50,
   },
   profileImage: {
     width: 150,
@@ -66,6 +77,7 @@ const styles = StyleSheet.create({
   changePhotoButtonText: {
     color: 'white',
     fontWeight: 'bold',
+    
   },
   attributeContainer: {
     flexDirection: 'row',
@@ -75,6 +87,12 @@ const styles = StyleSheet.create({
   attributeTitle: {
     fontWeight: 'bold',
     marginRight: 10,
+    flex: 1,
+    textAlign: 'left',
+  },
+  attributeValueContainer: {
+    flex: 2,
+    height:38,
   },
   attributeValue: {
     flex: 1,
@@ -82,6 +100,7 @@ const styles = StyleSheet.create({
     borderColor: '#6EAD3B',
     borderRadius: 8,
     padding: 8,
+    fontSize:15,
   },
   saveButton: {
     backgroundColor: '#6EAD3B',
@@ -89,6 +108,7 @@ const styles = StyleSheet.create({
     padding: 12,
     alignItems: 'center',
     marginTop: 20,
+    
   },
   saveButtonText: {
     color: 'white',
