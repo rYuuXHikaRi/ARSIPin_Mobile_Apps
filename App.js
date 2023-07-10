@@ -9,6 +9,8 @@ import ManajemenBerkas from './components/screens/manajemenBerkas';
 import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
+import PopUpTaccnt from './components/screens/popUp';
+
 
 const Stack = createStackNavigator();
 
@@ -16,6 +18,21 @@ export default function App() {
   return (
     <NavigationContainer>
     <Stack.Navigator>
+
+    {/* <Stack.Screen
+
+    name='popUp'
+    component={PopUpTaccnt }
+
+    options={{ headerShown:false }}/> */}
+
+    <Stack.Screen
+
+        name="manajemenakun"
+        component={ManajemenAkun}
+
+        options={{ headerShown: false}}
+      />
 
     <Stack.Screen
 
@@ -34,13 +51,7 @@ export default function App() {
         options={{ headerShown: false}}
       />
 
-    <Stack.Screen
 
-        name="manajemenakun"
-        component={ManajemenAkun}
-
-        options={{ headerShown: false}}
-      />
       
     <Stack.Screen
 
@@ -49,6 +60,8 @@ export default function App() {
 
         options={{ headerShown: false}}
         />
+
+
       <Stack.Screen
 
           name="dashboard"
@@ -56,6 +69,8 @@ export default function App() {
 
           options={{ headerShown: false}}
       />
+
+
             
     </Stack.Navigator>
 </NavigationContainer>
