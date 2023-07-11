@@ -47,9 +47,9 @@ class Navbar extends Component {
                                                                                   require("../../assets/img/navbarBgNone.png")
                         
                     }>
-                    <Pressable style={styles.itemNavbar} onPress={() => this.props.navigation.replace('search')}>
+                    <Pressable style={styles.itemNavbar} onPress={() => this.props.navigation.replace('arsip')}>
                         {curPgStyle('SVG', 'arsip', arsipActive, arsipInActive)}
-                        <Text style={{fontSize: 12, fontWeight:"400", color:this.props.whichPage === "search" ? "#0E8388" : "#2C3333"}}>arsip</Text>
+                        <Text style={{fontSize: 12, fontWeight:"400", color:this.props.whichPage === "arsip" ? "white" : "#197B40"}}>Arsip</Text>
                     </Pressable>
                     </ImageBackground>
 
@@ -59,9 +59,9 @@ class Navbar extends Component {
                                                                                   require("../../assets/img/navbarBgNone.png")
                         
                     }>
-                        <Pressable style={styles.itemNavbar} onPress={() => this.props.navigation.replace('ranking')}>
+                        <Pressable style={styles.itemNavbar} onPress={() => this.props.navigation.replace('unduhan')}>
                             {curPgStyle('SVG', 'unduhan', unduhActive, unduhInActive)}
-                            <Text style={{fontSize: 12, fontWeight:"400", color:this.props.whichPage === "ranking" ? "#0E8388" : "#2C3333"}}>unduhan</Text>
+                            <Text style={{fontSize: 12, fontWeight:"400", color:this.props.whichPage === "unduhan" ? "white" : "#197B40"}}>Unduhan</Text>
                         </Pressable>
                     </ImageBackground>
 
@@ -73,7 +73,7 @@ class Navbar extends Component {
                     }>
                         <Pressable style={[styles.itemNavbar]} onPress={() => this.props.navigation.replace('home')}>
                             {curPgStyle('SVG', 'home', homeActive, homeInActive)}
-                            <Text style={{fontSize: 12, fontWeight:"400", color: this.props.whichPage === "home" ? "#0E8388" : "#2C3333"}}>Home</Text>
+                            <Text style={{fontSize: 12, fontWeight:"400", color: this.props.whichPage === "home" ? "white" : "#197B40"}}>Home</Text>
                         </Pressable>
                     </ImageBackground>
 
@@ -83,9 +83,9 @@ class Navbar extends Component {
                                                                                   require("../../assets/img/navbarBgNone.png")
                         
                     }>
-                        <Pressable style={styles.itemNavbar} onPress={() => this.props.navigation.replace('setting')}>
+                        <Pressable style={styles.itemNavbar} onPress={() => this.props.navigation.replace('userList')}>
                             {curPgStyle('SVG', 'userList', userListActive, userListInActive)}
-                            <Text style={{fontSize: 12, fontWeight:"400", color: this.props.whichPage === "setting" ? "#0E8388" : "#2C3333"}}>Data Akun</Text>
+                            <Text style={{fontSize: 12, fontWeight:"400", color: this.props.whichPage === "userList" ? "white" : "#197B40"}}>Data Akun</Text>
                         </Pressable>
                     </ImageBackground>
 
@@ -95,9 +95,9 @@ class Navbar extends Component {
                                                                                   require("../../assets/img/navbarBgNone.png")
                         
                     }>
-                        <Pressable style={styles.itemNavbar} onPress={() => this.props.navigation.replace('setting')}>
+                        <Pressable style={styles.itemNavbar} onPress={() => this.props.navigation.replace('userSetting')}>
                             {curPgStyle('SVG', 'userSetting', userSettingActive, userSettingInActive)}
-                            <Text style={{fontSize: 12, fontWeight:"400", color: this.props.whichPage === "setting" ? "#0E8388" : "#2C3333"}}>Saya</Text>
+                            <Text style={{fontSize: 12, fontWeight:"400", color: this.props.whichPage === "userSetting" ? "white" : "#197B40"}}>Saya</Text>
                         </Pressable>
                     </ImageBackground>
 
