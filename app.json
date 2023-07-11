@@ -2,14 +2,14 @@
   "expo": {
     "name": "ARSIPin_Mobile_Apps",
     "slug": "ARSIPin_Mobile_Apps",
-    "version": "1.0.0",
+    "version": "0.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#fdfdfd"
     },
     "assetBundlePatterns": [
       "**/*"
