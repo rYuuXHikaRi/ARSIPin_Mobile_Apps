@@ -2,6 +2,7 @@ import React,{useState} from 'react';
 import { View, Text, StyleSheet, TouchableOpacity ,Modal ,TextInput} from 'react-native';
 import { AntDesign } from '@expo/vector-icons';
 import RNPickerSelect from 'react-native-picker-select';
+import DropDownPicker from 'react-native-dropdown-picker';
 
 
 
@@ -11,7 +12,8 @@ const ManajemenAkun = () => {
   const [fullName, setFullName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState('user');
+  // const [role, setRole] = useState('user');
+  const [role, setrole] = useState('');
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -49,6 +51,12 @@ const ManajemenAkun = () => {
             }}>
             <View style={styles.centeredView}>
               <View style={styles.modalView}>
+                <TouchableOpacity
+                        style={[styles.buttonX, styles.buttonClose]}
+                        onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.X}>X</Text>
+                  </TouchableOpacity>
+                  
                 <View style={styles.Headtitle}>
                   <Text style={[styles.bottomLine,styles.titleModal]}>Tambah Akun</Text>
                 </View>
@@ -71,8 +79,7 @@ const ManajemenAkun = () => {
                         />
                     </View>
                   </View>
-
-                      <Text style={styles.titleform}>Email</Text>
+                      <Text style={styles.titleform}>Nomor HP</Text>
                       <TextInput
                         style={styles.input}
                         placeholder="Email"
@@ -84,25 +91,26 @@ const ManajemenAkun = () => {
                         placeholder="Katak sandi"
                         onChangeText={text => setPassword(text)}
                       />
+                    <View>
+                      
+                    <Text style={styles.titleform}>Role</Text>
+                        <DropDownPicker style={styles.inputRole}
+                          items={[
+                            { label: 'User', value: 'user' },
+                            { label: 'Admin', value: 'admin' },
+                          ]}
+                          defaultValue={role}
+                          placeholder="Role"
+                          containerStyle={{ height: 40, width: 200 }}
+                          onChangeItem={item => setrole(item.value)}
+                        />
+                      </View>
 
-                      {/* <RNPickerSelect
-                        style={pickerSelectStyles}
-                        value={role}
-                        onValueChange={value => setRole(value)}
-                        items={[
-                          { label: 'User', value: 'user' },
-                          { label: 'Admin', value: 'admin' },
-                        ]}
-                        /> */}
-                      <TouchableOpacity style={[styles.button, styles.buttonClose]} onPress={handleSave}>
+                      <View style={styles.btnsave}>
+                      <TouchableOpacity style={[styles.button, styles.buttonSave]} onPress={handleSave}>
                         <Text style={styles.textStyle}>Simpan</Text>
                       </TouchableOpacity>
-
-                      <TouchableOpacity
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}>
-                        <Text>Hide Modal</Text>
-                      </TouchableOpacity>
+                      </View>
                     </View>
                   </View>
                 </Modal>
@@ -130,7 +138,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: 354,
-    height: 444,
+    height: 504,
     marginLeft: 20,
     marginRight:20,
     marginTop:-130,
@@ -145,24 +153,50 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
-  button: {
+  buttonX: {
     borderRadius: 20,
-    padding: 1,
+    width:40,
+    height:40,
+    justifyContent:'center',
+    alignItems:'center',
+    position:'absolute',
+    zIndex:2,
+    alignItems:'flex-end',
+    marginLeft:330,
+    marginTop:-15,
+  },
+  X:{
+    alignContent:'center',
+    alignSelf:'center',
+    color:'white',
+    fontSize:20,
   },
   buttonOpen: {
     backgroundColor: '#F194FF',
   },
   buttonClose: {
-    backgroundColor: '#2196F3',
+    backgroundColor: '#FBA919',
+    alignItems:'flex-end',
+  },
+  buttonSave: {
+    backgroundColor: '#6EAD3B',
+    width:109,
+    height:43,
+  },
+  btnsave:{
+    width:109,
+    height:73,
+    marginLeft:15,
+    paddingTop:10,
   },
   textStyle: {
-    color: 'white',
+    color: '#F6F6F6',
     fontWeight: 'bold',
     textAlign: 'center',
   },
   titleModal: {
     fontSize: 20,
-    marginTop:22,
+    marginTop:10,
     fontWeight: 'bold',
     color: '#6EAD3B',
     paddingBottom:8,
@@ -190,6 +224,17 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     backgroundColor: '#F6F6F6',
     borderRadius: 8,
+  },
+  inputRole:{
+    width: 319,
+    height: 40,
+    paddingHorizontal: 10,
+    marginBottom: 10,
+    backgroundColor: '#F6F6F6',
+    borderRadius: 8,
+    borderColor:'#F6F6F6',
+    marginLeft:18,
+    marginRight:18,
   },
   titleform:{
     fontSize: 20,
