@@ -35,7 +35,8 @@ const ManajemenAkun = () => {
       </View>
       <View style={styles.card2}>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2, styles.bottomLine]}>Admin</Text>
+          <TouchableOpacity>
+          <Text style={[styles.cardTitle2, styles.bottomLine]}>Admin</Text></TouchableOpacity>
           <Text style={[styles.cardTitle3, styles.bottomLine]}>Petugas</Text>
         </View>
       </View>
