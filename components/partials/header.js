@@ -4,27 +4,32 @@ import {
     Text,
     StyleSheet,
     SafeAreaView,
-    Pressable
+    Pressable,
+    Image,
+    Dimensions
 } from "react-native";
-import Octicons from "react-native-vector-icons/Octicons";
 import { useNavigation  } from "@react-navigation/native";
 
 class Header extends Component {
     render() {
+        const screenWidth = Dimensions.get('window').width;
         const { navigation } = this.props;
         return (
             <SafeAreaView>
-                <View style={[styles.container, {backgroundColor: "#2C3333"}]}>
-                    <Pressable onPress={() => this.props.navigation.goBack()}>
-                        <Octicons name="arrow-left" size={30} style={{color: "#CBE4DE"}}/>
+                <View style={[styles.container, {backgroundColor: "white", width: screenWidth}]}>
+                   <View style={styles.pingIndicator}/>
+                    <Image source={require('../../assets/img/GGF.png')}/>  
+                    <Pressable>
+                        <View style={styles.profileContainer}>
+                            <Image source={require('../../assets/img/profileTmp.jpeg')} style={styles.croppedProfile}/>
+                        </View>
                     </Pressable>
-                    <Text style={styles.headerText}>{this.props.headerTitle}</Text>
-                    <View style={styles.dummyItem}></View>   
                 </View>
             </SafeAreaView>
         );
     }
 }
+
 export default function (props) {
     const navigation = useNavigation();
     return <Header {...props} navigation={navigation} />;
@@ -41,13 +46,24 @@ const styles = StyleSheet.create({
         paddingRight: 13,
         paddingLeft: 13,
     },
-    headerText:{
-        fontWeight: "700",
-        fontSize: 20,
-        color: "#CBE4DE",
+    pingIndicator: {
+        width: 20,
+        height: 20,
+        borderRadius: 10,
+
+        backgroundColor: "#197b40",
     },
-    dummyItem : {
-        width: 280,
+    profileContainer : {
+        width: 30,
         height: 30,
+        overflow: "hidden",
+    },
+    croppedProfile :{
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+
+        borderRadius: 50,
+        borderColor: "#197b40",
     },
 });
