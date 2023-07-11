@@ -61,7 +61,7 @@ const ManajemenAkun = () => {
                   <Text style={[styles.bottomLine,styles.titleModal]}>Tambah Akun</Text>
                 </View>
                   <View style={styles.styletitle}>
-                    <View style={styles.styletitle2}>
+                      <View style={styles.styletitle2}>
                         <Text style={styles.titleform}>Nama User</Text>
                         <TextInput
                           style={[styles.inputName]}
@@ -70,40 +70,49 @@ const ManajemenAkun = () => {
                         /> 
                       </View>
         
-                    <View style={styles.styletitle2}>
-                        <Text style={styles.titleform}>Nama Lengkap</Text>
+                      <View style={styles.styletitle2}>
+                          <Text style={styles.titleform}>Nama Lengkap</Text>
+                          <TextInput
+                            style={styles.inputName}
+                            placeholder="Nama Lengkap"
+                            onChangeText={text => setFullName(text)}
+                          />
+                      </View>
+
+                      </View>
+                        <Text style={styles.titleform}>Nomor HP</Text>
                         <TextInput
-                          style={styles.inputName}
-                          placeholder="Nama Lengkap"
-                          onChangeText={text => setFullName(text)}
+                          style={styles.input}
+                          placeholder="Email"
+                          onChangeText={text => setEmail(text)}
                         />
-                    </View>
-                  </View>
-                      <Text style={styles.titleform}>Nomor HP</Text>
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Email"
-                        onChangeText={text => setEmail(text)}
-                      />
-                      <Text style={styles.titleform}>Kata Sandi</Text>
-                      <TextInput
-                        style={styles.input}
-                        placeholder="Katak sandi"
-                        onChangeText={text => setPassword(text)}
-                      />
-                    <View>
-                      
-                    <Text style={styles.titleform}>Role</Text>
-                        <DropDownPicker style={styles.inputRole}
-                          items={[
-                            { label: 'User', value: 'user' },
-                            { label: 'Admin', value: 'admin' },
-                          ]}
-                          defaultValue={role}
-                          placeholder="Role"
-                          containerStyle={{ height: 40, width: 200 }}
-                          onChangeItem={item => setrole(item.value)}
+                        
+                        <Text style={styles.titleform}>Kata Sandi</Text>
+                        <TextInput
+                          style={styles.input}
+                          placeholder="Katak sandi"
+                          onChangeText={text => setPassword(text)}
                         />
+
+                      <View style={styles.styletitle3}>
+                        <View style={styles.styletitle2}>
+                          <Text style={styles.titleform}>Role</Text>
+                              <DropDownPicker style={styles.inputRole}
+                                items={[
+                                  { label: 'User', value: 'user' },
+                                  { label: 'Admin', value: 'admin' },
+                                ]}
+                                defaultValue={role}
+                                placeholder="Role"
+                                containerStyle={{ height: 40, width: 200 }}
+                                onChangeItem={item => setrole(item.value)}
+                              />
+                        </View>
+
+                        <View style={styles.styletitle2}> 
+                          <Text style={styles.titleformFoto}>Foto</Text>
+                          <TextInput style={styles.inputFile}>ChooseFIle</TextInput>
+                        </View>
                       </View>
 
                       <View style={styles.btnsave}>
@@ -135,6 +144,8 @@ const styles = StyleSheet.create({
   centeredView: {
     flex: 1,
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
   },
   modalView: {
     width: 354,
@@ -226,15 +237,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   inputRole:{
-    width: 319,
+    width: 153,
+    height: 34,
+    marginLeft:16,
+    paddingHorizontal: 10,
+    backgroundColor: '#F6F6F6',
+    borderColor:'#F6F6F6',
+    borderRadius: 8,
+  },
+  inputFile:{
+    width: 135,
     height: 40,
     paddingHorizontal: 10,
-    marginBottom: 10,
     backgroundColor: '#F6F6F6',
     borderRadius: 8,
-    borderColor:'#F6F6F6',
-    marginLeft:18,
-    marginRight:18,
   },
   titleform:{
     fontSize: 20,
@@ -245,12 +261,24 @@ const styles = StyleSheet.create({
     height: 30,
     flexDirection:'column',
   },
+  titleformFoto:{
+    fontSize: 20,
+    fontWeight: 'bold',
+    marginBottom: 8,
+    marginLeft:0,
+    color: '#6EAD3B',
+    height: 30,
+    flexDirection:'column',
+  },
   styletitle:{
     flexDirection:'row',
     paddingTop:18,
   },
   styletitle2:{
     justifyContent: 'space-between',
+  },
+  styletitle3:{
+    flexDirection:'row',
   },
   Headtitle:{
     paddingLeft:16,
