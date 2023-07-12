@@ -19,13 +19,14 @@ export default function App() {
     <NavigationContainer>
     <Stack.Navigator>
 
-    {/* <Stack.Screen
+    <Stack.Screen
 
-    name='popUp'
-    component={PopUpTaccnt }
+        name="manajemenberkas"
+        component={ManajemenBerkas}
 
-    options={{ headerShown:false }}/> */}
-
+        options={{ headerShown: false}}
+        />
+        
     <Stack.Screen
 
         name="manajemenakun"
@@ -50,16 +51,6 @@ export default function App() {
 
         options={{ headerShown: false}}
       />
-
-
-      
-    <Stack.Screen
-
-        name="manajemenberkas"
-        component={ManajemenBerkas}
-
-        options={{ headerShown: false}}
-        />
 
 
       <Stack.Screen
