@@ -16,7 +16,13 @@ export default function App() {
   return (
     <NavigationContainer>
     <Stack.Navigator>
+    <Stack.Screen
 
+          name="dashboard"
+          component={DashBoard}
+
+          options={{ headerShown: false}}
+      />
     <Stack.Screen
 
         name="profilepage"
@@ -49,13 +55,7 @@ export default function App() {
 
         options={{ headerShown: false}}
         />
-      <Stack.Screen
-
-          name="dashboard"
-          component={DashBoard}
-
-          options={{ headerShown: false}}
-      />
+      
             
     </Stack.Navigator>
 </NavigationContainer>
