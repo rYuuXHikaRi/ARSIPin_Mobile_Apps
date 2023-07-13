@@ -6,9 +6,13 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
+  SafeAreaView,
+  Pressable,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
+import Header from "../partials/header";
+import Navbar from "../partials/navbar";
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,16 +36,20 @@ const ManajemenAkun = () => {
   };
 
   return (
-    <View style={styles.container}>
+    <SafeAreaView style={styles.container}>
+      <View style={{ position: "absolute", top: 0 }}>
+        <Header />
+      </View>
       <View style={styles.card}>
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </View>
       <View style={styles.card2}>
-        <View style={styles.row}>
+        <View style={[styles.row]}>
           <TouchableOpacity>
             <Text style={[styles.cardTitle2, styles.bottomLine]}>Admin</Text>
           </TouchableOpacity>
           <Text style={[styles.cardTitle3, styles.bottomLine]}>Petugas</Text>
+        
         </View>
       </View>
       <View style={styles.row}>
@@ -120,7 +128,7 @@ const ManajemenAkun = () => {
 
                   <View style={styles.styletitle2}>
                     <Text style={styles.titleformFoto}>Foto</Text>
-                    <TextInput style={styles.inputFile}>ChooseFIle</TextInput>
+                    <TextInput style={styles.inputFile} placeholder="Pilih" />
                   </View>
                 </View>
 
@@ -147,7 +155,10 @@ const ManajemenAkun = () => {
           <Text style={styles.searchButtonText}> Pencarian...</Text>
         </TouchableOpacity>
       </View>
-    </View>
+      <View style={{ position: "absolute", bottom: 0 }}>
+        <Navbar whichPage="arsip" />
+      </View>
+    </SafeAreaView>
   );
 };
 
@@ -311,16 +322,18 @@ const styles = StyleSheet.create({
   card: {
     backgroundColor: "#6EAD3B",
     borderRadius: 8,
-    padding: 16,
-    marginTop: 50,
-    height: 60,
+    // padding: 8,
+    paddingVertical: 12,
+    paddingHorizontal: 12,
+    marginTop: 65,
+    // height: 60,
   },
   card2: {
     backgroundColor: "white",
     borderRadius: 10,
     padding: 16,
     marginBottom: 5,
-    marginTop: 30,
+    marginTop: 20,
     height: 462,
     width: 354,
   },
@@ -330,7 +343,6 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     marginBottom: 8,
     color: "white",
-    height: 43,
     width: 352,
     justifyContent: "center",
   },
@@ -340,15 +352,13 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: "#6EAD3B",
     height: 30,
-    justifyContent: "center",
-    alignContent: "center",
-    flex: 1,
+    flex:1,
   },
   cardTitle3: {
     fontSize: 20,
     fontWeight: "bold",
     marginBottom: 8,
-    color: "#6EAD3B",
+    color: "#A19797",
     height: 30,
     justifyContent: "center",
     textAlign: "right",
@@ -360,8 +370,14 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bottomLine: {
-    borderBottomColor: "#6EAD3B",
+    // borderBottomColor: "#6EAD3B",
     borderBottomWidth: 1,
+  
+  },
+  bottomLineprimary: {
+    borderBottomColor: "#A19797",
+    borderBottomWidth: 1,
+    flexDirection:'row',
   },
   button: {
     backgroundColor: "#6EAD3B",

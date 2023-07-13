@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
-
+import { LinearGradient } from 'expo-linear-gradient';
 import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
