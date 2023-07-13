@@ -296,7 +296,7 @@ const styles = StyleSheet.create({
   },
   Headtitle: {
     paddingLeft: 16,
-    paddingRight:16,
+    paddingRight: 16,
   },
   pickerSelectStyles: {
     padding: 1,

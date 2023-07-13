@@ -118,7 +118,10 @@ const ManajemenBerkas = () => {
 
                 <View style={styles.styletitle4}>
                   <Text style={styles.titleformupload}>Upload File</Text>
-                  <TextInput style={styles.inputFile} placeholder="Pilih"></TextInput>
+                  <TextInput
+                    style={styles.inputFile}
+                    placeholder="Pilih"
+                  ></TextInput>
                 </View>
               </View>
 
@@ -216,7 +219,7 @@ const styles = StyleSheet.create({
     width: 109,
     height: 73,
     marginLeft: 15,
-    marginTop:-10,
+    marginTop: -10,
     paddingTop: 10,
   },
   textStyle: {
@@ -226,7 +229,7 @@ const styles = StyleSheet.create({
   },
   titleModal: {
     fontSize: 20,
-    marginTop: 10, 
+    marginTop: 10,
     fontWeight: "bold",
     color: "#6EAD3B",
     paddingBottom: 8,
@@ -240,14 +243,14 @@ const styles = StyleSheet.create({
     height: 30,
     flexDirection: "column",
   },
-  titleformupload:{
+  titleformupload: {
     fontSize: 17,
     fontWeight: "bold",
     marginBottom: 0,
     marginLeft: 18,
     color: "#6EAD3B",
     height: 30,
-    paddingVertical:5,
+    paddingVertical: 5,
   },
   input: {
     width: 319,
@@ -264,11 +267,11 @@ const styles = StyleSheet.create({
     borderColor: "gray",
     borderStyle: "solid",
   },
-  inputketerangan:{
+  inputketerangan: {
     width: 319,
     height: 80,
     paddingHorizontal: 10,
-    paddingVertical:10,
+    paddingVertical: 10,
     marginBottom: 10,
     backgroundColor: "#F6F6F6",
     borderRadius: 8,
@@ -282,9 +285,9 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     borderRadius: 8,
     marginLeft: 18,
-    borderWidth: 2, // Ketebalan border
+    borderWidth: 2,
     borderRadius: 10,
-    borderColor:'#D7DF23',
+    borderColor: "#D7DF23",
   },
   styletitle: {
     flexDirection: "row",
@@ -296,7 +299,7 @@ const styles = StyleSheet.create({
   styletitle3: {
     flexDirection: "row",
   },
-  styletitle4:{
+  styletitle4: {
     flexDirection: "row",
     paddingTop: 10,
   },
@@ -364,7 +367,7 @@ const styles = StyleSheet.create({
   bottomLine: {
     borderBottomColor: "#6EAD3B",
     borderBottomWidth: 1,
-    marginBottom:4,
+    marginBottom: 4,
   },
   button: {
     backgroundColor: "#6EAD3B",
@@ -380,6 +383,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "center",
     justifyContent: "center",
+    paddingVertical: 10,
   },
   searchButton: {
     backgroundColor: "white",
