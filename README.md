@@ -13,7 +13,7 @@ Note for Development :
 - Latest Expo GO App on Android
 - Expo 48.0.18 SDK 
 
-After clone this repo, you must run :
+After clone this repo, you must run (make sure there's no folder named 'node_module', '.expo' and file named 'package-lock.json', if there just delete it) :
 ```
 npm install
 ```
@@ -21,6 +21,11 @@ npm install
 While developing this app, all node packages or expo packages must be install using command
 ```
 npx expo install {name_package}
+```
+
+After merge from another branch must run: 
+```
+npx expi install
 ```
 
 ```/assets/``` is directory used for store all assets file on this project, for icon and splash you can put on root of this directory<br>
@@ -32,3 +37,4 @@ npx expo install {name_package}
 Rule of name :
 - for '.js. file use this format ' homePage.js ' or ' sagas.js '
 - for React Component use this format ' HomePage '  or ' App '
+- for naming variable same with naming '.js' file
