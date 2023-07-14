@@ -91,7 +91,7 @@ class Navbar extends Component {
 
                     {/* UserSetting */}
                     <ImageBackground source={
-                                                this.props.whichPage === "userList" ? require("../../assets/img/navbarBg.png") : 
+                                                this.props.whichPage === "userSetting" ? require("../../assets/img/navbarBg.png") : 
                                                                                   require("../../assets/img/navbarBgNone.png")
                         
                     }>
