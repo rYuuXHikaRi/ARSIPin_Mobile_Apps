@@ -16,6 +16,16 @@ export default function App() {
   return (
     <NavigationContainer>
     <Stack.Navigator>
+    
+    <Stack.Screen
+
+        name="manajemenberkas"
+        component={ManajemenBerkas}
+
+        options={{ headerShown: false}}
+        />
+    
+    
     <Stack.Screen
 
           name="dashboard"
@@ -48,13 +58,7 @@ export default function App() {
         options={{ headerShown: false}}
       />
       
-    <Stack.Screen
-
-        name="manajemenberkas"
-        component={ManajemenBerkas}
-
-        options={{ headerShown: false}}
-        />
+    
       
             
     </Stack.Navigator>
