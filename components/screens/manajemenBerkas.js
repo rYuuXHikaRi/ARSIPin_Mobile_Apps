@@ -146,7 +146,7 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontWeight: '300',
-    fontSize:'20'
+    
   },
   boldText: {
     fontWeight: 'bold',
