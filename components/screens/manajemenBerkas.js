@@ -8,9 +8,8 @@ import {
   Modal,
   TextInput,
 } from "react-native";
-import { AntDesign } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
-import { AntDesign } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
 import AndroidSafeView from "../AndroidSafeView";
@@ -26,27 +25,30 @@ const ManajemenBerkas = () => {
   const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
 
-  const tableHead = ['Nama', 'Lokasi', 'Aksi'];
+  
+  const tableHead = ['Nama Folder', 'Aksi'];
   const tableData = [
-    ['File 1', 'Lokasi 1', renderOpsiIcons()],
-    ['File 2', 'Lokasi 2', renderOpsiIcons()],
-    ['File 3', 'Lokasi 3', renderOpsiIcons()],
+    [<TouchableOpacity onPress={() => console.log('File 1')}>
+      <Text style={styles.tableText}>File 1</Text>
+    </TouchableOpacity>, renderOpsiIcons()],
+    [<TouchableOpacity onPress={() => console.log('File 2')}>
+      <Text style={styles.tableText}>File 2</Text>
+    </TouchableOpacity>, renderOpsiIcons()],
+    [<TouchableOpacity onPress={() => console.log('File 3')}>
+      <Text style={styles.tableText}>File 3</Text>
+    </TouchableOpacity>, renderOpsiIcons()],
     // tambahkan data lainnya di sini sesuai kebutuhan
   ];
 
   function renderOpsiIcons() {
     return (
       <View style={styles.opsiContainer}>
-        <TouchableOpacity style={styles.opsiButton}>
-          <AntDesign name="edit" size={25} color="#34A63A"/>
-        </TouchableOpacity>
-        <TouchableOpacity style={styles.opsiButton}>
-          <AntDesign name="eye" size={25} color="#34A63A" />
+        <TouchableOpacity onPress={() => console.log('Opsi titik-tiga')}>
+          <MaterialCommunityIcons name="dots-vertical" size={24} color="black" />
         </TouchableOpacity>
       </View>
     );
   }
-
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -59,6 +61,98 @@ const ManajemenBerkas = () => {
     // Setelah melakukan sesuatu, tutup modal
     setModalVisible(false);
   };
+
+  const renderOpsiModal = () => {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisible}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisible(!modalVisible);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TouchableOpacity
+              style={[styles.buttonX, styles.buttonClose]}
+              onPress={() => setModalVisible(!modalVisible)}
+            >
+              <Text style={styles.X}>X</Text>
+            </TouchableOpacity>
+
+            <View style={styles.Headtitle}>
+              <Text style={[styles.bottomLine, styles.titleModal]}>
+                Tambah Arsip Baru
+              </Text>
+            </View>
+            <View>
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Nama Dokumen</Text>
+                <TextInput
+                  style={[styles.input]}
+                  placeholder="Nama Dokumen"
+                  onChangeText={(text) => setnamadokumen(text)}
+                />
+              </View>
+
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Keterangan</Text>
+                <TextInput
+                  style={styles.inputketerangan}
+                  placeholder="Keterangan"
+                  onChangeText={(text) => setketerangan(text)}
+                />
+              </View>
+            </View>
+            <Text style={styles.titleform}>Tahun</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="tahun"
+              onChangeText={(text) => settahun(text)}
+            />
+
+            <Text style={styles.titleform}>Nama Desa</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Nama Desa"
+              onChangeText={(text) => setnamadesa(text)}
+            />
+
+            <View>
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Loker"
+                  onChangeText={(text) => settahun(text)}
+                />
+              </View>
+
+              <View style={styles.styletitle4}>
+                <Text style={styles.titleformupload}>Upload File</Text>
+                <TextInput
+                  style={styles.inputFile}
+                  placeholder="Pilih"
+                ></TextInput>
+              </View>
+            </View>
+
+            <View style={styles.btnsave}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonSave]}
+                onPress={handleSave}
+              >
+                <Text style={styles.textStyle}>Simpan</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ position: "absolute", top: 0 }}>
@@ -72,105 +166,19 @@ const ManajemenBerkas = () => {
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
         <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
-          <Row data={tableHead} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText]} />
+          <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText]} />
           {tableData.map((rowData, index) => (
             <Row
               key={index}
-              data={rowData}
+              data={rowData}flexArr={[4, 1]}
               style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
               textStyle={styles.text}
             />
           ))}
         </Table>
       </View>
-
       <View style={styles.row}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <TouchableOpacity
-                style={[styles.buttonX, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.X}>X</Text>
-              </TouchableOpacity>
-
-              <View style={styles.Headtitle}>
-                <Text style={[styles.bottomLine, styles.titleModal]}>
-                  Tambah Arsip Baru
-                </Text>
-              </View>
-              <View>
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Nama Dokumen</Text>
-                  <TextInput
-                    style={[styles.input]}
-                    placeholder="Nama Dokumen"
-                    onChangeText={(text) => setnamadokumen(text)}
-                  />
-                </View>
-
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Keterangan</Text>
-                  <TextInput
-                    style={styles.inputketerangan}
-                    placeholder="Keterangan"
-                    onChangeText={(text) => setketerangan(text)}
-                  />
-                </View>
-              </View>
-              <Text style={styles.titleform}>Tahun</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="tahun"
-                onChangeText={(text) => settahun(text)}
-              />
-
-              <Text style={styles.titleform}>Nama Desa</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Nama Desa"
-                onChangeText={(text) => setnamadesa(text)}
-              />
-
-              <View>
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
-                  <TextInput
-                    style={styles.input}
-                    placeholder="Loker"
-                    onChangeText={(text) => settahun(text)}
-                  />
-                </View>
-
-                <View style={styles.styletitle4}>
-                  <Text style={styles.titleformupload}>Upload File</Text>
-                  <TextInput
-                    style={styles.inputFile}
-                    placeholder="Pilih"
-                  ></TextInput>
-                </View>
-              </View>
-
-              <View style={styles.btnsave}>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonSave]}
-                  onPress={handleSave}
-                >
-                  <Text style={styles.textStyle}>Simpan</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
+        {renderOpsiModal()}
       </View>
 
       <View style={styles.row}>
@@ -195,6 +203,7 @@ const ManajemenBerkas = () => {
 };
 
 export default ManajemenBerkas;
+
 const styles = StyleSheet.create({
   //Modal Style
   centeredView: {
@@ -442,7 +451,6 @@ const styles = StyleSheet.create({
   text: {
     textAlign: 'center',
     fontWeight: '300',
-    
   },
   boldText: {
     fontWeight: 'bold',
@@ -464,6 +472,7 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "left",
   },
+  tableText: {
+    textAlign: 'center',
+  },
 });
-
-export default ManajemenBerkas;
