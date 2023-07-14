@@ -15,6 +15,7 @@ const screenWidth = Dimensions.get('window').width;
 const logoWidth = 113 * 1.3; const logoHeight = 57 * 1.3;
 
 const LoginPage = ({navigation}) => {
+  const [loginData, setLoginData] = useState({username: '', password: ''});
   const [keyBoardStat, setKeyboardStat] = useState('notshowed');
 
   useEffect(() => {
@@ -35,6 +36,7 @@ const LoginPage = ({navigation}) => {
   }, []);
 
   console.log(keyBoardStat);
+  console.log(loginData)
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{backgroundColor: '#F0E5E5'}}> 
@@ -71,7 +73,7 @@ const LoginPage = ({navigation}) => {
                             />
                           </View>
 
-                          <Pressable onPress={() => {console.log('Login Button Pressed')}} style={{marginTop: 7}}>
+                          <Pressable onPress={() => {navigation.navigate('dashboard')}} style={{marginTop: 7}}>
                             <LinearGradient
                                             colors={['#90C13B', '#7CB53C', '#378D3F']}
                                             start={[0, 0.5]}
