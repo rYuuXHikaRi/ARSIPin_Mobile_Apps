@@ -11,6 +11,8 @@ import ManajemenBerkas from './components/screens/manajemenBerkas';
 import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
+import PopUpTaccnt from './components/screens/popUp';
+
 
 const Stack = createStackNavigator();
 
