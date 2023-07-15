@@ -12,6 +12,7 @@ import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
 import PopUpTaccnt from './components/screens/popUp';
+import detailBerkas from './components/screens/detailBerkas';
 
 
 const Stack = createStackNavigator();
@@ -20,7 +21,13 @@ export default function App() {
   return (
     <NavigationContainer>
     <Stack.Navigator>
-    
+    <Stack.Screen
+
+        name="detail"
+        component={detailBerkas}
+
+        options={{ headerShown: false}}
+        />
     <Stack.Screen
 
         name="manajemenberkas"

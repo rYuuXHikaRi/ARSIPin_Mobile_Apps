@@ -6,9 +6,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Modal,
-  TextInput,ScrollView
+  TextInput,
+  ScrollView
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons ,FontAwesome} from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -16,7 +17,7 @@ import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 
-const ManajemenBerkas = () => {
+const detailBerkas = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [namadokumen, setnamadokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
@@ -26,7 +27,7 @@ const ManajemenBerkas = () => {
   const [namafile, setnamafile] = useState("");
 
   
-  const tableHead = ['Nama Folder', 'Aksi'];
+  const tableHead = ['Nama File', 'Aksi'];
   const tableData = [
     [<TouchableOpacity onPress={() => console.log('File 1')}>
       <Text style={[styles.tableText, { fontSize: 20 }]}>File 1</Text>
@@ -37,7 +38,7 @@ const ManajemenBerkas = () => {
     [<TouchableOpacity onPress={() => console.log('File 3')}>
       <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
     </TouchableOpacity>, renderOpsiIcons()],
-      [<TouchableOpacity onPress={() => console.log('File 3')}>
+        [<TouchableOpacity onPress={() => console.log('File 3')}>
       <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
     </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
       <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
@@ -55,9 +56,21 @@ const ManajemenBerkas = () => {
 
   function renderOpsiIcons() {
     return (
-      <View style={styles.opsiContainer}>
-        <TouchableOpacity onPress={() => console.log('Opsi titik-tiga')}>
-          <MaterialCommunityIcons name="dots-vertical" size={30} color="black" />
+        <View style={styles.opsiContainer}>
+        <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
+          <MaterialCommunityIcons
+            name="eye"
+            size={25}
+            color="black"
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
+          <FontAwesome
+            name="trash"
+            size={25}
+            color="black"
+          />
         </TouchableOpacity>
       </View>
     );
@@ -176,7 +189,19 @@ const ManajemenBerkas = () => {
       </View>
       <View style={styles.card2}>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
+          <Text style={[styles.cardTitle2, styles.bottomLine]}>Detail Arsip</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.cardTitle2]}>Nama : Folder A</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.cardTitle2]}>Tahun: 2013</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.cardTitle2]}>Desa : Desa A</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : Loker A</Text>
         </View>
         <ScrollView>
         <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
@@ -218,7 +243,7 @@ const ManajemenBerkas = () => {
   );
 };
 
-export default ManajemenBerkas;
+export default detailBerkas;
 
 const styles = StyleSheet.create({
   //Modal Style
