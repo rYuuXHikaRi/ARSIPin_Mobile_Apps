@@ -7,10 +7,11 @@ import {
   Modal,
   TextInput,
   SafeAreaView,
-  Pressable,
+  Pressable,ScrollView
 } from "react-native";
-import { AntDesign } from "@expo/vector-icons";
+import { AntDesign ,MaterialCommunityIcons ,FontAwesome} from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
+import { Table, Row } from 'react-native-table-component';
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 
@@ -22,6 +23,42 @@ const ManajemenAkun = () => {
   const [password, setPassword] = useState("");
   // const [role, setRole] = useState('user');
   const [role, setrole] = useState("");
+
+  const tableHead = ['Nama','Role', 'Aksi'];
+  const tableData = [
+    [<TouchableOpacity onPress={() => console.log('Akun 1')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>Agus</Text>
+    </TouchableOpacity>,<Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>, renderOpsiIcons()],
+    [<TouchableOpacity onPress={() => console.log('Akun 2')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>Sunar</Text>
+    </TouchableOpacity>,<Text style={[styles.tableText, { fontSize: 20 }]}>Petugas</Text>, renderOpsiIcons()],
+    [<TouchableOpacity onPress={() => console.log('Akun 3')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>Yo</Text>
+    </TouchableOpacity>, <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,renderOpsiIcons()],
+    // tambahkan data lainnya di sini sesuai kebutuhan
+  ];
+
+  function renderOpsiIcons() {
+    return (
+      <View style={styles.opsiContainer}>
+        <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
+          <MaterialCommunityIcons
+            name="pencil"
+            size={25}
+            color="black"
+          />
+        </TouchableOpacity>
+
+        <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
+          <FontAwesome
+            name="trash"
+            size={25}
+            color="black"
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -44,13 +81,20 @@ const ManajemenAkun = () => {
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </View>
       <View style={styles.card2}>
-        <View style={[styles.row]}>
-          <TouchableOpacity>
-            <Text style={[styles.cardTitle2, styles.bottomLine]}>Admin</Text>
-          </TouchableOpacity>
-          <Text style={[styles.cardTitle3, styles.bottomLine]}>Petugas</Text>
-        
-        </View>
+      <ScrollView>
+        <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
+          <Row data={tableHead} flexArr={[4,2, 1.3]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
+          {tableData.map((rowData, index,columnData) => (
+            <Row
+              key={index}
+              data={rowData}flexArr={[4, 2,1.3]}
+              
+              style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
+              textStyle={styles.text}
+            />
+          ))}
+        </Table>
+        </ScrollView>
       </View>
       <View style={styles.row}>
         <TouchableOpacity style={styles.button}>
@@ -411,4 +455,34 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     textAlign: "left",
   },
+  header: {
+    height: 50,
+    backgroundColor: '#A6D17A',},
+    text: {
+      textAlign: 'center',
+      fontWeight: '300',
+    },
+    boldText: {
+      fontWeight: 'bold',
+    },
+    dataWrapper: {
+      marginTop: -1,
+    },
+    opsiContainer: {
+      flexDirection: 'row',
+      justifyContent: 'center',
+    },
+    opsiButton: {
+      marginHorizontal: 5,
+      flexDirection: "row",
+      alignItems: "center",
+    },
+    searchButtonText: {
+      color: "black",
+      fontWeight: "bold",
+      textAlign: "left",
+    },
+    tableText: {
+      textAlign: 'center',
+    },
 });
