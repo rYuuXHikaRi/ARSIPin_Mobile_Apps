@@ -12,7 +12,7 @@ import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
 import PopUpTaccnt from './components/screens/popUp';
-import detailBerkas from './components/screens/detailBerkas';
+import detailBerkas from './components/screens/DetailBerkas';
 
 
 const Stack = createStackNavigator();
