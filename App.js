@@ -12,7 +12,6 @@ import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
 import PopUpTaccnt from './components/screens/popUp';
-import detailBerkas from './components/screens/detailBerkas';
 
 
 const Stack = createStackNavigator();
@@ -20,59 +19,56 @@ const Stack = createStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-    <Stack.Navigator>
-    <Stack.Screen
-
-        name="detail"
-        component={detailBerkas}
-
-        options={{ headerShown: false}}
-        />
-    <Stack.Screen
-
-        name="manajemenberkas"
-        component={ManajemenBerkas}
-
-        options={{ headerShown: false}}
-        />
-    
-    
-    <Stack.Screen
+      <Stack.Navigator>
+        {/* <Stack.Screen
 
             name="login"
             component={LoginPage}
 
-          options={{ headerShown: false}}
-      />
-    <Stack.Screen
+            options={{ headerShown: false}}
+        />
+        <Stack.Screen
 
-        name="profilepage"
-        component={ProfilePage}
+            name="dashboard"
+            component={DashBoard}
 
-        options={{ headerShown: false}}
-    />
+            options={{ headerShown: false}}
+        />
+        <Stack.Screen
+
+            name="profilepage"
+            component={ProfilePage}
+
+            options={{ headerShown: false}}
+        />
 
 
-    <Stack.Screen
+        <Stack.Screen
 
-        name="riwayatunduhan"
-        component={RiwayatUnduhan}
+            name="riwayatunduhan"
+            component={RiwayatUnduhan}
 
-        options={{ headerShown: false}}
-      />
+            options={{ headerShown: false}}
+        />
 
-    <Stack.Screen
+        <Stack.Screen
 
-        name="manajemenakun"
-        component={ManajemenAkun}
+            name="manajemenakun"
+            component={ManajemenAkun}
 
-        options={{ headerShown: false}}
-      />
-      
-    
-      
-            
-    </Stack.Navigator>
-</NavigationContainer>
+            options={{ headerShown: false}}
+        /> */}
+          
+        <Stack.Screen
+
+            name="manajemenberkas"
+            component={ManajemenBerkas}
+
+            options={{ headerShown: false}}
+        />
+        
+              
+      </Stack.Navigator>
+  </NavigationContainer>
   );
 }

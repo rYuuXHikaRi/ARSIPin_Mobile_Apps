@@ -15,6 +15,9 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
+import { useEffect } from "react";
+import axios from "axios";
+
 
 const ManajemenBerkas = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -24,34 +27,37 @@ const ManajemenBerkas = () => {
   const [namadesa, setnamadesa] = useState("");
   const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
+  const [tableData, setTableData] = useState([]);
+
 
   
   const tableHead = ['Nama Folder', 'Aksi'];
-  const tableData = [
-    [<TouchableOpacity onPress={() => console.log('File 1')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 1</Text>
-    </TouchableOpacity>, renderOpsiIcons()],
-    [<TouchableOpacity onPress={() => console.log('File 2')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 2</Text>
-    </TouchableOpacity>, renderOpsiIcons()],
-    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],
-      [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],
-    // tambahkan data lainnya di sini sesuai kebutuhan
-  ];
+  const UserList = () => {
+    const [users, setUsers] = useState([]);
+
+    useEffect(() => {
+        fetchUsers();
+    }, []);
+
+    const fetchUsers = async () => {
+        try {
+            const response = await fetch('http://192.168.111.249:8000/api/users');
+            const data = await response.json();  
+            setUsers(data);
+        } catch (error) {
+            console.log(error);
+        }
+    };
+
+    const addUsers = () => {
+    //   users.map((user) => (
+    //     // tableData.push([<TouchableOpacity onPress={() => console.log('File 1')}>
+    //     // <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.UserName}</Text>
+    //     // </TouchableOpacity>,renderOpsiIcons()])
+    //     console.log("test"+user)
+    // ))
+    }
+};
 
   function renderOpsiIcons() {
     return (
@@ -180,8 +186,11 @@ const ManajemenBerkas = () => {
         </View>
         <ScrollView>
         <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
+          <UserList/>
           <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
-          {tableData.map((rowData, index,columnData) => (
+       
+          
+          {tableData.map((rowData, index,) => (
             <Row
               key={index}
               data={rowData}flexArr={[4, 1]}
