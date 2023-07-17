@@ -17,7 +17,7 @@ import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 
-const detailBerkas = () => {
+const detailBerkas = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [namadokumen, setnamadokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
@@ -27,6 +27,9 @@ const detailBerkas = () => {
   const [namafile, setnamafile] = useState("");
 
   
+  const { user } = route.params;
+
+  console.log(user);
   const tableHead = ['Nama File', 'Aksi'];
   const tableData = [
     [<TouchableOpacity onPress={() => console.log('File 1')}>

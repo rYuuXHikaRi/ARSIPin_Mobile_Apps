@@ -19,7 +19,8 @@ import { useEffect } from "react";
 import axios from "axios";
 
 
-const ManajemenBerkas = () => {
+
+const ManajemenBerkas = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [namadokumen, setnamadokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
@@ -29,35 +30,42 @@ const ManajemenBerkas = () => {
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
   const [users, setUsers] = useState([]);
+  const [rowData,setRowData]= useState([]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, []);
+
+
+
+  const fetchUsers = async () => {
+
+    try {
+        const response = await fetch('http://192.168.26.249:8000/api/arsips');
+        const data = await response.json();  
+        setUsers(data);
+        tableData.splice(0,tableData.length);
+
+
+
+        users.map((user) => (
+          tableData.push([<TouchableOpacity onPress={() => navigation.navigate('detailberkas',{user})}>
+          <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.NamaDokumen}</Text>
+          </TouchableOpacity>,renderOpsiIcons()])
+       ))
+       console.log(users)
+
+    } catch (error) {
+        console.log(error);
+    }
+   
+};
 
 
   
   const tableHead = ['Nama Folder', 'Aksi'];
   const UserList = () => {
     
-
-    useEffect(() => {
-        fetchUsers();
-    }, []);
-
-    const fetchUsers = async () => {
-        try {
-            const response = await fetch('http://192.168.26.249:8000/api/arsips');
-            const data = await response.json();  
-            setUsers(data);
-            tableData.splice(0,tableData.length);
-            users.map((user) => (
-              
-              tableData.push([<TouchableOpacity onPress={() => console.log('File 1')}>
-              <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.NamaDokumen}</Text>
-              </TouchableOpacity>,renderOpsiIcons()])
-           ))
-  
-        } catch (error) {
-            console.log(error);
-        }
-       
-    };
 
     const addUsers = () => {
 
