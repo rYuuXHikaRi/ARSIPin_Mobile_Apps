@@ -28,12 +28,13 @@ const ManajemenBerkas = () => {
   const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
+  const [users, setUsers] = useState([]);
 
 
   
   const tableHead = ['Nama Folder', 'Aksi'];
   const UserList = () => {
-    const [users, setUsers] = useState([]);
+    
 
     useEffect(() => {
         fetchUsers();
@@ -41,21 +42,25 @@ const ManajemenBerkas = () => {
 
     const fetchUsers = async () => {
         try {
-            const response = await fetch('http://192.168.111.249:8000/api/users');
+            const response = await fetch('http://192.168.26.249:8000/api/arsips');
             const data = await response.json();  
             setUsers(data);
+            tableData.splice(0,tableData.length);
+            users.map((user) => (
+              
+              tableData.push([<TouchableOpacity onPress={() => console.log('File 1')}>
+              <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.NamaDokumen}</Text>
+              </TouchableOpacity>,renderOpsiIcons()])
+           ))
+  
         } catch (error) {
             console.log(error);
         }
+       
     };
 
     const addUsers = () => {
-    //   users.map((user) => (
-    //     // tableData.push([<TouchableOpacity onPress={() => console.log('File 1')}>
-    //     // <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.UserName}</Text>
-    //     // </TouchableOpacity>,renderOpsiIcons()])
-    //     console.log("test"+user)
-    // ))
+
     }
 };
 
