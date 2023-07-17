@@ -31,6 +31,20 @@ const ManajemenBerkas = ({ navigation }) => {
   const [users, setUsers] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [modalOpsVisible, setModalOpsVisible] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
+
+  const options = ["Option 1", "Option 2", "Option 3"];
+
+  const handleSelectOption = (option) => {
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+    renderOpsiIcons();
+  };
 
   useEffect(() => {
     fetchUsers();
@@ -52,7 +66,19 @@ const ManajemenBerkas = ({ navigation }) => {
               {user.NamaDokumen}
             </Text>
           </TouchableOpacity>,
-          renderOpsiIcons(),
+          // renderOpsiIcons()
+          <View style={styles.opsiContainer}>
+          <TouchableOpacity
+            onPress={() => [[{ toggleDropdown }, console.log("Opsi titik-tiga")]]}
+          >
+            <MaterialCommunityIcons
+              name="dots-vertical"
+              size={30}
+              color="black"
+            />
+          </TouchableOpacity>
+        </View>
+          ,
         ])
       );
       console.log(users);
@@ -66,59 +92,39 @@ const ManajemenBerkas = ({ navigation }) => {
     const addUsers = () => {};
   };
 
-  function renderOpsiIcons() {
-    return (
-      <View style={styles.opsiContainer}>
-        <TouchableOpacity
-          onPress={() => [
-            setModalOpsVisible(true),
-            console.log("Opsi titik-tiga"),
-          ]}
-        >
-          <MaterialCommunityIcons
-            name="dots-vertical"
-            size={30}
-            color="black"
-          />
-        </TouchableOpacity>
-      </View>
-    );
-  }
-
-  // const renderOpsiModaltiga = () => {
+  // function renderOpsiIcons() {
   //   return (
-  //   <Modal
-  //   visible={modalOpsVisible}
-  //   animationType="slide"
-  //   transparent={true}
-  //   onRequestClose={() => setModalOpsVisible(!modalOpsVisible)}
-  // >
-  //   <View style={styles.modalContainer}>
-  //     <TouchableOpacity
-  //       style={styles.optionButton}
-  //       onPress={() => console.log("Edit")}
-  //     >
-  //       <Text style={styles.optionText}>Edit</Text>
-  //     </TouchableOpacity>
-
-  //     <TouchableOpacity
-  //       style={styles.optionButton}
-  //       onPress={() => console.log("Hapus")}
-  //     >
-  //       <Text style={styles.optionText}>Hapus</Text>
-  //     </TouchableOpacity>
-
-  //     <TouchableOpacity
-  //       style={styles.cancelButton}
-  //       onPress={() => [setModalOpsVisible(!modalOpsVisible),console.log("close")]}
-  //     >
-  //       <Text style={styles.cancelButtonText}>Batal</Text>
-  //     </TouchableOpacity>
-  //   </View>
-  // </Modal>
+  //     <View style={styles.opsiContainer}>
+  //       <TouchableOpacity
+  //         onPress={() => [[{ toggleDropdown }, console.log("Opsi titik-tiga")]]}
+  //       >
+  //         <MaterialCommunityIcons
+  //           name="dots-vertical"
+  //           size={30}
+  //           color="black"
+  //         />
+  //       </TouchableOpacity>
+  //     </View>
   //   );
   // }
- 
+  function renderOpsiIcons(){
+    {isOpen && (
+      <View style={styles.dropdownContainer}>
+        {options.map((option) => (
+          <TouchableOpacity
+            key={option}
+            onPress={() => handleSelectOption(option)}
+          >
+            <Text style={styles.dropdownOption}>{option}</Text>
+          </TouchableOpacity>
+        ))}
+      </View>
+    )}
+
+    <Text style={styles.selectedOptionText}>
+      {selectedOption !== '' ? `Selected: ${selectedOption}` : 'Select an option'}
+    </Text>
+  }
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi

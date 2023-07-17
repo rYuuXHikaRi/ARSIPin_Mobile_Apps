@@ -27,11 +27,11 @@ export default function App() {
           component={dropdowntes}
           options={{ headerShown: false }}
         /> */}
-        <Stack.Screen
+        {/* <Stack.Screen
           name="manajemenakun"
           component={ManajemenAkun}
           options={{ headerShown: false }}
-        />
+        /> */}
 
         <Stack.Screen
           name="manajemenberkas"
