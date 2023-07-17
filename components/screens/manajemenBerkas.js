@@ -6,21 +6,20 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Modal,
-  TextInput,ScrollView
+  TextInput,
+  ScrollView,
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
-import { Table, Row } from 'react-native-table-component';
+import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
+import { Table, Row } from "react-native-table-component";
 import DropDownPicker from "react-native-dropdown-picker";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
 import axios from "axios";
 
-
-
-const ManajemenBerkas = ({navigation}) => {
+const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [namadokumen, setnamadokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
@@ -30,57 +29,96 @@ const ManajemenBerkas = ({navigation}) => {
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
   const [users, setUsers] = useState([]);
-  const [rowData,setRowData]= useState([]);
+  const [rowData, setRowData] = useState([]);
+  const [modalOpsVisible, setModalOpsVisible] = useState(false);
 
   useEffect(() => {
     fetchUsers();
   }, []);
 
-
-
   const fetchUsers = async () => {
-
     try {
-        const response = await fetch('http://192.168.26.249:8000/api/arsips');
-        const data = await response.json();  
-        setUsers(data);
-        tableData.splice(0,tableData.length);
+      const response = await fetch("http://192.168.67.213:8000/api/arsips");
+      const data = await response.json();
+      setUsers(data);
+      tableData.splice(0, tableData.length);
 
-
-
-        users.map((user) => (
-          tableData.push([<TouchableOpacity onPress={() => navigation.navigate('detailberkas',{user})}>
-          <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.NamaDokumen}</Text>
-          </TouchableOpacity>,renderOpsiIcons()])
-       ))
-       console.log(users)
-
+      users.map((user) =>
+        tableData.push([
+          <TouchableOpacity
+            onPress={() => navigation.navigate("detailberkas", { user })}
+          >
+            <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>
+              {user.NamaDokumen}
+            </Text>
+          </TouchableOpacity>,
+          renderOpsiIcons(),
+        ])
+      );
+      console.log(users);
     } catch (error) {
-        console.log(error);
+      console.log(error);
     }
-   
-};
+  };
 
-
-  
-  const tableHead = ['Nama Folder', 'Aksi'];
+  const tableHead = ["Nama Folder", "Aksi"];
   const UserList = () => {
-    
-
-    const addUsers = () => {
-
-    }
-};
+    const addUsers = () => {};
+  };
 
   function renderOpsiIcons() {
     return (
       <View style={styles.opsiContainer}>
-        <TouchableOpacity onPress={() => console.log('Opsi titik-tiga')}>
-          <MaterialCommunityIcons name="dots-vertical" size={30} color="black" />
+        <TouchableOpacity
+          onPress={() => [
+            setModalOpsVisible(true),
+            console.log("Opsi titik-tiga"),
+          ]}
+        >
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={30}
+            color="black"
+          />
         </TouchableOpacity>
       </View>
     );
   }
+
+  // const renderOpsiModaltiga = () => {
+  //   return (
+  //   <Modal
+  //   visible={modalOpsVisible}
+  //   animationType="slide"
+  //   transparent={true}
+  //   onRequestClose={() => setModalOpsVisible(!modalOpsVisible)}
+  // >
+  //   <View style={styles.modalContainer}>
+  //     <TouchableOpacity
+  //       style={styles.optionButton}
+  //       onPress={() => console.log("Edit")}
+  //     >
+  //       <Text style={styles.optionText}>Edit</Text>
+  //     </TouchableOpacity>
+
+  //     <TouchableOpacity
+  //       style={styles.optionButton}
+  //       onPress={() => console.log("Hapus")}
+  //     >
+  //       <Text style={styles.optionText}>Hapus</Text>
+  //     </TouchableOpacity>
+
+  //     <TouchableOpacity
+  //       style={styles.cancelButton}
+  //       onPress={() => [setModalOpsVisible(!modalOpsVisible),console.log("close")]}
+  //     >
+  //       <Text style={styles.cancelButtonText}>Batal</Text>
+  //     </TouchableOpacity>
+  //   </View>
+  // </Modal>
+  //   );
+  // }
+ 
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -191,33 +229,40 @@ const ManajemenBerkas = ({navigation}) => {
         <Header />
       </View>
       <View style={styles.card}>
-        <Text style={[styles.cardTitle, styles.boldText]}>Manajemen Berkas</Text>
+        <Text style={[styles.cardTitle, styles.boldText]}>
+          Manajemen Berkas
+        </Text>
       </View>
       <View style={styles.card2}>
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
         <ScrollView>
-        <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
-          <UserList/>
-          <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
-       
-          
-          {tableData.map((rowData, index,) => (
+          <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
+            <UserList />
             <Row
-              key={index}
-              data={rowData}flexArr={[4, 1]}
-              
-              style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
-              textStyle={styles.text}
+              data={tableHead}
+              flexArr={[4, 1]}
+              style={[styles.header, styles.boldText]}
+              textStyle={[styles.text, styles.boldText, { fontSize: 20 }]}
             />
-          ))}
-        </Table>
+
+            {tableData.map((rowData, index) => (
+              <Row
+                key={index}
+                data={rowData}
+                flexArr={[4, 1]}
+                style={[
+                  styles.row,
+                  index % 2 && { backgroundColor: "#e1fcc5" },
+                ]}
+                textStyle={styles.text}
+              />
+            ))}
+          </Table>
         </ScrollView>
       </View>
-      <View style={styles.row}>
-        {renderOpsiModal()}
-      </View>
+      <View style={styles.row}>{renderOpsiModal()}</View>
 
       <View style={styles.row}>
         <TouchableOpacity
@@ -227,6 +272,7 @@ const ManajemenBerkas = ({navigation}) => {
           <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
         </TouchableOpacity>
       </View>
+
       <View style={styles.row}>
         <TouchableOpacity style={styles.searchButton}>
           <AntDesign name="search1" size={24} color="black" />
@@ -243,6 +289,34 @@ const ManajemenBerkas = ({navigation}) => {
 export default ManajemenBerkas;
 
 const styles = StyleSheet.create({
+  //ModalOpsi
+  // modalContainer: {
+  //   flex: 1,
+  //   justifyContent: 'flex-end',
+  //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  // },
+  // optionButton: {
+  //   backgroundColor: 'white',
+  //   padding: 15,
+  //   borderTopWidth: 1,
+  //   borderTopColor: 'lightgray',
+  // },
+  // optionText: {
+  //   fontSize: 16,
+  //   color: 'black',
+  // },
+  // cancelButton: {
+  //   backgroundColor: 'white',
+  //   padding: 15,
+  //   marginTop: 10,
+  // },
+  // cancelButtonText: {
+  //   fontSize: 16,
+  //   color: 'red',
+  //   textAlign: 'center',
+  // },
+  //endModalOpsi
+
   //Modal Style
   centeredView: {
     flex: 1,
@@ -475,30 +549,30 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 60,
     marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   searchButtonText: {
-    color: 'black',
-    textAlign: 'left',
+    color: "black",
+    textAlign: "left",
   },
   header: {
     height: 50,
-    backgroundColor: '#A6D17A',
+    backgroundColor: "#A6D17A",
   },
   text: {
-    textAlign: 'center',
-    fontWeight: '300',
+    textAlign: "center",
+    fontWeight: "300",
   },
   boldText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   dataWrapper: {
     marginTop: -1,
   },
   opsiContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   opsiButton: {
     marginHorizontal: 5,
@@ -511,6 +585,6 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   tableText: {
-    textAlign: 'center',
+    textAlign: "center",
   },
 });

@@ -7,11 +7,17 @@ import {
   Modal,
   TextInput,
   SafeAreaView,
-  Pressable,ScrollView
+  Pressable,
+  ScrollView,
+  picker,
 } from "react-native";
-import { AntDesign ,MaterialCommunityIcons ,FontAwesome} from "@expo/vector-icons";
+import {
+  AntDesign,
+  MaterialCommunityIcons,
+  FontAwesome,
+} from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
-import { Table, Row } from 'react-native-table-component';
+import { Table, Row } from "react-native-table-component";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 
@@ -21,40 +27,55 @@ const ManajemenAkun = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  // const [role, setRole] = useState('user');
   const [role, setrole] = useState("");
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedOption, setSelectedOption] = useState("");
 
-  const tableHead = ['Nama','Role', 'Aksi'];
+  const options = ["User", "Admin"];
+
+  const handleSelectOption = (option) => {
+    setSelectedOption(option);
+    setIsOpen(false);
+  };
+
+  const toggleDropdown = () => {
+    setIsOpen(!isOpen);
+  };
+
+  const tableHead = ["Nama", "Role", "Aksi"];
   const tableData = [
-    [<TouchableOpacity onPress={() => console.log('Akun 1')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>Agus</Text>
-    </TouchableOpacity>,<Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>, renderOpsiIcons()],
-    [<TouchableOpacity onPress={() => console.log('Akun 2')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>Sunar</Text>
-    </TouchableOpacity>,<Text style={[styles.tableText, { fontSize: 20 }]}>Petugas</Text>, renderOpsiIcons()],
-    [<TouchableOpacity onPress={() => console.log('Akun 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>Yo</Text>
-    </TouchableOpacity>, <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,renderOpsiIcons()],
-    // tambahkan data lainnya di sini sesuai kebutuhan
+    [
+      <TouchableOpacity onPress={() => console.log("Akun 1")}>
+        <Text style={[styles.tableText, { fontSize: 20 }]}>Agus</Text>
+      </TouchableOpacity>,
+      <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
+      renderOpsiIcons(),
+    ],
+    [
+      <TouchableOpacity onPress={() => console.log("Akun 2")}>
+        <Text style={[styles.tableText, { fontSize: 20 }]}>Sunar</Text>
+      </TouchableOpacity>,
+      <Text style={[styles.tableText, { fontSize: 20 }]}>Petugas</Text>,
+      renderOpsiIcons(),
+    ],
+    [
+      <TouchableOpacity onPress={() => console.log("Akun 3")}>
+        <Text style={[styles.tableText, { fontSize: 20 }]}>Yo</Text>
+      </TouchableOpacity>,
+      <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
+      renderOpsiIcons(),
+    ],
   ];
 
   function renderOpsiIcons() {
     return (
       <View style={styles.opsiContainer}>
         <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
-          <MaterialCommunityIcons
-            name="pencil"
-            size={25}
-            color="black"
-          />
+          <MaterialCommunityIcons name="pencil" size={25} color="black" />
         </TouchableOpacity>
 
         <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
-          <FontAwesome
-            name="trash"
-            size={25}
-            color="black"
-          />
+          <FontAwesome name="trash" size={25} color="black" />
         </TouchableOpacity>
       </View>
     );
@@ -81,19 +102,27 @@ const ManajemenAkun = () => {
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </View>
       <View style={styles.card2}>
-      <ScrollView>
-        <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
-          <Row data={tableHead} flexArr={[4,2, 1.3]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
-          {tableData.map((rowData, index,columnData) => (
+        <ScrollView>
+          <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
             <Row
-              key={index}
-              data={rowData}flexArr={[4, 2,1.3]}
-              
-              style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
-              textStyle={styles.text}
+              data={tableHead}
+              flexArr={[4, 2, 1.3]}
+              style={[styles.header, styles.boldText]}
+              textStyle={[styles.text, styles.boldText, { fontSize: 20 }]}
             />
-          ))}
-        </Table>
+            {tableData.map((rowData, index, columnData) => (
+              <Row
+                key={index}
+                data={rowData}
+                flexArr={[4, 2, 1.3]}
+                style={[
+                  styles.row,
+                  index % 2 && { backgroundColor: "#e1fcc5" },
+                ]}
+                textStyle={styles.text}
+              />
+            ))}
+          </Table>
         </ScrollView>
       </View>
       <View style={styles.row}>
@@ -157,20 +186,37 @@ const ManajemenAkun = () => {
                 <View style={styles.styletitle3}>
                   <View style={styles.styletitle2}>
                     <Text style={styles.titleform}>Role</Text>
-                    <DropDownPicker
-                      style={styles.inputRole}
-                      items={[
-                        { label: "User", value: "user" },
-                        { label: "Admin", value: "admin" },
-                      ]}
-                      defaultValue={role}
-                      placeholder="Role"
-                      containerStyle={{ height: 40, width: 200 }}
-                      onChangeItem={(item) => setrole(item.value)}
-                    />
+                    <View style={styles.inputRole}>
+                      <TouchableOpacity onPress={toggleDropdown}>
+                        <Text
+                          style={{ padding: 10, backgroundColor: "#F6F6F6" }}
+                        >
+                          {selectedOption !== ""
+                            ? selectedOption
+                            : "Select an option"}
+                        </Text>
+                      </TouchableOpacity>
+
+                      {isOpen && (
+                        <View style={{ marginTop: 3 }}>
+                          {options.map((option) => (
+                            <TouchableOpacity
+                              key={option}
+                              onPress={() => handleSelectOption(option)}
+                            >
+                              <Text
+                                style={styles.OpsionDropdown}
+                              >
+                                {option}
+                              </Text>
+                            </TouchableOpacity>
+                          ))}
+                        </View>
+                      )}
+                    </View>
                   </View>
 
-                  <View style={styles.styletitle2}>
+                  <View style={styles.styletitle4}>
                     <Text style={styles.titleformFoto}>Foto</Text>
                     <TextInput style={styles.inputFile} placeholder="Pilih" />
                   </View>
@@ -259,15 +305,16 @@ const styles = StyleSheet.create({
     alignItems: "flex-end",
   },
   buttonSave: {
-    backgroundColor: "#6EAD3B",
     width: 109,
     height: 43,
+
   },
   btnsave: {
     width: 109,
     height: 73,
     marginLeft: 15,
-    paddingTop: 10,
+    paddingTop: 13,
+    marginTop:45,
   },
   textStyle: {
     color: "#F6F6F6",
@@ -307,7 +354,7 @@ const styles = StyleSheet.create({
   },
   inputRole: {
     width: 153,
-    height: 34,
+    height: 40,
     marginLeft: 16,
     paddingHorizontal: 10,
     backgroundColor: "#F6F6F6",
@@ -315,11 +362,20 @@ const styles = StyleSheet.create({
     borderRadius: 8,
   },
   inputFile: {
-    width: 135,
+    width: 150,
     height: 40,
     paddingHorizontal: 10,
     backgroundColor: "#F6F6F6",
     borderRadius: 8,
+  },
+  OpsionDropdown:{
+      padding: 5,
+      marginTop:3,
+      width:140,
+      borderRadius:6,
+      paddingHorizontal: 10,
+      backgroundColor: "#F6F6F6",
+      position:'relative',
   },
   titleform: {
     fontSize: 17,
@@ -348,6 +404,10 @@ const styles = StyleSheet.create({
   },
   styletitle3: {
     flexDirection: "row",
+  },
+  styletitle4: {
+    justifyContent: "space-between",
+    marginLeft:20,
   },
   Headtitle: {
     paddingLeft: 16,
@@ -396,7 +456,7 @@ const styles = StyleSheet.create({
     marginBottom: 8,
     color: "#6EAD3B",
     height: 30,
-    flex:1,
+    flex: 1,
   },
   cardTitle3: {
     fontSize: 20,
@@ -414,14 +474,13 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   bottomLine: {
-    // borderBottomColor: "#6EAD3B",
+    borderBottomColor: "#6EAD3B",
     borderBottomWidth: 1,
-  
   },
   bottomLineprimary: {
     borderBottomColor: "#A19797",
     borderBottomWidth: 1,
-    flexDirection:'row',
+    flexDirection: "row",
   },
   button: {
     backgroundColor: "#6EAD3B",
@@ -457,32 +516,33 @@ const styles = StyleSheet.create({
   },
   header: {
     height: 50,
-    backgroundColor: '#A6D17A',},
-    text: {
-      textAlign: 'center',
-      fontWeight: '300',
-    },
-    boldText: {
-      fontWeight: 'bold',
-    },
-    dataWrapper: {
-      marginTop: -1,
-    },
-    opsiContainer: {
-      flexDirection: 'row',
-      justifyContent: 'center',
-    },
-    opsiButton: {
-      marginHorizontal: 5,
-      flexDirection: "row",
-      alignItems: "center",
-    },
-    searchButtonText: {
-      color: "black",
-      fontWeight: "bold",
-      textAlign: "left",
-    },
-    tableText: {
-      textAlign: 'center',
-    },
+    backgroundColor: "#A6D17A",
+  },
+  text: {
+    textAlign: "center",
+    fontWeight: "300",
+  },
+  boldText: {
+    fontWeight: "bold",
+  },
+  dataWrapper: {
+    marginTop: -1,
+  },
+  opsiContainer: {
+    flexDirection: "row",
+    justifyContent: "center",
+  },
+  opsiButton: {
+    marginHorizontal: 5,
+    flexDirection: "row",
+    alignItems: "center",
+  },
+  searchButtonText: {
+    color: "black",
+    fontWeight: "bold",
+    textAlign: "left",
+  },
+  tableText: {
+    textAlign: "center",
+  },
 });
