@@ -6,22 +6,21 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Modal,
-  TextInput,
-  ScrollView,
+  TextInput,ScrollView
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons } from "@expo/vector-icons";
-import { Table, Row } from "react-native-table-component";
 import { AntDesign, MaterialCommunityIcons,Feather } from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
 import DropDownPicker from "react-native-dropdown-picker";
-import { LinearGradient } from "expo-linear-gradient";
+import { LinearGradient } from 'expo-linear-gradient';
 import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
 import axios from "axios";
 
-const ManajemenBerkas = ({ navigation }) => {
+
+
+const ManajemenBerkas = ({navigation}) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [namadokumen, setnamadokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
@@ -31,80 +30,82 @@ const ManajemenBerkas = ({ navigation }) => {
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
   const [users, setUsers] = useState([]);
-  const [rowData, setRowData] = useState([]);
-  const [modalOpsVisible, setModalOpsVisible] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState("");
-
-  const options = ["Option 1", "Option 2", "Option 3"];
-
-  const handleSelectOption = (option) => {
-    setSelectedOption(option);
-    setIsOpen(false);
-  };
-
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
-    renderOpsiIcons();
-  };
+  const [rowData,setRowData]= useState([]);
+  const [NamaDokumen, setNamaDokumen] = useState('');
+  const [Keterangan, setKeterangan] = useState('');
+  const [Tahun, setTahun] = useState('');
+  const [NamaDesa, setNamaDesa] = useState('');
+  const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState('');
+  const [NamaFile, setNamaFile] = useState('');
+  const [showPopover,setShowPopover] = useState('');
+  
 
   useEffect(() => {
+    const fetchUsers = async () => {
+
+      try {
+          const response = await fetch('http://192.168.118.213:8000/api/arsips');
+          const data = await response.json();  
+          setUsers(data);
+          tableData.splice(0,tableData.length);
+  
+      } catch (error) {
+          console.log(error);
+      }
+
+
+  };
     fetchUsers();
+    addUsers();
   }, []);
 
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch("http://192.168.118.213:8000/api/arsips");
-      const data = await response.json();
-      setUsers(data);
-      tableData.splice(0, tableData.length);
 
-      users.map((user) =>
-        tableData.push([
-          <TouchableOpacity
-            onPress={() => navigation.navigate("detailberkas", { user })}
-          >
-            <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>
-              {user.NamaDokumen}
-            </Text>
-          </TouchableOpacity>,
-          // renderOpsiIcons()
-          <View style={styles.opsiContainer}>
-          <TouchableOpacity
-            onPress={() => [[{ toggleDropdown }, console.log("Opsi titik-tiga")]]}
-          >
-            <MaterialCommunityIcons
-              name="dots-vertical"
-              size={30}
-              color="black"
-            />
-          </TouchableOpacity>
-        </View>
-          ,
-        ])
-      );
-      console.log(users);
-    } catch (error) {
-      console.log(error);
-    }
+
+
+const addUsers = () => {
+  users.map((user) => (
+    tableData.push([<TouchableOpacity onPress={() => navigation.navigate('detailberkas',{user})}>
+    <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.NamaDokumen}</Text>
+    </TouchableOpacity>,renderOpsiIcons()])
+ ))
+
+}
+
+const handleCreate = async () => {
+ 
+  const data = {
+    NamaDokumen: NamaDokumen,
+    Keterangan: Keterangan,
+    Tahun: Tahun,
+    NamaDesa: NamaDesa,
+    LokasiPenyimpanan: LokasiPenyimpanan,
+    NamaFile : "File.txt"
   };
 
-  const tableHead = ["Nama Folder", "Aksi"];
-  const UserList = () => {
-    const addUsers = () => {};
-  };
+  try {
+    console.log(data)
+    const response = await axios.post('http://192.168.118.213:8000/api/store', data);
+    console.log('Data created successfully:', response.data);
+    // Reset input fields if needed
+    console.log('berhasil')
+    setModalVisible(false);
+
+  } catch (error) {
+    console.error('Error creating data:', error);
+  }
+};
+
+
+
+  
+  const tableHead = ['Nama Folder', 'Aksi'];
+
 
   function renderOpsiIcons() {
     return (
       <View style={styles.opsiContainer}>
-        <TouchableOpacity
-          onPress={() => [[{ toggleDropdown }, console.log("Opsi titik-tiga")]]}
-        >
-          <MaterialCommunityIcons
-            name="dots-vertical"
-            size={30}
-            color="black"
-          />
+        <TouchableOpacity onPress={() => setShowPopover(true)}>
+          <MaterialCommunityIcons name="dots-vertical" size={30} color="black" />
         </TouchableOpacity>
         <Modal
           animationType="slide"
@@ -159,24 +160,7 @@ const ManajemenBerkas = ({ navigation }) => {
       </View>
     );
   }
-  function renderOpsiIcons(){
-    {isOpen && (
-      <View style={styles.dropdownContainer}>
-        {options.map((option) => (
-          <TouchableOpacity
-            key={option}
-            onPress={() => handleSelectOption(option)}
-          >
-            <Text style={styles.dropdownOption}>{option}</Text>
-          </TouchableOpacity>
-        ))}
-      </View>
-    )}
-
-    <Text style={styles.selectedOptionText}>
-      {selectedOption !== '' ? `Selected: ${selectedOption}` : 'Select an option'}
-    </Text>
-  }
+  
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -221,7 +205,8 @@ const ManajemenBerkas = ({ navigation }) => {
                 <TextInput
                   style={[styles.input]}
                   placeholder="Nama Dokumen"
-                  onChangeText={(text) => setnamadokumen(text)}
+                  value={NamaDokumen}
+                  onChangeText={(text) => setNamaDokumen(text)}
                 />
               </View>
 
@@ -230,7 +215,8 @@ const ManajemenBerkas = ({ navigation }) => {
                 <TextInput
                   style={styles.inputketerangan}
                   placeholder="Keterangan"
-                  onChangeText={(text) => setketerangan(text)}
+                  value={Keterangan}
+                  onChangeText={(text) => setKeterangan(text)}
                 />
               </View>
             </View>
@@ -238,14 +224,16 @@ const ManajemenBerkas = ({ navigation }) => {
             <TextInput
               style={styles.input}
               placeholder="tahun"
-              onChangeText={(text) => settahun(text)}
+              value={Tahun}
+              onChangeText={(text) => setTahun(text)}
             />
 
             <Text style={styles.titleform}>Nama Desa</Text>
             <TextInput
               style={styles.input}
               placeholder="Nama Desa"
-              onChangeText={(text) => setnamadesa(text)}
+              value={NamaDesa}
+              onChangeText={(text) => setNamaDesa(text)}
             />
 
             <View>
@@ -254,7 +242,8 @@ const ManajemenBerkas = ({ navigation }) => {
                 <TextInput
                   style={styles.input}
                   placeholder="Loker"
-                  onChangeText={(text) => settahun(text)}
+                  value={LokasiPenyimpanan}
+                  onChangeText={(text) => setLokasiPenyimpanan(text)}
                 />
               </View>
 
@@ -263,6 +252,8 @@ const ManajemenBerkas = ({ navigation }) => {
                 <TextInput
                   style={styles.inputFile}
                   placeholder="Pilih"
+                  value={NamaFile}
+                  onChangeText={(text) => setNamaFile(text)}
                 ></TextInput>
               </View>
             </View>
@@ -270,7 +261,7 @@ const ManajemenBerkas = ({ navigation }) => {
             <View style={styles.btnsave}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonSave]}
-                onPress={handleSave}
+                onPress={handleCreate}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
               </TouchableOpacity>
@@ -287,40 +278,33 @@ const ManajemenBerkas = ({ navigation }) => {
         <Header />
       </View>
       <View style={styles.card}>
-        <Text style={[styles.cardTitle, styles.boldText]}>
-          Manajemen Berkas
-        </Text>
+        <Text style={[styles.cardTitle, styles.boldText]}>Manajemen Berkas</Text>
       </View>
       <View style={styles.card2}>
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
         <ScrollView>
-          <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
-            <UserList />
+        <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
+        
+          <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
+       
+          
+          {tableData.map((rowData, index,) => (
             <Row
-              data={tableHead}
-              flexArr={[4, 1]}
-              style={[styles.header, styles.boldText]}
-              textStyle={[styles.text, styles.boldText, { fontSize: 20 }]}
+              key={index}
+              data={rowData}flexArr={[4, 1]}
+              
+              style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
+              textStyle={styles.text}
             />
-
-            {tableData.map((rowData, index) => (
-              <Row
-                key={index}
-                data={rowData}
-                flexArr={[4, 1]}
-                style={[
-                  styles.row,
-                  index % 2 && { backgroundColor: "#e1fcc5" },
-                ]}
-                textStyle={styles.text}
-              />
-            ))}
-          </Table>
+          ))}
+        </Table>
         </ScrollView>
       </View>
-      <View style={styles.row}>{renderOpsiModal()}</View>
+      <View style={styles.row}>
+        {renderOpsiModal()}
+      </View>
 
       <View style={styles.row}>
         <TouchableOpacity
@@ -330,7 +314,6 @@ const ManajemenBerkas = ({ navigation }) => {
           <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
         </TouchableOpacity>
       </View>
-
       <View style={styles.row}>
         <TouchableOpacity style={styles.searchButton}>
           <AntDesign name="search1" size={24} color="black" />
@@ -347,34 +330,6 @@ const ManajemenBerkas = ({ navigation }) => {
 export default ManajemenBerkas;
 
 const styles = StyleSheet.create({
-  //ModalOpsi
-  // modalContainer: {
-  //   flex: 1,
-  //   justifyContent: 'flex-end',
-  //   backgroundColor: 'rgba(0, 0, 0, 0.5)',
-  // },
-  // optionButton: {
-  //   backgroundColor: 'white',
-  //   padding: 15,
-  //   borderTopWidth: 1,
-  //   borderTopColor: 'lightgray',
-  // },
-  // optionText: {
-  //   fontSize: 16,
-  //   color: 'black',
-  // },
-  // cancelButton: {
-  //   backgroundColor: 'white',
-  //   padding: 15,
-  //   marginTop: 10,
-  // },
-  // cancelButtonText: {
-  //   fontSize: 16,
-  //   color: 'red',
-  //   textAlign: 'center',
-  // },
-  //endModalOpsi
-
   //Modal Style
   centeredView: {
     flex: 1,
@@ -607,30 +562,30 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 60,
     marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   searchButtonText: {
-    color: "black",
-    textAlign: "left",
+    color: 'black',
+    textAlign: 'left',
   },
   header: {
     height: 50,
-    backgroundColor: "#A6D17A",
+    backgroundColor: '#A6D17A',
   },
   text: {
-    textAlign: "center",
-    fontWeight: "300",
+    textAlign: 'center',
+    fontWeight: '300',
   },
   boldText: {
-    fontWeight: "bold",
+    fontWeight: 'bold',
   },
   dataWrapper: {
     marginTop: -1,
   },
   opsiContainer: {
-    flexDirection: "row",
-    justifyContent: "center",
+    flexDirection: 'row',
+    justifyContent: 'center',
   },
   opsiButton: {
     marginHorizontal: 5,
@@ -643,7 +598,7 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   tableText: {
-    textAlign: "center",
+    textAlign: 'center',
   },
   opsiContainer: {
     flexDirection: 'row',
@@ -674,6 +629,6 @@ const styles = StyleSheet.create({
     },
     shadowOpacity: 0.25,
     shadowRadius: 4,
-    elevation: 5,
-  },
-});
+    elevation: 5,
+  },
+})
