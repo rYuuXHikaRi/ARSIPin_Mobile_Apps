@@ -6,8 +6,6 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  Pressable,
-  SafeAreaView,
   Pressable,ScrollView
 } from "react-native";
 import { AntDesign ,MaterialCommunityIcons ,FontAwesome} from "@expo/vector-icons";

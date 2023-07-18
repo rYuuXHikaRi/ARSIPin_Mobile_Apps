@@ -12,7 +12,7 @@ import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
 import PopUpTaccnt from './components/screens/popUp';
-import detailBerkas from './components/screens/DetailBerkas';
+import DetailBerkas from './components/screens/detailBerkas';
 
 
 const Stack = createStackNavigator();
@@ -58,7 +58,7 @@ export default function App() {
 
             options={{ headerShown: false}}
         />
-           */}
+        
         <Stack.Screen
 
             name="manajemenberkas"
@@ -70,7 +70,7 @@ export default function App() {
         <Stack.Screen
 
             name="detailberkas"
-            component={detailBerkas}
+            component={DetailBerkas}
 
             options={{ headerShown: false}}
         />
