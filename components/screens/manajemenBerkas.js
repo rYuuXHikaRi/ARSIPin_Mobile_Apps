@@ -11,7 +11,6 @@ import {
 import { AntDesign } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
-import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 
@@ -40,9 +39,14 @@ const ManajemenBerkas = () => {
       <View style={{ position: "absolute", top: 0 }}>
         <Header />
       </View>
-      <View style={styles.card}>
+      <LinearGradient
+                      colors={['#197B40', '#79B33B', '#A6CE39']}
+                      start={[0, 0.5]}
+                      end={[1, 0.5]}
+                      style={[styles.card]}
+      > 
         <Text style={styles.cardTitle}>Manajemen Berkas</Text>
-      </View>
+      </LinearGradient>
       <View style={styles.card2}>
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
@@ -139,20 +143,28 @@ const ManajemenBerkas = () => {
       </View>
 
       <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => setModalVisible(true)}
-        >
-          <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
-        </TouchableOpacity>
+        <LinearGradient
+                        colors={['#90C13B', '#7CB53C', '#378D3F']}
+                        start={[0, 0.5]}
+                        end={[1, 0.5]}
+                        style={styles.button}
+        > 
+          <TouchableOpacity onPress={() => setModalVisible(true)} >
+            <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
+          </TouchableOpacity>
+        </LinearGradient>
       </View>
-      <View style={styles.row}>
-        <TouchableOpacity style={styles.searchButton}>
-          <AntDesign name="search1" size={24} color="black" />
-          <Text style={styles.searchButtonText}> Pencarian...</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{ position: "absolute", bottom: 0 }}>
+
+      <View style={{ position: "absolute", bottom: 0 , backgroundColor: '#F0E5E5'}}>
+        <View style={[styles.row, {paddingLeft: 18, paddingRight: 18, marginBottom: 20}]}>
+          <View style={styles.searchButton}>
+            <AntDesign name="search1" size={20} color="black" />
+            <TextInput
+                      placeholder="Cari data..."
+                      style={styles.searchButtonText}
+            />
+          </View>
+        </View>
         <Navbar whichPage="arsip" />
       </View>
     </SafeAreaView>
@@ -317,28 +329,26 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0E5E5",
   },
   card: {
-    backgroundColor: "#6EAD3B",
     borderRadius: 8,
-    padding: 16,
-    marginTop: 50,
-    height: 60,
+    marginTop: 76,
+    paddingLeft: 12,
+    height: 43,
+
+    justifyContent: 'center'
   },
   card2: {
     backgroundColor: "white",
     borderRadius: 8,
     padding: 16,
     marginBottom: 5,
-    marginTop: 30,
+    marginTop: 15,
     height: 460,
     width: 350,
   },
   cardTitle: {
-    fontSize: 20,
-    fontWeight: "bold",
-    marginBottom: 8,
+    fontSize: 16,
+    fontWeight: "700",
     color: "white",
-    height: 30,
-    justifyContent: "center",
   },
   cardTitle2: {
     fontSize: 20,
@@ -370,13 +380,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   button: {
-    backgroundColor: "#6EAD3B",
     borderRadius: 8,
-    padding: 10,
     marginHorizontal: 5,
     flex: 1,
-    height: 60,
-    marginTop: 20,
+    height: 43,
+    marginTop: 17,
+
+    justifyContent: 'center'
   },
   buttonText: {
     color: "white",
@@ -387,14 +397,15 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     backgroundColor: "white",
-    borderRadius: 8,
-    padding: 10,
+    borderRadius: 10,
     marginHorizontal: 5,
     flex: 1,
-    height: 60,
+    height: 43,
     marginTop: 20,
     flexDirection: "row",
     alignItems: "center",
+
+    paddingLeft: 7,
   },
   searchButtonText: {
     color: "black",
