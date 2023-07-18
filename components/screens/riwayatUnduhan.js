@@ -1,25 +1,38 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { AntDesign } from '@expo/vector-icons';
+
+//local
+import Header from '../partials/header';
+import Navbar from '../partials/navbar';
 
 const RiwayatUnduhan = () => {
   return (
-    <View style={styles.container}>
-      <View style={styles.card}>
-        <Text style={styles.cardTitle}>Riwayat Unduhan</Text>
-      </View>
-      <View style={styles.card2}>
-        <View style={styles.row}>
-        
-        <View style={styles.card6}>
+            <SafeAreaView style={styles.container}>
+                <View style={{position: 'absolute', top: 0}}>
+                  <Header />
+                </View>
+                <View >
+                  <View style={styles.card}>
+                    <Text style={styles.cardTitle}>Riwayat Unduhan</Text>
+                  </View>
+                  <View style={styles.card2}>
+                    <View style={styles.row}>
+                    
+                    <View style={styles.card6}>
 
 
-    </View>
+                </View>
 
-        </View>
-      </View>
-      
-    </View>
+                    </View>
+                  </View>
+                  
+                </View>
+                <View style={{position: 'absolute', bottom: 0}}>
+                  <Navbar whichPage='unduhan'/>
+                </View>
+            </SafeAreaView>
   );
 };
 
