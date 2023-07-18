@@ -16,20 +16,36 @@ import { LinearGradient } from 'expo-linear-gradient';
 import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
+import { useEffect } from "react";
 
-const detailBerkas = ({route}) => {
+const DetailBerkas = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [namadokumen, setnamadokumen] = useState("");
+  const [NamaDokumen, setNamaDokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
-  const [tahun, settahun] = useState("");
-  const [namadesa, setnamadesa] = useState("");
-  const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
+  const [Tahun, setTahun] = useState("");
+  const [NamaDesa, setNamaDesa] = useState("");
+  const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
-
-  
+  const [fileDetail, setFileDetail] = useState(null);
   const { user } = route.params;
 
+  console.log(1);
   console.log(user);
+  console.log(1);
+
+  useEffect(() => {
+    // Lakukan pengambilan data detail file dari endpoint Laravel menggunakan fileId
+    fetch(`http://192.168.26.249:8000/api/arsips/8`)
+    .then(response => response.json())
+    .then(data => {
+      setFileDetail(data);
+    })
+    .catch(error => {
+      console.error('Error fetching user detail:', error);
+    });
+  }, [user.id]);
+  
+  console.log(fileDetail);
   const tableHead = ['Nama File', 'Aksi'];
   const tableData = [
     [<TouchableOpacity onPress={() => console.log('File 1')}>
@@ -81,11 +97,11 @@ const detailBerkas = ({route}) => {
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
-    console.log("namadokumen:", namadokumen);
-    console.log("Nama Lengkap:", keterangan);
-    console.log("tahun:", tahun);
-    console.log("namadesa:", namadesa);
-    console.log("namafile:", namafile);
+    console.log("NamaDokumen:", NamaDokumen);
+    console.log("Nama Lengkap:", Keterangan);
+    console.log("Tahun:", Tahun);
+    console.log("NamaDesa:", NamaDesa);
+    console.log("namafile:", NamaFile);
 
     // Setelah melakukan sesuatu, tutup modal
     setModalVisible(false);
@@ -122,7 +138,7 @@ const detailBerkas = ({route}) => {
                 <TextInput
                   style={[styles.input]}
                   placeholder="Nama Dokumen"
-                  onChangeText={(text) => setnamadokumen(text)}
+                  onChangeText={(text) => setNamaDokumen(text)}
                 />
               </View>
 
@@ -138,15 +154,15 @@ const detailBerkas = ({route}) => {
             <Text style={styles.titleform}>Tahun</Text>
             <TextInput
               style={styles.input}
-              placeholder="tahun"
-              onChangeText={(text) => settahun(text)}
+              placeholder="Tahun"
+              onChangeText={(text) => setTahun(text)}
             />
 
             <Text style={styles.titleform}>Nama Desa</Text>
             <TextInput
               style={styles.input}
               placeholder="Nama Desa"
-              onChangeText={(text) => setnamadesa(text)}
+              onChangeText={(text) => setNamaDesa(text)}
             />
 
             <View>
@@ -155,7 +171,7 @@ const detailBerkas = ({route}) => {
                 <TextInput
                   style={styles.input}
                   placeholder="Loker"
-                  onChangeText={(text) => settahun(text)}
+                  onChangeText={(text) => setTahun(text)}
                 />
               </View>
 
@@ -195,16 +211,16 @@ const detailBerkas = ({route}) => {
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Detail Arsip</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Nama : Folder A</Text>
+          <Text style={[styles.cardTitle2]}>Nama : {user.NamaDokumen}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Tahun: 2013</Text>
+          <Text style={[styles.cardTitle2]}>Tahun: {user.Tahun}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Desa : Desa A</Text>
+          <Text style={[styles.cardTitle2]}>Desa : {user.NamaDesa}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : Loker A</Text>
+          <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : {user.LokasiPenyimpanan}</Text>
         </View>
         <ScrollView>
         <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
@@ -246,7 +262,7 @@ const detailBerkas = ({route}) => {
   );
 };
 
-export default detailBerkas;
+export default DetailBerkas;
 
 const styles = StyleSheet.create({
   //Modal Style

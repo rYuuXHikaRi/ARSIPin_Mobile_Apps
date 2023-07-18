@@ -5,15 +5,14 @@ import { NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 
 // Local
-import LoginPage from "./components/screens/loginPage";
-import DashBoard from "./components/screens/dashBoard";
-import ManajemenBerkas from "./components/screens/manajemenBerkas";
-import ManajemenAkun from "./components/screens/manajemenAkun";
-import RiwayatUnduhan from "./components/screens/riwayatUnduhan";
-import ProfilePage from "./components/screens/profilePage";
-import PopUpTaccnt from "./components/screens/popUp";
-import detailBerkas from "./components/screens/detailBerkas";
-import dropdowntes from "./components/screens/dropdowntes";
+import LoginPage from './components/screens/loginPage';
+import DashBoard from './components/screens/dashBoard';
+import ManajemenBerkas from './components/screens/manajemenBerkas';
+import ManajemenAkun from './components/screens/manajemenAkun';
+import RiwayatUnduhan from './components/screens/riwayatUnduhan';
+import ProfilePage from './components/screens/profilePage';
+import PopUpTaccnt from './components/screens/popUp';
+import detailBerkas from './components/screens/DetailBerkas';
 
 
 const Stack = createStackNavigator();
