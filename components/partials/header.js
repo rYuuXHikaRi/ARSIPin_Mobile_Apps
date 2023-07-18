@@ -1,7 +1,6 @@
 import React, { Component } from "react";
 import {
     View,
-    Text,
     StyleSheet,
     SafeAreaView,
     Pressable,
@@ -13,12 +12,13 @@ import { useNavigation  } from "@react-navigation/native";
 class Header extends Component {
     render() {
         const screenWidth = Dimensions.get('window').width;
+        const logoWidth = 113 * 1.2; const logoHeight = 57 * 1.2;
         const { navigation } = this.props;
         return (
             <SafeAreaView>
                 <View style={[styles.container, {backgroundColor: "white", width: screenWidth}]}>
                    <View style={styles.pingIndicator}/>
-                    <Image source={require('../../assets/img/GGF.png')}/>  
+                    <Image source={require('../../assets/img/logoGGP.png')} style={{width: logoWidth, height: logoHeight}}/>  
                     <Pressable>
                         <View style={styles.profileContainer}>
                             <Image source={require('../../assets/img/profileTmp.jpeg')} style={styles.croppedProfile}/>
