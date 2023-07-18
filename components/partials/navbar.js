@@ -60,7 +60,7 @@ class Navbar extends Component {
         >
           <Pressable
             style={styles.itemNavbar}
-            onPress={() => this.props.navigation.replace("arsip")}
+            onPress={() => this.props.navigation.replace("manajemenberkas")}
           >
             {curPgStyle("SVG", "arsip", arsipActive, arsipInActive)}
             <Text
@@ -85,7 +85,7 @@ class Navbar extends Component {
         >
           <Pressable
             style={styles.itemNavbar}
-            onPress={() => this.props.navigation.replace("unduhan")}
+            onPress={() => this.props.navigation.replace("riwayatunduhan")}
           >
             {curPgStyle("SVG", "unduhan", unduhActive, unduhInActive)}
             <Text
@@ -110,7 +110,7 @@ class Navbar extends Component {
         >
           <Pressable
             style={[styles.itemNavbar]}
-            onPress={() => this.props.navigation.replace("home")}
+            onPress={() => this.props.navigation.replace("dashboard")}
           >
             {curPgStyle("SVG", "home", homeActive, homeInActive)}
             <Text
@@ -135,7 +135,7 @@ class Navbar extends Component {
         >
           <Pressable
             style={styles.itemNavbar}
-            onPress={() => this.props.navigation.replace("userList")}
+            onPress={() => this.props.navigation.replace("manajemenakun")}
           >
             {curPgStyle("SVG", "userList", userListActive, userListInActive)}
             <Text
@@ -154,14 +154,14 @@ class Navbar extends Component {
         {/* UserSetting */}
         <ImageBackground
           source={
-            this.props.whichPage === "userList"
+            this.props.whichPage === "userSetting"
               ? require("../../assets/img/navbarBg.png")
               : require("../../assets/img/navbarBgNone.png")
           }
         >
           <Pressable
             style={styles.itemNavbar}
-            onPress={() => this.props.navigation.replace("userSetting")}
+            onPress={() => this.props.navigation.replace("profilepage")}
           >
             {curPgStyle(
               "SVG",
