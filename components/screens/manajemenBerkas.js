@@ -52,7 +52,7 @@ const ManajemenBerkas = ({ navigation }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.67.213:8000/api/arsips");
+      const response = await fetch("http://192.168.118.213:8000/api/arsips");
       const data = await response.json();
       setUsers(data);
       tableData.splice(0, tableData.length);
@@ -92,21 +92,21 @@ const ManajemenBerkas = ({ navigation }) => {
     const addUsers = () => {};
   };
 
-  // function renderOpsiIcons() {
-  //   return (
-  //     <View style={styles.opsiContainer}>
-  //       <TouchableOpacity
-  //         onPress={() => [[{ toggleDropdown }, console.log("Opsi titik-tiga")]]}
-  //       >
-  //         <MaterialCommunityIcons
-  //           name="dots-vertical"
-  //           size={30}
-  //           color="black"
-  //         />
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
+  function renderOpsiIcons() {
+    return (
+      <View style={styles.opsiContainer}>
+        <TouchableOpacity
+          onPress={() => [[{ toggleDropdown }, console.log("Opsi titik-tiga")]]}
+        >
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={30}
+            color="black"
+          />
+        </TouchableOpacity>
+      </View>
+    );
+  }
   function renderOpsiIcons(){
     {isOpen && (
       <View style={styles.dropdownContainer}>
