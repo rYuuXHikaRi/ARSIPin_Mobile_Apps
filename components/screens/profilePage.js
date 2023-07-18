@@ -1,5 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity} from 'react-native';
+import { LinearGradient } from 'expo-linear-gradient';
 
 import Navbar from '../partials/navbar';
 import Header from '../partials/header';
@@ -15,9 +16,16 @@ const ProfilePage = () => {
         style={styles.profileImage}
         source={require('../../assets/profile.png')}
       />
-      <TouchableOpacity style={styles.changePhotoButton}>
-        <Text style={styles.changePhotoButtonText}>Ganti Foto</Text>
-      </TouchableOpacity>
+      <LinearGradient
+                colors={['#90C13B', '#7CB53C', '#378D3F']}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
+                style={styles.changePhotoButton}
+      > 
+        <TouchableOpacity >
+          <Text style={styles.changePhotoButtonText}>Ganti Foto</Text>
+        </TouchableOpacity>
+      </LinearGradient>
     </View>
     
     <View style={styles.attributeContainer}>
@@ -50,10 +58,16 @@ const ProfilePage = () => {
         <TextInput style={styles.attributeValue} placeholder="Masukkan Password Baru" secureTextEntry={true} />
       </View>
     </View>
-
-    <TouchableOpacity style={styles.saveButton}>
-      <Text style={styles.saveButtonText}>Simpan</Text>
-    </TouchableOpacity>
+    <LinearGradient
+                colors={['#90C13B', '#7CB53C', '#378D3F']}
+                start={[0, 0.5]}
+                end={[1, 0.5]}
+                style={styles.saveButton}
+      > 
+        <TouchableOpacity >
+          <Text style={styles.saveButtonText}>Simpan</Text>
+        </TouchableOpacity>
+      </LinearGradient>
 
     <View style={{position: 'absolute', bottom: 0}}>
       <Navbar whichPage="userSetting"/>
