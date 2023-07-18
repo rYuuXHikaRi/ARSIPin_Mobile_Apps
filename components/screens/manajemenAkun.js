@@ -6,11 +6,13 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  SafeAreaView,
   Pressable,
 } from "react-native";
 import { AntDesign } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
+import { SafeAreaView } from 'react-native-safe-area-context';
+
+
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 
@@ -156,7 +158,7 @@ const ManajemenAkun = () => {
         </TouchableOpacity>
       </View>
       <View style={{ position: "absolute", bottom: 0 }}>
-        <Navbar whichPage="arsip" />
+        <Navbar whichPage="userList" />
       </View>
     </SafeAreaView>
   );
