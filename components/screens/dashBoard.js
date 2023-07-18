@@ -20,13 +20,13 @@ const DashBoard = () => {
                     style={styles.title}
       >Halo, {'\n'}Administrator</GradientText>
       <LinearGradient
-                            colors={['#197B40', '#79B33B', '#A6CE39']}
-                            start={[0, 0.5]}
-                            end={[1, 0.5]}
-                            style={[styles.card]}
-          > 
-            <Text style={styles.cardTitle}>Statistik</Text>
-          </LinearGradient>
+                      colors={['#197B40', '#79B33B', '#A6CE39']}
+                      start={[0, 0.5]}
+                      end={[1, 0.5]}
+                      style={[styles.card]}
+      > 
+        <Text style={styles.cardTitle}>Statistik</Text>
+      </LinearGradient>
       <View style={styles.row}>
         <View style={styles.column}>
           <LinearGradient
@@ -89,7 +89,6 @@ const styles = StyleSheet.create({
     fontWeight: '800',
   },
   card: {
-    backgroundColor: '#6EAD3B',
     borderRadius: 8,
     marginTop: 30,
     paddingLeft: 12,
