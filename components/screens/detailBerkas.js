@@ -6,168 +6,102 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Modal,
-  TextInput,ScrollView
+  TextInput,
+  ScrollView
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons,Feather } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons ,FontAwesome} from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
+import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
-import axios from "axios";
 
-
-
-const ManajemenBerkas = ({navigation}) => {
+const DetailBerkas = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
-  const [namadokumen, setnamadokumen] = useState("");
+  const [NamaDokumen, setNamaDokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
-  const [tahun, settahun] = useState("");
-  const [namadesa, setnamadesa] = useState("");
-  const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
+  const [Tahun, setTahun] = useState("");
+  const [NamaDesa, setNamaDesa] = useState("");
+  const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
-  const [tableData, setTableData] = useState([]);
-  const [users, setUsers] = useState([]);
-  const [rowData,setRowData]= useState([]);
-  const [NamaDokumen, setNamaDokumen] = useState('');
-  const [Keterangan, setKeterangan] = useState('');
-  const [Tahun, setTahun] = useState('');
-  const [NamaDesa, setNamaDesa] = useState('');
-  const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState('');
-  const [NamaFile, setNamaFile] = useState('');
-  
-  
+  const [fileDetail, setFileDetail] = useState(null);
+  const { user } = route.params;
+
+  console.log(1);
+  console.log(user);
+  console.log(1);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-
-      try {
-          const response = await fetch('http://192.168.26.249:8000/api/arsips');
-          const data = await response.json();  
-          setUsers(data);
-          tableData.splice(0,tableData.length);
+    // Lakukan pengambilan data detail file dari endpoint Laravel menggunakan fileId
+    fetch(`http://192.168.26.249:8000/api/arsips/8`)
+    .then(response => response.json())
+    .then(data => {
+      setFileDetail(data);
+    })
+    .catch(error => {
+      console.error('Error fetching user detail:', error);
+    });
+  }, [user.id]);
   
-      } catch (error) {
-          console.log(error);
-      }
-
-
-  };
-    fetchUsers();
-    addUsers();
-  }, []);
-
-
-
-
-const addUsers = () => {
-  users.map((user) => (
-    tableData.push([<TouchableOpacity onPress={() => navigation.navigate('detailberkas',{user})}>
-    <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.NamaDokumen}</Text>
-    </TouchableOpacity>,renderOpsiIcons()])
- ))
-
-}
-
-const handleCreate = async () => {
- 
-  const data = {
-    NamaDokumen: NamaDokumen,
-    Keterangan: Keterangan,
-    Tahun: Tahun,
-    NamaDesa: NamaDesa,
-    LokasiPenyimpanan: LokasiPenyimpanan,
-    NamaFile : "File.txt"
-  };
-
-  try {
-    console.log(data)
-    const response = await axios.post('http://192.168.26.249:8000/api/store', data);
-    console.log('Data created successfully:', response.data);
-    // Reset input fields if needed
-    console.log('berhasil')
-    setModalVisible(false);
-
-  } catch (error) {
-    console.error('Error creating data:', error);
-  }
-};
-
-
-
-  
-  const tableHead = ['Nama Folder', 'Aksi'];
-
+  console.log(fileDetail);
+  const tableHead = ['Nama File', 'Aksi'];
+  const tableData = [
+    [<TouchableOpacity onPress={() => console.log('File 1')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 1</Text>
+    </TouchableOpacity>, renderOpsiIcons()],
+    [<TouchableOpacity onPress={() => console.log('File 2')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 2</Text>
+    </TouchableOpacity>, renderOpsiIcons()],
+    [<TouchableOpacity onPress={() => console.log('File 3')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+    </TouchableOpacity>, renderOpsiIcons()],
+        [<TouchableOpacity onPress={() => console.log('File 3')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+    </TouchableOpacity>, renderOpsiIcons()],
+    // tambahkan data lainnya di sini sesuai kebutuhan
+  ];
 
   function renderOpsiIcons() {
     return (
-      <View style={styles.opsiContainer}>
-        <TouchableOpacity onPress={() => setShowPopover(true)}>
-          <MaterialCommunityIcons name="dots-vertical" size={30} color="black" />
+        <View style={styles.opsiContainer}>
+        <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
+          <MaterialCommunityIcons
+            name="eye"
+            size={25}
+            color="black"
+          />
         </TouchableOpacity>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={showPopover}
-          onRequestClose={() => setShowPopover(false)}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView2}>
-              <TouchableOpacity
-                style={styles.opsiButton}
-                onPress={() => {
-                  // Logika ketika tombol "Pencil" ditekan
-                  console.log('Pencil button pressed');
-                  setShowPopover(false);
-                }}
-              >
-                <Feather name="edit" size={30} color="black" />
-                <Text style={styles.opsiText}>Edit</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.opsiButton}
-                onPress={() => {
-                  // Logika ketika tombol "Eye" ditekan
-                  console.log('Eye button pressed');
-                  setShowPopover(false);
-                }}
-              >
-                <Feather name="eye" size={30} color="black" />
-                <Text style={styles.opsiText}>View</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={styles.opsiButton}
-                onPress={() => {
-                  // Logika ketika tombol "Trash" ditekan
-                  console.log('Trash button pressed');
-                  setShowPopover(false);
-                }}
-              >
-                <Feather name="trash" size={30} color="black" />
-                <Text style={styles.opsiText}>Delete</Text>
-              </TouchableOpacity>
-              <TouchableOpacity
-                style={[styles.buttonX, styles.buttonClose]}
-                onPress={() => setShowPopover(false)}
-              >
-                <Text style={styles.X}>X</Text>
-              </TouchableOpacity>
-            </View>
-          </View>
-        </Modal>
+
+        <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
+          <FontAwesome
+            name="trash"
+            size={25}
+            color="black"
+          />
+        </TouchableOpacity>
       </View>
     );
   }
-  
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
-    console.log("namadokumen:", namadokumen);
-    console.log("Nama Lengkap:", keterangan);
-    console.log("tahun:", tahun);
-    console.log("namadesa:", namadesa);
-    console.log("namafile:", namafile);
+    console.log("NamaDokumen:", NamaDokumen);
+    console.log("Nama Lengkap:", Keterangan);
+    console.log("Tahun:", Tahun);
+    console.log("NamaDesa:", NamaDesa);
+    console.log("namafile:", NamaFile);
 
     // Setelah melakukan sesuatu, tutup modal
     setModalVisible(false);
@@ -204,7 +138,6 @@ const handleCreate = async () => {
                 <TextInput
                   style={[styles.input]}
                   placeholder="Nama Dokumen"
-                  value={NamaDokumen}
                   onChangeText={(text) => setNamaDokumen(text)}
                 />
               </View>
@@ -214,16 +147,14 @@ const handleCreate = async () => {
                 <TextInput
                   style={styles.inputketerangan}
                   placeholder="Keterangan"
-                  value={Keterangan}
-                  onChangeText={(text) => setKeterangan(text)}
+                  onChangeText={(text) => setketerangan(text)}
                 />
               </View>
             </View>
             <Text style={styles.titleform}>Tahun</Text>
             <TextInput
               style={styles.input}
-              placeholder="tahun"
-              value={Tahun}
+              placeholder="Tahun"
               onChangeText={(text) => setTahun(text)}
             />
 
@@ -231,7 +162,6 @@ const handleCreate = async () => {
             <TextInput
               style={styles.input}
               placeholder="Nama Desa"
-              value={NamaDesa}
               onChangeText={(text) => setNamaDesa(text)}
             />
 
@@ -241,8 +171,7 @@ const handleCreate = async () => {
                 <TextInput
                   style={styles.input}
                   placeholder="Loker"
-                  value={LokasiPenyimpanan}
-                  onChangeText={(text) => setLokasiPenyimpanan(text)}
+                  onChangeText={(text) => setTahun(text)}
                 />
               </View>
 
@@ -251,8 +180,6 @@ const handleCreate = async () => {
                 <TextInput
                   style={styles.inputFile}
                   placeholder="Pilih"
-                  value={NamaFile}
-                  onChangeText={(text) => setNamaFile(text)}
                 ></TextInput>
               </View>
             </View>
@@ -260,7 +187,7 @@ const handleCreate = async () => {
             <View style={styles.btnsave}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonSave]}
-                onPress={handleCreate}
+                onPress={handleSave}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
               </TouchableOpacity>
@@ -276,25 +203,29 @@ const handleCreate = async () => {
       <View style={{ position: "absolute", top: 0 }}>
         <Header />
       </View>
-      <LinearGradient
-                      colors={['#197B40', '#79B33B', '#A6CE39']}
-                      start={[0, 0.5]}
-                      end={[1, 0.5]}
-                      style={[styles.card]}
-      > 
-        <Text style={styles.cardTitle}>Manajemen Berkas</Text>
-      </LinearGradient>
+      <View style={styles.card}>
+        <Text style={[styles.cardTitle, styles.boldText]}>Manajemen Berkas</Text>
+      </View>
       <View style={styles.card2}>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
+          <Text style={[styles.cardTitle2, styles.bottomLine]}>Detail Arsip</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.cardTitle2]}>Nama : {user.NamaDokumen}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.cardTitle2]}>Tahun: {user.Tahun}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.cardTitle2]}>Desa : {user.NamaDesa}</Text>
+        </View>
+        <View style={styles.row}>
+          <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : {user.LokasiPenyimpanan}</Text>
         </View>
         <ScrollView>
         <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
-        
           <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
-       
-          
-          {tableData.map((rowData, index,) => (
+          {tableData.map((rowData, index,columnData) => (
             <Row
               key={index}
               data={rowData}flexArr={[4, 1]}
@@ -311,35 +242,27 @@ const handleCreate = async () => {
       </View>
 
       <View style={styles.row}>
-        <LinearGradient
-                        colors={['#90C13B', '#7CB53C', '#378D3F']}
-                        start={[0, 0.5]}
-                        end={[1, 0.5]}
-                        style={styles.button}
-        > 
-          <TouchableOpacity onPress={() => setModalVisible(true)} >
-            <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
-          </TouchableOpacity>
-        </LinearGradient>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => setModalVisible(true)}
+        >
+          <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
+        </TouchableOpacity>
       </View>
-
-      <View style={{ position: "absolute", bottom: 0 , backgroundColor: '#F0E5E5'}}>
-        <View style={[styles.row, {paddingLeft: 18, paddingRight: 18, marginBottom: 20}]}>
-          <View style={styles.searchButton}>
-            <AntDesign name="search1" size={20} color="black" />
-            <TextInput
-                      placeholder="Cari data..."
-                      style={styles.searchButtonText}
-            />
-          </View>
-        </View>
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.searchButton}>
+          <AntDesign name="search1" size={24} color="black" />
+          <Text style={styles.searchButtonText}> Pencarian...</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{ position: "absolute", bottom: 0 }}>
         <Navbar whichPage="arsip" />
       </View>
     </SafeAreaView>
   );
 };
 
-export default ManajemenBerkas;
+export default DetailBerkas;
 
 const styles = StyleSheet.create({
   //Modal Style
@@ -498,26 +421,28 @@ const styles = StyleSheet.create({
     backgroundColor: "#F0E5E5",
   },
   card: {
+    backgroundColor: "#6EAD3B",
     borderRadius: 8,
-    marginTop: 76,
-    paddingLeft: 12,
-    height: 43,
-
-    justifyContent: 'center'
+    padding: 16,
+    marginTop: 50,
+    height: 60,
   },
   card2: {
     backgroundColor: "white",
     borderRadius: 8,
     padding: 16,
     marginBottom: 5,
-    marginTop: 15,
+    marginTop: 30,
     height: 460,
     width: 350,
   },
   cardTitle: {
-    fontSize: 16,
-    fontWeight: "700",
+    fontSize: 20,
+    fontWeight: "bold",
+    marginBottom: 8,
     color: "white",
+    height: 30,
+    justifyContent: "center",
   },
   cardTitle2: {
     fontSize: 20,
@@ -549,13 +474,13 @@ const styles = StyleSheet.create({
     marginBottom: 4,
   },
   button: {
+    backgroundColor: "#6EAD3B",
     borderRadius: 8,
+    padding: 10,
     marginHorizontal: 5,
     flex: 1,
-    height: 43,
-    marginTop: 17,
-
-    justifyContent: 'center'
+    height: 60,
+    marginTop: 20,
   },
   buttonText: {
     color: "white",
@@ -566,10 +491,11 @@ const styles = StyleSheet.create({
   },
   searchButton: {
     backgroundColor: "white",
-    borderRadius: 10,
+    borderRadius: 8,
+    padding: 10,
     marginHorizontal: 5,
     flex: 1,
-    height: 43,
+    height: 60,
     marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
@@ -600,8 +526,6 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     flexDirection: "row",
     alignItems: "center",
-
-    paddingLeft: 7,
   },
   searchButtonText: {
     color: "black",
@@ -610,36 +534,5 @@ const styles = StyleSheet.create({
   },
   tableText: {
     textAlign: 'center',
-  },
-  opsiContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
-  },
-  opsiButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    paddingVertical: 10,
-    paddingHorizontal: 16,
-  },
-  opsiText: {
-    marginLeft: 8,
-    fontSize: 16,
-  },
-  modalView2: {
-    width: 350,
-    height: 150,
-    marginLeft: 20,
-    marginRight: 20,
-    marginTop: -130,
-    backgroundColor: "white",
-    borderRadius: 10,
-    shadowColor: "#000",
-    shadowOffset: {
-      width: 0,
-      height: 2,
-    },
-    shadowOpacity: 0.25,
-    shadowRadius: 4,
-    elevation: 5,
   },
 });
