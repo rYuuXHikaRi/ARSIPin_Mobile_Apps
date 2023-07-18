@@ -19,7 +19,7 @@ class Header extends Component {
                 <View style={[styles.container, {backgroundColor: "white", width: screenWidth}]}>
                    <View style={styles.pingIndicator}/>
                     <Image source={require('../../assets/img/logoGGP.png')} style={{width: logoWidth, height: logoHeight}}/>  
-                    <Pressable>
+                    <Pressable style={{width: 50, height: 50, justifyContent: 'center', alignItems: 'center'}} onPress={() => {console.log('test')}}>
                         <View style={styles.profileContainer}>
                             <Image source={require('../../assets/img/profileTmp.jpeg')} style={styles.croppedProfile}/>
                         </View>
