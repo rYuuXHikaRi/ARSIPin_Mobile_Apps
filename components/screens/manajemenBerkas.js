@@ -8,7 +8,7 @@ import {
   Modal,
   TextInput,ScrollView
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons,Feather } from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -104,12 +104,63 @@ const handleCreate = async () => {
   function renderOpsiIcons() {
     return (
       <View style={styles.opsiContainer}>
-        <TouchableOpacity onPress={() => console.log('Opsi titik-tiga')}>
+        <TouchableOpacity onPress={() => setShowPopover(true)}>
           <MaterialCommunityIcons name="dots-vertical" size={30} color="black" />
         </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={showPopover}
+          onRequestClose={() => setShowPopover(false)}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView2}>
+              <TouchableOpacity
+                style={styles.opsiButton}
+                onPress={() => {
+                  // Logika ketika tombol "Pencil" ditekan
+                  console.log('Pencil button pressed');
+                  setShowPopover(false);
+                }}
+              >
+                <Feather name="edit" size={30} color="black" />
+                <Text style={styles.opsiText}>Edit</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.opsiButton}
+                onPress={() => {
+                  // Logika ketika tombol "Eye" ditekan
+                  console.log('Eye button pressed');
+                  setShowPopover(false);
+                }}
+              >
+                <Feather name="eye" size={30} color="black" />
+                <Text style={styles.opsiText}>View</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={styles.opsiButton}
+                onPress={() => {
+                  // Logika ketika tombol "Trash" ditekan
+                  console.log('Trash button pressed');
+                  setShowPopover(false);
+                }}
+              >
+                <Feather name="trash" size={30} color="black" />
+                <Text style={styles.opsiText}>Delete</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                style={[styles.buttonX, styles.buttonClose]}
+                onPress={() => setShowPopover(false)}
+              >
+                <Text style={styles.X}>X</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </Modal>
       </View>
     );
   }
+  
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -548,5 +599,36 @@ const styles = StyleSheet.create({
   },
   tableText: {
     textAlign: 'center',
+  },
+  opsiContainer: {
+    flexDirection: 'row',
+    justifyContent: 'center',
+  },
+  opsiButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 10,
+    paddingHorizontal: 16,
+  },
+  opsiText: {
+    marginLeft: 8,
+    fontSize: 16,
+  },
+  modalView2: {
+    width: 350,
+    height: 150,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: -130,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
   },
 });
