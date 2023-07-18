@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { AntDesign } from '@expo/vector-icons';
+import { LinearGradient } from 'expo-linear-gradient';
 
 //local
 import Header from '../partials/header';
@@ -13,17 +13,23 @@ const RiwayatUnduhan = () => {
                 <View style={{position: 'absolute', top: 0}}>
                   <Header />
                 </View>
-                <View >
-                  <View style={styles.card}>
+
+                <View>
+                  <LinearGradient
+                        colors={['#197B40', '#79B33B', '#A6CE39']}
+                        start={[0, 0.5]}
+                        end={[1, 0.5]}
+                        style={[styles.card]}
+                  > 
                     <Text style={styles.cardTitle}>Riwayat Unduhan</Text>
-                  </View>
+                  </LinearGradient>
                   <View style={styles.card2}>
                     <View style={styles.row}>
                     
-                    <View style={styles.card6}>
+                      <View style={styles.card6}>
 
 
-                </View>
+                      </View>
 
                     </View>
                   </View>
@@ -45,28 +51,26 @@ const styles = StyleSheet.create({
     backgroundColor: '#F0E5E5',
   },
   card: {
-    backgroundColor: '#6EAD3B',
     borderRadius: 8,
-    padding: 16,
-    marginTop: 50,
-    height: 60,
+    marginTop: 76,
+    paddingLeft: 12,
+    height: 43,
+
+    justifyContent: 'center'
   },
   card2: {
     backgroundColor: 'white',
     borderRadius: 8,
     padding: 16,
     marginBottom: 5,
-    marginTop: 30,
+    marginTop: 15,
     height: 460,
     width: 350,
   },
   cardTitle: {
-    fontSize: 20,
-    fontWeight: 'bold',
-    marginBottom: 8,
-    color: 'white',
-    height: 30,
-    justifyContent: 'center',
+    fontSize: 16,
+    fontWeight: "700",
+    color: "white",
   },
 
   
