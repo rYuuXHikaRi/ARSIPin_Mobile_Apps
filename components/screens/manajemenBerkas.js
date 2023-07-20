@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Modal,
-  TextInput,ScrollView
+  TextInput,ScrollView,Button
 } from "react-native";
 import { AntDesign, MaterialCommunityIcons,Feather } from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
@@ -16,6 +16,7 @@ import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
 import axios from "axios";
+import * as DocumentPicker from 'expo-document-picker';
 
 
 
@@ -36,6 +37,9 @@ const ManajemenBerkas = ({navigation}) => {
   const [NamaDesa, setNamaDesa] = useState('');
   const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState('');
   const [NamaFile, setNamaFile] = useState('');
+  const [showPopover,setShowPopover] = useState('');
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  
   
   
 
@@ -43,7 +47,7 @@ const ManajemenBerkas = ({navigation}) => {
     const fetchUsers = async () => {
 
       try {
-          const response = await fetch('http://192.168.26.249:8000/api/arsips');
+          const response = await fetch('http://192.168.172.249:8000/api/arsips');
           const data = await response.json();  
           setUsers(data);
           tableData.splice(0,tableData.length);
@@ -70,6 +74,24 @@ const addUsers = () => {
 
 }
 
+const handleFilePick = async () => {
+  try {
+    const result = await DocumentPicker.getDocumentAsync({
+      multiple: true,
+      type: 'application/pdf', // Adjust the file type based on your requirements
+    });
+
+    if (result.type === 'success') {
+      setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
+      console.log(result.uri);
+    } else if (result.type === 'cancel') {
+      console.log('User cancelled document picker');
+    }
+  } catch (error) {
+    console.log('DocumentPicker Error: ', error);
+  }
+};
+
 const handleCreate = async () => {
  
   const data = {
@@ -83,7 +105,7 @@ const handleCreate = async () => {
 
   try {
     console.log(data)
-    const response = await axios.post('http://192.168.26.249:8000/api/store', data);
+    const response = await axios.post('http://192.168.172.249:8000/api/store', data);
     console.log('Data created successfully:', response.data);
     // Reset input fields if needed
     console.log('berhasil')
@@ -248,12 +270,10 @@ const handleCreate = async () => {
 
               <View style={styles.styletitle4}>
                 <Text style={styles.titleformupload}>Upload File</Text>
-                <TextInput
-                  style={styles.inputFile}
-                  placeholder="Pilih"
-                  value={NamaFile}
-                  onChangeText={(text) => setNamaFile(text)}
-                ></TextInput>
+                <Button title="Pilih File" onPress={handleFilePick} />
+                {selectedFiles.map((file, index) => (
+                  <Text key={index}>{file.name}</Text>
+                ))}
               </View>
             </View>
 
