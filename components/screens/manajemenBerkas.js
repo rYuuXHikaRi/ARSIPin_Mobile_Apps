@@ -40,7 +40,8 @@ const ManajemenBerkas = ({navigation}) => {
   const [NamaFile, setNamaFile] = useState('');
   const [showPopover,setShowPopover] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
-  const [file, setFile] = useState([]);
+  const [files, setFiles] = useState([]);
+  
   
   
   
@@ -85,18 +86,13 @@ const handleFilePick = async () => {
 
     if (result.type === 'success') {
       setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
-      console.log(result.uri);
-      const files = {
+      const file = {
         uri: result.uri,
         name: result.name,
         type: result.type,
       };
-
-      setFile(files);
-
-      // Append the file to the FormData object
-      
-
+      setFiles(file);
+      console.log(result.uri);
     } else if (result.type === 'cancel') {
       console.log('User cancelled document picker');
     }
@@ -115,6 +111,7 @@ const handleCreate = async () => {
   //   LokasiPenyimpanan: LokasiPenyimpanan,
   //   NamaFile : "File.txt"
   // };
+  console.log(files);
   const formData = new FormData();
   formData.append('NamaDokumen', NamaDokumen);
   formData.append('Keterangan', Keterangan);
@@ -123,8 +120,12 @@ const handleCreate = async () => {
   formData.append('LokasiPenyimpanan', LokasiPenyimpanan);
   $folderName = NamaDokumen +'-'+ LokasiPenyimpanan;
   formData.append('NamaFile', $folderName);
-  formData.append('file',file);
+  formData.append('file', files);
 
+
+  // selectedFiles.forEach((file, index) => {
+  //   formData.append(`file[${index}]`, file);
+  // });
 
   try {
     // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
