@@ -9,19 +9,20 @@ import {
   SafeAreaView,
   Pressable,
   ScrollView,
-  picker,
+  Picker,
+  FlatList,
 } from "react-native";
 import {
   AntDesign,
   MaterialCommunityIcons,
   FontAwesome,
+  Feather,
 } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
 import { Table, Row } from "react-native-table-component";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
-
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -32,6 +33,7 @@ const ManajemenAkun = () => {
   const [role, setrole] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
+  const [users, setUsers] = useState([]);
 
   const options = ["User", "Admin"];
 
@@ -45,62 +47,88 @@ const ManajemenAkun = () => {
   };
 
   useEffect(() => {
-    const fetchUsers = async () => {
-
-      try {
-          const response = await fetch('http://192.168.118.213:8000/api/users');
-          const data = await response.json();  
-          setUsers(data);
-          tableData.splice(0,tableData.length);
-  
-      } catch (error) {
-          console.log(error);
-      }
-
-
-  };
     fetchUsers();
-    addUsers();
   }, []);
 
-  const tableHead = ["Nama", "Role", "Aksi"];
-  const tableData = [
-    [
-      <TouchableOpacity onPress={() => console.log("Akun 1")}>
-        <Text style={[styles.tableText, { fontSize: 20 }]}>Agus</Text>
-      </TouchableOpacity>,
-      <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
-      renderOpsiIcons(),
-    ],
-    [
-      <TouchableOpacity onPress={() => console.log("Akun 2")}>
-        <Text style={[styles.tableText, { fontSize: 20 }]}>Sunar</Text>
-      </TouchableOpacity>,
-      <Text style={[styles.tableText, { fontSize: 20 }]}>Petugas</Text>,
-      renderOpsiIcons(),
-    ],
-    [
-      <TouchableOpacity onPress={() => console.log("Akun 3")}>
-        <Text style={[styles.tableText, { fontSize: 20 }]}>Yo</Text>
-      </TouchableOpacity>,
-      <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
-      renderOpsiIcons(),
-    ],
-  ];
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("http://192.168.118.213:8000/api/users");
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+  const handleEdit = (userId) => {
+    // Implement edit action here
+    console.log("Edit user with ID:", userId);
+  };
 
-  function renderOpsiIcons() {
-    return (
-      <View style={styles.opsiContainer}>
-        <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
-          <MaterialCommunityIcons name="pencil" size={25} color="black" />
+  const handleDelete = (userId) => {
+    // Implement delete action here
+    console.log("Delete user with ID:", userId);
+  };
+
+  const renderUserItem = ({ item }) => (
+    <View style={styles.userItem}>
+      <Text style={styles.userName}>{item.NamaLengkap}</Text>
+      <Text style={styles.userRole}>{item.Roles == 1 ? 'admin' : 'user'}</Text>
+      <View style={styles.actionsContainer}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => handleEdit(item.id)}
+        >
+          {/* <Text style={[styles.actionText]}>Edit</Text> */}
+          <MaterialCommunityIcons name="pencil" size={20} color="#197B40" />
         </TouchableOpacity>
-
-        <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
-          <FontAwesome name="trash" size={25} color="black" />
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDelete(item.id)}
+        >
+          {/* <Text style={styles.actionText}>Delete</Text> */}
+          <FontAwesome name="trash" size={25} color="#A6D17A" />
         </TouchableOpacity>
       </View>
-    );
-  }
+    </View>
+  );
+  // const tableHead = ["Nama", "Role", "Aksi"];
+  // const tableData = [
+  //   [
+  //     <TouchableOpacity onPress={() => console.log("Akun 1")}>
+  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Agus</Text>
+  //     </TouchableOpacity>,
+  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
+  //     renderOpsiIcons(),
+  //   ],
+  //   [
+  //     <TouchableOpacity onPress={() => console.log("Akun 2")}>
+  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Sunar</Text>
+  //     </TouchableOpacity>,
+  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Petugas</Text>,
+  //     renderOpsiIcons(),
+  //   ],
+  //   [
+  //     <TouchableOpacity onPress={() => console.log("Akun 3")}>
+  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Yo</Text>
+  //     </TouchableOpacity>,
+  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
+  //     renderOpsiIcons(),
+  //   ],
+  // ];
+
+  // function renderOpsiIcons() {
+  //   return (
+  //     <View style={styles.opsiContainer}>
+  //       <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
+  //         <MaterialCommunityIcons name="pencil" size={25} color="black" />
+  //       </TouchableOpacity>
+
+  //       <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
+  //         <FontAwesome name="trash" size={25} color="black" />
+  //       </TouchableOpacity>
+  //     </View>
+  //   );
+  // }
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -124,7 +152,7 @@ const ManajemenAkun = () => {
       </View>
       <View style={styles.card2}>
         <ScrollView>
-          <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
+          {/* <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
             <Row
               data={tableHead}
               flexArr={[4, 2, 1.3]}
@@ -143,7 +171,21 @@ const ManajemenAkun = () => {
                 textStyle={styles.text}
               />
             ))}
-          </Table>
+          </Table> */}
+          <View style={styles.containertabel}>
+            <FlatList
+              data={users}
+              renderItem={renderUserItem}
+              keyExtractor={(item) => item.id.toString()}
+              ListHeaderComponent={
+                <View style={styles.tableHeader}>
+                  <Text style={styles.headerText}>Nama Lengkap</Text>
+                  <Text style={styles.headerText}>Roles</Text>
+                  <Text style={styles.headerText}>Aksi</Text>
+                </View>
+              }
+            />
+          </View>
         </ScrollView>
       </View>
       <View style={styles.row}>
@@ -193,14 +235,14 @@ const ManajemenAkun = () => {
                 <Text style={styles.titleform}>Nomor HP</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Email"
+                  placeholder="Nomor HP"
                   onChangeText={(text) => setEmail(text)}
                 />
 
                 <Text style={styles.titleform}>Kata Sandi</Text>
                 <TextInput
                   style={styles.input}
-                  placeholder="Katak sandi"
+                  placeholder="Kata Sandi"
                   onChangeText={(text) => setPassword(text)}
                 />
 
@@ -210,11 +252,20 @@ const ManajemenAkun = () => {
                     <View style={styles.inputRole}>
                       <TouchableOpacity onPress={toggleDropdown}>
                         <Text
-                          style={{ padding: 10, backgroundColor: "#F6F6F6" }}
+                          style={{
+                            paddingHorizontal: 10,
+                            backgroundColor: "#F6F6F6",
+                            paddingVertical: 10,
+                          }}
                         >
                           {selectedOption !== ""
                             ? selectedOption
-                            : "Select an option"}
+                            : "Plih Role          "}
+                          <Feather
+                            name="chevron-down"
+                            size={20}
+                            color={"black"}
+                          />
                         </Text>
                       </TouchableOpacity>
 
@@ -225,9 +276,7 @@ const ManajemenAkun = () => {
                               key={option}
                               onPress={() => handleSelectOption(option)}
                             >
-                              <Text
-                                style={styles.OpsionDropdown}
-                              >
+                              <Text style={styles.OpsionDropdown}>
                                 {option}
                               </Text>
                             </TouchableOpacity>
@@ -255,6 +304,8 @@ const ManajemenAkun = () => {
             </View>
           </Modal>
 
+          
+
           <Text style={styles.buttonText} onPress={() => setModalVisible(true)}>
             + Tambah Akun
           </Text>
@@ -276,6 +327,67 @@ const ManajemenAkun = () => {
 export default ManajemenAkun;
 
 const styles = StyleSheet.create({
+  //TabelContent:
+  containertabel: {
+    flex: 1,
+    padding: 16,
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  userItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  userName: {
+    flex: 2,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  userRole: {
+    flex: 2,
+    fontSize: 16,
+    color: "#888",
+    paddingLeft:80,
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    flex: 1,
+  },
+  editButton: {
+    marginRight: 1,
+    backgroundColor: "#A6D17A",
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+    borderRadius: 6,
+    width:35,
+  },
+  deleteButton: {
+    backgroundColor: "#197B40",
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+    borderRadius: 6,
+    width:35,
+  },
+  actionText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   //Modal Style
   centeredView: {
     flex: 1,
@@ -328,14 +440,13 @@ const styles = StyleSheet.create({
   buttonSave: {
     width: 109,
     height: 43,
-
   },
   btnsave: {
     width: 109,
     height: 73,
     marginLeft: 15,
     paddingTop: 13,
-    marginTop:45,
+    marginTop: 45,
   },
   textStyle: {
     color: "#F6F6F6",
@@ -389,14 +500,14 @@ const styles = StyleSheet.create({
     backgroundColor: "#F6F6F6",
     borderRadius: 8,
   },
-  OpsionDropdown:{
-      padding: 5,
-      marginTop:3,
-      width:140,
-      borderRadius:6,
-      paddingHorizontal: 10,
-      backgroundColor: "#F6F6F6",
-      position:'relative',
+  OpsionDropdown: {
+    padding: 5,
+    marginTop: 3,
+    width: 140,
+    borderRadius: 6,
+    paddingHorizontal: 10,
+    backgroundColor: "#F6F6F6",
+    position: "relative",
   },
   titleform: {
     fontSize: 17,
@@ -428,7 +539,7 @@ const styles = StyleSheet.create({
   },
   styletitle4: {
     justifyContent: "space-between",
-    marginLeft:20,
+    marginLeft: 20,
   },
   Headtitle: {
     paddingLeft: 16,

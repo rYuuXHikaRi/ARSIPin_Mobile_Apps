@@ -1,43 +1,130 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity } from 'react-native';
+import React, { useState, useEffect } from 'react';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
 
-export default function App() {
-  const [isOpen, setIsOpen] = useState(false);
-  const [selectedOption, setSelectedOption] = useState('');
+const ProductListScreen = () => {
+  const [users, setUsers] = useState([]);
 
-  const options = ['Option 1', 'Option 2', 'Option 3'];
+  useEffect(() => {
+    fetchUsers();
+  }, []);
 
-  const handleSelectOption = (option) => {
-    setSelectedOption(option);
-    setIsOpen(false);
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch('http://192.168.118.213:8000/api/users');
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
   };
 
-  const toggleDropdown = () => {
-    setIsOpen(!isOpen);
+  const handleEdit = (userId) => {
+    // Implement edit action here
+    console.log('Edit user with ID:', userId);
   };
 
-  return (
-    <View style={{ marginTop: 100, alignItems: 'center' }}>
-      <TouchableOpacity onPress={toggleDropdown}>
-        <Text style={{ padding: 10, backgroundColor: 'lightgray' }}>
-          {selectedOption !== '' ? selectedOption : 'Select an option'}
-        </Text>
-      </TouchableOpacity>
+  const handleDelete = (userId) => {
+    // Implement delete action here
+    console.log('Delete user with ID:', userId);
+  };
 
-      {isOpen && (
-        <View style={{ marginTop: 10 }}>
-          {options.map((option) => (
-            <TouchableOpacity
-              key={option}
-              onPress={() => handleSelectOption(option)}
-            >
-              <Text style={{ padding: 10, backgroundColor: 'lightgray' }}>
-                {option}
-              </Text>
-            </TouchableOpacity>
-          ))}
-        </View>
-      )}
+  const renderUserItem = ({ item }) => (
+    <View style={styles.userItem}>
+      <Text style={styles.userName}>{item.NamaLengkap}</Text>
+      <Text style={styles.userRole}>{item.Roles}</Text>
+      <View style={styles.actionsContainer}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => handleEdit(item.id)}
+        >
+          <Text style={styles.actionText}>Edit</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          style={styles.deleteButton}
+          onPress={() => handleDelete(item.id)}
+        >
+          <Text style={styles.actionText}>Delete</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   );
-}
+
+  return (
+    <View style={styles.containertabel}>
+      <FlatList
+        data={users}
+        renderItem={renderUserItem}
+        keyExtractor={(item) => item.id.toString()}
+        ListHeaderComponent={
+          <View style={styles.tableHeader}>
+            <Text style={styles.headerText}>Nama Lengkap</Text>
+            <Text style={styles.headerText}>Roles</Text>
+            <Text style={styles.headerText}>Aksi</Text>
+          </View>
+        }
+      />
+    </View>
+  );
+};
+
+const styles = StyleSheet.create({
+  containertabel: {
+    flex: 1,
+    padding: 16,
+  },
+  tableHeader: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+  userItem: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: '#ccc',
+  },
+  userName: {
+    flex: 2,
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  userRole: {
+    flex: 2,
+    fontSize: 16,
+    color: '#888',
+  },
+  actionsContainer: {
+    flexDirection: 'row',
+    justifyContent: 'flex-end',
+    flex: 1,
+  },
+  editButton: {
+    marginRight: 10,
+    backgroundColor: '#007BFF',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  deleteButton: {
+    backgroundColor: '#FF3B30',
+    paddingHorizontal: 12,
+    paddingVertical: 6,
+    borderRadius: 6,
+  },
+  actionText: {
+    color: 'white',
+    fontSize: 16,
+    fontWeight: 'bold',
+  },
+});
+
+export default ProductListScreen;

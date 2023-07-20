@@ -13,6 +13,7 @@ import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
 import PopUpTaccnt from './components/screens/popUp';
 import detailBerkas from './components/screens/DetailBerkas';
+import ProductListScreen from './components/screens/dropdowntes';
 
 
 const Stack = createStackNavigator();
@@ -23,14 +24,14 @@ export default function App() {
       <Stack.Navigator>
       {/* <Stack.Screen
           name="dropdowntes"
-          component={dropdowntes}
+          component={ProductListScreen}
           options={{ headerShown: false }}
         /> */}
-        {/* <Stack.Screen
+        <Stack.Screen
           name="manajemenakun"
           component={ManajemenAkun}
           options={{ headerShown: false }}
-        /> */}
+        />
 
         <Stack.Screen
           name="manajemenberkas"
