@@ -40,6 +40,7 @@ const ManajemenBerkas = ({navigation}) => {
   const [NamaFile, setNamaFile] = useState('');
   const [showPopover,setShowPopover] = useState('');
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [file, setFile] = useState([]);
   
   
   
@@ -48,7 +49,7 @@ const ManajemenBerkas = ({navigation}) => {
     const fetchUsers = async () => {
 
       try {
-          const response = await fetch('http://192.168.172.249:8000/api/arsips');
+          const response = await fetch('http://192.168.0.249:8000/api/arsips');
           const data = await response.json();  
           setUsers(data);
           tableData.splice(0,tableData.length);
@@ -85,6 +86,17 @@ const handleFilePick = async () => {
     if (result.type === 'success') {
       setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
       console.log(result.uri);
+      const files = {
+        uri: result.uri,
+        name: result.name,
+        type: result.type,
+      };
+
+      setFile(files);
+
+      // Append the file to the FormData object
+      
+
     } else if (result.type === 'cancel') {
       console.log('User cancelled document picker');
     }
@@ -95,23 +107,38 @@ const handleFilePick = async () => {
 
 const handleCreate = async () => {
  
-  const data = {
-    NamaDokumen: NamaDokumen,
-    Keterangan: Keterangan,
-    Tahun: Tahun,
-    NamaDesa: NamaDesa,
-    LokasiPenyimpanan: LokasiPenyimpanan,
-    NamaFile : "File.txt"
-  };
+  // const data = {
+  //   NamaDokumen: NamaDokumen,
+  //   Keterangan: Keterangan,
+  //   Tahun: Tahun,
+  //   NamaDesa: NamaDesa,
+  //   LokasiPenyimpanan: LokasiPenyimpanan,
+  //   NamaFile : "File.txt"
+  // };
+  const formData = new FormData();
+  formData.append('NamaDokumen', NamaDokumen);
+  formData.append('Keterangan', Keterangan);
+  formData.append('Tahun', Tahun);
+  formData.append('NamaDesa', NamaDesa);
+  formData.append('LokasiPenyimpanan', LokasiPenyimpanan);
+  $folderName = NamaDokumen +'-'+ LokasiPenyimpanan;
+  formData.append('NamaFile', $folderName);
+  formData.append('file',file);
+
 
   try {
-    console.log(data)
-    const response = await axios.post('http://192.168.172.249:8000/api/store', data);
+    // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
+    console.log(formData)
+    const response = await axios.post('http://192.168.0.249:8000/api/store', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data' // Pastikan Anda mengatur Content-Type sebagai 'multipart/form-data'
+      }
+    });
+  
     console.log('Data created successfully:', response.data);
     // Reset input fields if needed
     console.log('berhasil')
     setModalVisible(false);
-
   } catch (error) {
     console.error('Error creating data:', error);
   }

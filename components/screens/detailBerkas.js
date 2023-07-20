@@ -35,7 +35,7 @@ const DetailBerkas = ({route}) => {
 
   useEffect(() => {
     // Lakukan pengambilan data detail file dari endpoint Laravel menggunakan fileId
-    fetch(`http://192.168.172.249:8000/api/arsips/8`)
+    fetch(`http://192.168.0.249:8000/api/arsips/8`)
     .then(response => response.json())
     .then(data => {
       setFileDetail(data);
