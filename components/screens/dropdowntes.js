@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, FlatList, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, FlatList, StyleSheet, TouchableOpacity, Modal } from 'react-native';
+import { MaterialCommunityIcons, FontAwesome } from '@expo/vector-icons';
 
 const ProductListScreen = () => {
   const [users, setUsers] = useState([]);
+  const [selectedUser, setSelectedUser] = useState(null); // State untuk menyimpan data user yang akan ditampilkan dalam modal
+  const [isEditModalVisible, setEditModalVisible] = useState(false);
 
   useEffect(() => {
     fetchUsers();
@@ -19,8 +22,10 @@ const ProductListScreen = () => {
   };
 
   const handleEdit = (userId) => {
-    // Implement edit action here
-    console.log('Edit user with ID:', userId);
+    // Temukan data user berdasarkan ID dan simpan dalam state selectedUser
+    const user = users.find((user) => user.id === userId);
+    setSelectedUser(user);
+    setEditModalVisible(true);
   };
 
   const handleDelete = (userId) => {
@@ -28,29 +33,62 @@ const ProductListScreen = () => {
     console.log('Delete user with ID:', userId);
   };
 
+  const renderOpsiModalEdit = () => {
+    // Implement modal edit here
+    // Misalnya, Anda bisa menggunakan Modal dan menampilkan data dari state selectedUser
+    return (
+      <Modal
+        visible={isEditModalVisible}
+        animationType="slide"
+        onRequestClose={() => setEditModalVisible(false)}
+      >
+        <View>
+          <Text>Edit User</Text>
+          {selectedUser && (
+            <>
+              <Text>Nama Lengkap: {selectedUser.NamaLengkap}</Text>
+              <Text>Role: {selectedUser.Roles === 1 ? 'admin' : 'user'}</Text>
+              {/* Tampilkan form edit di sini */}
+              {/* Contoh:
+              <TextInput
+                value={selectedUser.NamaLengkap}
+                onChangeText={(text) => handleEditNamaLengkap(text)}
+              />
+              <Button title="Simpan" onPress={() => handleSimpan()} />
+              */}
+            </>
+          )}
+          <TouchableOpacity onPress={() => setEditModalVisible(false)}>
+            <Text>Close Modal</Text>
+          </TouchableOpacity>
+        </View>
+      </Modal>
+    );
+  };
+
   const renderUserItem = ({ item }) => (
     <View style={styles.userItem}>
       <Text style={styles.userName}>{item.NamaLengkap}</Text>
-      <Text style={styles.userRole}>{item.Roles}</Text>
+      <Text style={styles.userRole}>{item.Roles === 1 ? 'admin' : 'user'}</Text>
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.editButton}
           onPress={() => handleEdit(item.id)}
         >
-          <Text style={styles.actionText}>Edit</Text>
+          <MaterialCommunityIcons name="pencil" size={20} color="#197B40" />
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deleteButton}
           onPress={() => handleDelete(item.id)}
         >
-          <Text style={styles.actionText}>Delete</Text>
+          <FontAwesome name="trash" size={25} color="#A6D17A" />
         </TouchableOpacity>
       </View>
     </View>
   );
 
   return (
-    <View style={styles.containertabel}>
+    <View style={styles.container}>
       <FlatList
         data={users}
         renderItem={renderUserItem}
@@ -63,12 +101,13 @@ const ProductListScreen = () => {
           </View>
         }
       />
+      {renderOpsiModalEdit()} {/* Tampilkan modal edit di sini */}
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  containertabel: {
+  container: {
     flex: 1,
     padding: 16,
   },
