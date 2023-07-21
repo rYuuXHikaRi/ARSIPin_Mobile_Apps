@@ -83,12 +83,13 @@ const handleFilePick = async () => {
       type: 'application/pdf', // Adjust the file type based on your requirements
     });
 
+    console.log(result);
     if (result.type === 'success') {
       setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
       const file = {
         uri: result.uri,
         name: result.name,
-        type: result.type,
+        type: result.mimeType,
       };
       setFiles(file);
       console.log(result.uri);
@@ -128,12 +129,21 @@ const handleCreate = async () => {
 
   try {
     // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
-    console.log(formData)
-    const response = await axios.post('http://192.168.0.249:8000/api/store', formData, {
+    console.log(formData);
+    const config = {
+      body: formData,
+      method: 'POST',
       headers: {
-        'Content-Type': 'multipart/form-data' // Pastikan Anda mengatur Content-Type sebagai 'multipart/form-data'
+        'Content-Type': 'multipart/form-data'
       }
-    });
+    }
+    // let response = await axios.post('http://192.168.0.249:8000/api/store', formData, {
+    //   headers: {
+    //     'Content-Type': 'multipart/form-data' // Pastikan Anda mengatur Content-Type sebagai 'multipart/form-data'
+    //   }
+    // });
+
+    let response = await fetch('http://192.168.216.249:8000/api/store', config);
   
     console.log('Data created successfully:', response.data);
     // Reset input fields if needed
