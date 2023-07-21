@@ -6,9 +6,10 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Modal,
-  TextInput,ScrollView,Button
+  TextInput,ScrollView,Button,
+  FlatList,
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons,Feather } from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons,Feather , FontAwesome} from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -49,7 +50,7 @@ const ManajemenBerkas = ({navigation}) => {
     const fetchUsers = async () => {
 
       try {
-          const response = await fetch('http://192.168.0.249:8000/api/arsips');
+          const response = await fetch('http://192.168.176.213:8000/api/arsips');
           const data = await response.json();  
           setUsers(data);
           tableData.splice(0,tableData.length);
@@ -219,7 +220,23 @@ const handleCreate = async () => {
       </View>
     );
   }
-  
+
+  const renderUserItem = ({ item }) => (
+    <View style={styles.userItem}>
+      <Text style={styles.userName}>{item.NamaDokumen}</Text>
+      {/* <Text style={styles.userRole}>{item.Roles == 1 ? "admin" : "user"}</Text> */}
+      <View style={styles.actionsContainer}>
+        <TouchableOpacity
+          style={styles.editButton}
+          onPress={() => handleEdit(item.id)}
+        >
+          {/* <View style={styles.row}>{renderOpsiModalEdit()}</View> */}
+          {/* <Text style={[styles.actionText]}>Edit</Text> */}
+          <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" />
+        </TouchableOpacity>
+      </View>
+    </View>
+  );
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -347,7 +364,7 @@ const handleCreate = async () => {
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
         <ScrollView>
-        <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
+        {/* <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
         
           <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
        
@@ -361,12 +378,26 @@ const handleCreate = async () => {
               textStyle={styles.text}
             />
           ))}
-        </Table>
+        </Table> */}
+                  <View style={styles.containertabel}>
+            <FlatList
+              data={users}
+              renderItem={renderUserItem}
+              keyExtractor={(item) => item.id.toString()}
+              ListHeaderComponent={
+                <View style={styles.tableHeader}>
+                  <Text style={styles.headerText}>Nama Dokumen</Text>
+                  {/* <Text style={styles.headerText}>Roles</Text> */}
+                  <Text style={styles.headerText}>Aksi</Text>
+                </View>
+              }
+            />
+          </View>
         </ScrollView>
       </View>
-      <View style={styles.row}>
+      {/* <View style={styles.row}>
         {renderOpsiModal()}
-      </View>
+      </View> */}
 
       <View style={styles.row}>
         <LinearGradient
@@ -400,6 +431,67 @@ const handleCreate = async () => {
 export default ManajemenBerkas;
 
 const styles = StyleSheet.create({
+   //TabelContent:
+   containertabel: {
+    flex: 1,
+    padding: 16,
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: "bold",
+  },
+  userItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  userName: {
+    flex: 2,
+    fontSize: 18,
+    fontWeight: "bold",
+  },
+  userRole: {
+    flex: 2,
+    fontSize: 16,
+    color: "#888",
+    paddingLeft: 80,
+  },
+  actionsContainer: {
+    flexDirection: "row",
+    justifyContent: "flex-end",
+    flex: 1,
+  },
+  editButton: {
+    marginRight: 1,
+    backgroundColor: "#A6D17A",
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+    borderRadius: 6,
+    width: 35,
+  },
+  deleteButton: {
+    backgroundColor: "#197B40",
+    paddingHorizontal: 6,
+    paddingVertical: 6,
+    borderRadius: 6,
+    width: 35,
+  },
+  actionText: {
+    color: "white",
+    fontSize: 16,
+    fontWeight: "bold",
+  },
   //Modal Style
   centeredView: {
     flex: 1,
