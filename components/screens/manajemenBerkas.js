@@ -631,6 +631,7 @@ const styles = StyleSheet.create({
     marginTop: 20,
     flexDirection: 'row',
     alignItems: 'center',
+    paddingLeft: 12,
   },
   searchButtonText: {
     color: 'black',
