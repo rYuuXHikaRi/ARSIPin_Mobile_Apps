@@ -5,7 +5,6 @@ import { StyleSheet, Text, View, Dimensions, Image,
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
-
 // Local
 import GradientText from '../partials/gradientText';
 

@@ -12,8 +12,7 @@ import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
 import PopUpTaccnt from './components/screens/popUp';
-import DetailBerkas from './components/screens/detailBerkas';
-import detailBerkas from './components/screens/DetailBerkas';
+import detailBerkas from './components/screens/detailBerkas';
 import ProductListScreen from './components/screens/dropdowntes';
 
 
@@ -24,28 +23,25 @@ export default function App() {
     <NavigationContainer>
       <Stack.Navigator>
         {/* <Stack.Screen
-
             name="login"
             component={LoginPage}
-
             options={{ headerShown: false}}
         /> */}
+
         <Stack.Screen
           name="manajemenakun"
           component={ManajemenAkun}
           options={{ headerShown: false }}
         />
 
-        <Stack.Screen
+        {/* 
+
+                 <Stack.Screen
           name="manajemenberkas"
           component={ManajemenBerkas}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
-          name="login"
-          component={LoginPage}
-          options={{ headerShown: false }}
-        />
+       
         <Stack.Screen
           name="dashboard"
           component={DashBoard}
@@ -56,30 +52,11 @@ export default function App() {
           component={ProfilePage}
           options={{ headerShown: false }}
         />
-
         <Stack.Screen
-
-            name="manajemenakun"
-            component={ManajemenAkun}
-
-            options={{ headerShown: false}}
-        />
-        
-        <Stack.Screen
-
-            name="manajemenberkas"
-            component={ManajemenBerkas}
-
-            options={{ headerShown: false}}
-        />
-
-        <Stack.Screen
-
             name="detailberkas"
             component={DetailBerkas}
-
             options={{ headerShown: false}}
-        />
+        /> */}
       </Stack.Navigator>
     </NavigationContainer>
   );
