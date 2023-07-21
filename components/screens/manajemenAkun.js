@@ -54,7 +54,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.118.213:8000/api/users");
+      const response = await fetch("http://192.168.176.213:8000/api/users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -190,95 +190,99 @@ const ManajemenAkun = () => {
 
   const renderOpsiModalEdit = () => {
     return (
-        <Modal
-          animationType="fade"
-          transparent={true}
-          visible={modalVisibleEdit}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisibleEdit(!modalVisibleEdit);
-          }}
-        >
-          <View style={styles.centeredView2}>
-            <View style={styles.modalView}>
-              <TouchableOpacity
-                style={[styles.buttonX, styles.buttonClose]}
-                onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
-              >
-                <Text style={styles.X}>X</Text>
-              </TouchableOpacity>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalVisibleEdit}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisibleEdit(!modalVisibleEdit);
+        }}
+      >
+        <View style={styles.centeredView2}>
+          <View style={styles.modalView}>
+            <TouchableOpacity
+              style={[styles.buttonX, styles.buttonClose]}
+              onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
+            >
+              <Text style={styles.X}>X</Text>
+            </TouchableOpacity>
 
-              <View style={styles.Headtitle}>
-                <Text style={[styles.bottomLine, styles.titleModal]}>
-                  Edit Data Akun
-                </Text>
-              </View>
-              {selectedUser && (
-                <>
-              <View style={styles.styletitle}>
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Nama User</Text>
-                  <TextInput
-                    style={[styles.inputName]}
-                    placeholder={selectedUser.NamaLengkap}
-                    onChangeText={(text) => setUsername(text)}
-                  />
+            <View style={styles.Headtitle}>
+              <Text style={[styles.bottomLine, styles.titleModal]}>
+                Edit Data Akun
+              </Text>
+            </View>
+            {selectedUser && (
+              <>
+                <View style={styles.styletitle}>
+                  <View style={styles.styletitle2}>
+                    <Text style={styles.titleform}>Nama User</Text>
+                    <TextInput
+                      style={[styles.inputName]}
+                      placeholder={selectedUser.NamaLengkap}
+                      onChangeText={(text) => setUsername(text)}
+                    />
+                  </View>
+
+                  <View style={styles.styletitle2}>
+                    <Text style={styles.titleform}>Nama Lengkap</Text>
+                    <TextInput
+                      style={styles.inputName}
+                      placeholder={selectedUser.UserName}
+                      onChangeText={(text) => setFullName(text)}
+                    />
+                  </View>
                 </View>
+                <Text style={styles.titleform}>Nomor HP</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder={selectedUser.NomorHp}
+                  onChangeText={(text) => setEmail(text)}
+                />
 
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Nama Lengkap</Text>
-                  <TextInput
-                    style={styles.inputName}
-                    placeholder={selectedUser.UserName}
-                    onChangeText={(text) => setFullName(text)}
-                  />
-                </View>
-              </View>
-              <Text style={styles.titleform}>Nomor HP</Text>
-              <TextInput
-                style={styles.input}
-                placeholder={selectedUser.NomorHp}
-                onChangeText={(text) => setEmail(text)}
-              />
+                <Text style={styles.titleform}>Kata Sandi</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder={selectedUser.Password}
+                  onChangeText={(text) => setPassword(text)}
+                />
 
-              <Text style={styles.titleform}>Kata Sandi</Text>
-              <TextInput
-                style={styles.input}
-                placeholder={selectedUser.Password}
-                onChangeText={(text) => setPassword(text)}
-              />
-
-              <View style={styles.styletitle3}>
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Role</Text>
-                  <View style={styles.inputRole}>
-                    <Text                         style={{
+                <View style={styles.styletitle3}>
+                  <View style={styles.styletitle2}>
+                    <Text style={styles.titleform}>Role</Text>
+                    <View style={styles.inputRole}>
+                      <Text
+                        style={{
                           paddingHorizontal: 10,
                           backgroundColor: "#DDDADA",
                           paddingVertical: 10,
-                        }}>{selectedUser.Roles == 1 ? 'admin' : 'user'}</Text>
+                        }}
+                      >
+                        {selectedUser.Roles == 1 ? "admin" : "user"}
+                      </Text>
+                    </View>
+                  </View>
+
+                  <View style={styles.styletitle4}>
+                    <Text style={styles.titleformFoto}>Foto</Text>
+                    <TextInput style={styles.inputFile} placeholder="Pilih" />
                   </View>
                 </View>
-
-                <View style={styles.styletitle4}>
-                  <Text style={styles.titleformFoto}>Foto</Text>
-                  <TextInput style={styles.inputFile} placeholder="Pilih" />
-                </View>
-              </View>
               </>
-              )}
+            )}
 
-              <View style={styles.btnsave}>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonSave]}
-                  onPress={handleSave}
-                >
-                  <Text style={styles.textStyle}>Simpan</Text>
-                </TouchableOpacity>
-              </View>
+            <View style={styles.btnsave}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonSave]}
+                onPress={handleSave}
+              >
+                <Text style={styles.textStyle}>Simpan</Text>
+              </TouchableOpacity>
             </View>
           </View>
-        </Modal>
+        </View>
+      </Modal>
     );
   };
 

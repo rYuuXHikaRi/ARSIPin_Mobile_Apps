@@ -49,7 +49,7 @@ const ManajemenBerkas = ({ navigation }) => {
   useEffect(() => {
     const fetchUsers = async () => {
       try {
-        const response = await fetch("http://192.168.118.213:8000/api/arsips");
+        const response = await fetch("http://192.168.192.213:8000/api/arsips");
         const data = await response.json();
         setUsers(data);
         tableData.splice(0, tableData.length);
