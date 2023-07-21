@@ -8,19 +8,18 @@ import {
   Modal,
   TextInput,ScrollView,Button
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons,Feather } from '@expo/vector-icons';
-import { Table, Row } from 'react-native-table-component';
+import { AntDesign, MaterialCommunityIcons, Feather } from "@expo/vector-icons";
+import { Table, Row } from "react-native-table-component";
 import DropDownPicker from "react-native-dropdown-picker";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
+import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
 import axios from "axios";
 import * as DocumentPicker from 'expo-document-picker';
 
-
-
-const ManajemenBerkas = ({navigation}) => {
+const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [namadokumen, setnamadokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
@@ -30,141 +29,89 @@ const ManajemenBerkas = ({navigation}) => {
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
   const [users, setUsers] = useState([]);
-  const [rowData,setRowData]= useState([]);
-  const [NamaDokumen, setNamaDokumen] = useState('');
-  const [Keterangan, setKeterangan] = useState('');
-  const [Tahun, setTahun] = useState('');
-  const [NamaDesa, setNamaDesa] = useState('');
-  const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState('');
-  const [NamaFile, setNamaFile] = useState('');
-  const [showPopover,setShowPopover] = useState('');
-  const [selectedFiles, setSelectedFiles] = useState([]);
-  const [files, setFiles] = useState([]);
-  
-  
-  
-  
+  const [rowData, setRowData] = useState([]);
+  const [NamaDokumen, setNamaDokumen] = useState("");
+  const [Keterangan, setKeterangan] = useState("");
+  const [Tahun, setTahun] = useState("");
+  const [NamaDesa, setNamaDesa] = useState("");
+  const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
+  const [NamaFile, setNamaFile] = useState("");
+  const [showPopover, setShowPopover] = useState(false);
+  const [modalVisibleEdit, setmodalVisibleEdit] = useState(false);
+
+  const manageModal = () => {
+    setShowPopover(false);
+    setmodalVisibleEdit(true);
+    console.log('bismillah');
+    
+  }
 
   useEffect(() => {
     const fetchUsers = async () => {
-
       try {
-          const response = await fetch('http://192.168.164.250:8000/api/arsips');
-          const data = await response.json();  
-          setUsers(data);
-          tableData.splice(0,tableData.length);
-  
+        const response = await fetch("http://192.168.192.213:8000/api/arsips");
+        const data = await response.json();
+        setUsers(data);
+        tableData.splice(0, tableData.length);
       } catch (error) {
-          console.log(error);
+        console.log(error);
       }
-
-
-  };
+    };
     fetchUsers();
     addUsers();
   }, []);
 
+  const addUsers = () => {
+    users.map((user) =>
+      tableData.push([
+        <TouchableOpacity
+          onPress={() => navigation.navigate("detailberkas", { user })}
+        >
+          <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>
+            {user.NamaDokumen}
+          </Text>
+        </TouchableOpacity>,
+        renderOpsiIcons(),
+      ])
+    );
+  };
 
+  const handleCreate = async () => {
+    const data = {
+      NamaDokumen: NamaDokumen,
+      Keterangan: Keterangan,
+      Tahun: Tahun,
+      NamaDesa: NamaDesa,
+      LokasiPenyimpanan: LokasiPenyimpanan,
+      NamaFile: "File.txt",
+    };
 
-
-const addUsers = () => {
-  users.map((user) => (
-    tableData.push([<TouchableOpacity onPress={() => navigation.navigate('detailberkas',{user})}>
-    <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.NamaDokumen}</Text>
-    </TouchableOpacity>,renderOpsiIcons()])
- ))
-
-}
-
-const handleFilePick = async () => {
-  try {
-    const result = await DocumentPicker.getDocumentAsync({
-      multiple: true,
-      type: 'application/pdf', // Adjust the file type based on your requirements
-    });
-
-    console.log(result);
-    if (result.type === 'success') {
-      setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
-      const file = {
-        uri: result.uri,
-        name: result.name,
-        type: result.mimeType,
-      };
-      setFiles(file);
-      console.log(result.uri);
-    } else if (result.type === 'cancel') {
-      console.log('User cancelled document picker');
+    try {
+      console.log(data);
+      const response = await axios.post(
+        "http://192.168.118.213:8000/api/store",
+        data
+      );
+      console.log("Data created successfully:", response.data);
+      // Reset input fields if needed
+      console.log("berhasil");
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Error creating data:", error);
     }
-  } catch (error) {
-    console.log('DocumentPicker Error: ', error);
-  }
-};
+  };
 
-const handleCreate = async () => {
- 
-  // const data = {
-  //   NamaDokumen: NamaDokumen,
-  //   Keterangan: Keterangan,
-  //   Tahun: Tahun,
-  //   NamaDesa: NamaDesa,
-  //   LokasiPenyimpanan: LokasiPenyimpanan,
-  //   NamaFile : "File.txt"
-  // };
-  console.log(files);
-  const formData = new FormData();
-  formData.append('NamaDokumen', NamaDokumen);
-  formData.append('Keterangan', Keterangan);
-  formData.append('Tahun', Tahun);
-  formData.append('NamaDesa', NamaDesa);
-  formData.append('LokasiPenyimpanan', LokasiPenyimpanan);
-  $folderName = NamaDokumen +'-'+ LokasiPenyimpanan;
-  formData.append('NamaFile', $folderName);
-  formData.append('file', files);
-
-
-  // selectedFiles.forEach((file, index) => {
-  //   formData.append(`file[${index}]`, file);
-  // });
-
-  try {
-    // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
-    console.log(formData);
-    const config = {
-      body: formData,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data'
-      }
-    }
-    // let response = await axios.post('http://192.168.0.249:8000/api/store', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data' // Pastikan Anda mengatur Content-Type sebagai 'multipart/form-data'
-    //   }
-    // });
-
-    let response = await fetch('http://192.168.164.250:8000/api/store', config);
-  
-    console.log('Data created successfully:', response.data);
-    // Reset input fields if needed
-    console.log('berhasil')
-    setModalVisible(false);
-  } catch (error) {
-    console.error('Error creating data:', error);
-  }
-};
-
-
-
-  
-  const tableHead = ['Nama Folder', 'Aksi'];
-
+  const tableHead = ["Nama Folder", "Aksi"];
 
   function renderOpsiIcons() {
     return (
       <View style={styles.opsiContainer}>
         <TouchableOpacity onPress={() => setShowPopover(true)}>
-          <MaterialCommunityIcons name="dots-vertical" size={30} color="black" />
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={30}
+            color="black"
+          />
         </TouchableOpacity>
         <Modal
           animationType="slide"
@@ -174,23 +121,26 @@ const handleCreate = async () => {
         >
           <View style={styles.centeredView}>
             <View style={styles.modalView2}>
-              <TouchableOpacity
-                style={styles.opsiButton}
-                onPress={() => {
-                  // Logika ketika tombol "Pencil" ditekan
-                  console.log('Pencil button pressed');
-                  setShowPopover(false);
-                }}
-              >
-                <Feather name="edit" size={30} color="black" />
-                <Text style={styles.opsiText}>Edit</Text>
-              </TouchableOpacity>
+              <View>
+                {renderOpsiModalEdit()}
+                <TouchableOpacity
+                  style={styles.opsiButton}
+                  onPress={() => {
+                    // Logika ketika tombol "Pencil" ditekan
+                    console.log("Pencil button pressed");
+                    manageModal();
+                  }}
+                > 
+                  <Feather name="edit" size={30} color="black" />
+                  <Text style={styles.opsiText}>Edit</Text>
+                </TouchableOpacity>
+              </View>
               <TouchableOpacity
                 style={styles.opsiButton}
                 onPress={() => {
                   // Logika ketika tombol "Eye" ditekan
-                  console.log('Eye button pressed');
-                  setShowPopover(false);
+                  console.log("Eye button pressed");
+                  // setShowPopover(false);
                 }}
               >
                 <Feather name="eye" size={30} color="black" />
@@ -200,8 +150,8 @@ const handleCreate = async () => {
                 style={styles.opsiButton}
                 onPress={() => {
                   // Logika ketika tombol "Trash" ditekan
-                  console.log('Trash button pressed');
-                  setShowPopover(false);
+                  console.log("Trash button pressed");
+                  // setShowPopover(false);
                 }}
               >
                 <Feather name="trash" size={30} color="black" />
@@ -219,7 +169,6 @@ const handleCreate = async () => {
       </View>
     );
   }
-  
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -233,6 +182,7 @@ const handleCreate = async () => {
     setModalVisible(false);
   };
 
+  //Modal Tambah Arsip
   const renderOpsiModal = () => {
     return (
       <Modal
@@ -328,45 +278,150 @@ const handleCreate = async () => {
       </Modal>
     );
   };
+  //end-Modal Tambah arsip
+
+  //Modal Edit Arsip
+  const renderOpsiModalEdit = () => {
+    return (
+      <View style={styles.modalEdit}>
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleEdit}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setmodalVisibleEdit(!modalVisibleEdit);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TouchableOpacity
+              style={[styles.buttonX, styles.buttonClose]}
+              onPress={() => setmodalVisibleEdit(!modalVisibleEdit)}
+            >
+              <Text style={styles.X}>X</Text>
+            </TouchableOpacity>
+
+            <View style={styles.Headtitle}>
+              <Text style={[styles.bottomLine, styles.titleModal]}>
+                Edit Arsip
+              </Text>
+            </View>
+            <View>
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Nama Dokumen</Text>
+                <TextInput
+                  style={[styles.input]}
+                  placeholder="Nama Dokumen"
+                  value={NamaDokumen}
+                  onChangeText={(text) => setNamaDokumen(text)}
+                />
+              </View>
+
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Keterangan</Text>
+                <TextInput
+                  style={styles.inputketerangan}
+                  placeholder="Keterangan"
+                  value={Keterangan}
+                  onChangeText={(text) => setKeterangan(text)}
+                />
+              </View>
+            </View>
+            <Text style={styles.titleform}>Tahun</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="tahun"
+              value={Tahun}
+              onChangeText={(text) => setTahun(text)}
+            />
+
+            <Text style={styles.titleform}>Nama Desa</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Nama Desa"
+              value={NamaDesa}
+              onChangeText={(text) => setNamaDesa(text)}
+            />
+
+            <View>
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Loker"
+                  value={LokasiPenyimpanan}
+                  onChangeText={(text) => setLokasiPenyimpanan(text)}
+                />
+              </View>
+
+              <View style={styles.styletitle4}>
+                <Text style={styles.titleformupload}>Upload File</Text>
+                <TextInput
+                  style={styles.inputFile}
+                  placeholder="Pilih"
+                  value={NamaFile}
+                  onChangeText={(text) => setNamaFile(text)}
+                ></TextInput>
+              </View>
+            </View>
+
+            <View style={styles.btnsave}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonSave]}
+                onPress={handleCreate}
+              >
+                <Text style={styles.textStyle}>Simpan</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+      </View>
+    );
+  };
+  
+  //end MODAL EDIT ARSIP
 
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ position: "absolute", top: 0 }}>
         <Header />
       </View>
-      <LinearGradient
-                      colors={['#197B40', '#79B33B', '#A6CE39']}
-                      start={[0, 0.5]}
-                      end={[1, 0.5]}
-                      style={[styles.card]}
-      > 
-        <Text style={styles.cardTitle}>Manajemen Berkas</Text>
-      </LinearGradient>
+      <View style={styles.card}>
+        <Text style={[styles.cardTitle, styles.boldText]}>
+          Manajemen Berkas
+        </Text>
+      </View>
       <View style={styles.card2}>
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
         <ScrollView>
-        <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
-        
-          <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
-       
-          
-          {tableData.map((rowData, index,) => (
+          <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
             <Row
-              key={index}
-              data={rowData}flexArr={[4, 1]}
-              
-              style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
-              textStyle={styles.text}
+              data={tableHead}
+              flexArr={[4, 1]}
+              style={[styles.header, styles.boldText]}
+              textStyle={[styles.text, styles.boldText, { fontSize: 20 }]}
             />
-          ))}
-        </Table>
+
+            {tableData.map((rowData, index) => (
+              <Row
+                key={index}
+                data={rowData}
+                flexArr={[4, 1]}
+                style={[
+                  styles.row,
+                  index % 2 && { backgroundColor: "#e1fcc5" },
+                ]}
+                textStyle={styles.text}
+              />
+            ))}
+          </Table>
         </ScrollView>
       </View>
-      <View style={styles.row}>
-        {renderOpsiModal()}
-      </View>
+      <View style={styles.row}>{renderOpsiModal()}</View>
 
       <View style={styles.row}>
         <LinearGradient
@@ -381,16 +436,13 @@ const handleCreate = async () => {
         </LinearGradient>
       </View>
 
-      <View style={{ position: "absolute", bottom: 0 , backgroundColor: '#F0E5E5'}}>
-        <View style={[styles.row, {paddingLeft: 18, paddingRight: 18, marginBottom: 20}]}>
-          <View style={styles.searchButton}>
-            <AntDesign name="search1" size={20} color="black" />
-            <TextInput
-                      placeholder="Cari data..."
-                      style={styles.searchButtonText}
-            />
-          </View>
-        </View>
+      <View style={styles.row}>
+        <TouchableOpacity style={styles.searchButton}>
+          <AntDesign name="search1" size={24} color="black" />
+          <Text style={styles.searchButtonText}> Pencarian...</Text>
+        </TouchableOpacity>
+      </View>
+      <View style={{ position: "absolute", bottom: 0 }}>
         <Navbar whichPage="arsip" />
       </View>
     </SafeAreaView>
@@ -629,30 +681,30 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 43,
     marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
   },
   searchButtonText: {
-    color: 'black',
-    textAlign: 'left',
+    color: "black",
+    textAlign: "left",
   },
   header: {
     height: 50,
-    backgroundColor: '#A6D17A',
+    backgroundColor: "#A6D17A",
   },
   text: {
-    textAlign: 'center',
-    fontWeight: '300',
+    textAlign: "center",
+    fontWeight: "300",
   },
   boldText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   dataWrapper: {
     marginTop: -1,
   },
   opsiContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   opsiButton: {
     marginHorizontal: 5,
@@ -667,15 +719,15 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   tableText: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   opsiContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   opsiButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 16,
   },
