@@ -49,7 +49,7 @@ const ManajemenBerkas = ({navigation}) => {
     const fetchUsers = async () => {
 
       try {
-          const response = await fetch('http://192.168.0.249:8000/api/arsips');
+          const response = await fetch('http://192.168.164.250:8000/api/arsips');
           const data = await response.json();  
           setUsers(data);
           tableData.splice(0,tableData.length);
@@ -143,7 +143,7 @@ const handleCreate = async () => {
     //   }
     // });
 
-    let response = await fetch('http://192.168.216.249:8000/api/store', config);
+    let response = await fetch('http://192.168.164.250:8000/api/store', config);
   
     console.log('Data created successfully:', response.data);
     // Reset input fields if needed
