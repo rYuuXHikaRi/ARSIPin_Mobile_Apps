@@ -1,11 +1,38 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity} from 'react-native';
 import { LinearGradient } from 'expo-linear-gradient';
+import * as ImagePicker from 'expo-image-picker';
 
 import Navbar from '../partials/navbar';
 import Header from '../partials/header';
 
 const ProfilePage = () => {
+  const [selectedImg, setSelectedImg] = useState(null);
+  
+
+  const pickImage= async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+  
+      console.log(result);
+
+      if (!result.canceled) {
+        setSelectedImg(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log('ImagePicker Error: ', error);
+    }
+  };
+
+  const storeUserData = async () => {
+
+  };
+
   return (
     <View style={styles.container}>
     <View style={{position: 'absolute', top: 0}}>
@@ -14,7 +41,7 @@ const ProfilePage = () => {
     <View style={styles.profileImageContainer}>
       <Image
         style={styles.profileImage}
-        source={require('../../assets/profile.png')}
+        source={selectedImg === null ? require('../../assets/profile.png') : {uri: selectedImg}}
       />
       <LinearGradient
                 colors={['#90C13B', '#7CB53C', '#378D3F']}
@@ -22,7 +49,7 @@ const ProfilePage = () => {
                 end={[1, 0.5]}
                 style={styles.changePhotoButton}
       > 
-        <TouchableOpacity >
+        <TouchableOpacity onPress={pickImage}>
           <Text style={styles.changePhotoButtonText}>Ganti Foto</Text>
         </TouchableOpacity>
       </LinearGradient>
