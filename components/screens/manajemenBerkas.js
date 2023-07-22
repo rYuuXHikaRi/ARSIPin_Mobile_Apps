@@ -48,34 +48,33 @@ const ManajemenBerkas = ({ navigation }) => {
   const [files, setFiles] = useState([]);
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch("http://192.168.176.213:8000/api/arsips");
-        const data = await response.json();
-        setUsers(data);
-        tableData.splice(0, tableData.length);
-      } catch (error) {
-        console.log(error);
-      }
-    };
     fetchUsers();
-    addUsers();
   }, []);
 
-  const addUsers = () => {
-    users.map((user) =>
-      tableData.push([
-        <TouchableOpacity
-          onPress={() => navigation.navigate("detailberkas", { user })}
-        >
-          <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>
-            {user.NamaDokumen}
-          </Text>
-        </TouchableOpacity>,
-        renderOpsiIcons(),
-      ])
-    );
+  const fetchUsers = async () => {
+    try {
+      const response = await fetch("http://192.168.176.213:8000/api/arsips");
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
+
+  // const addUsers = () => {
+  //   users.map((user) =>
+  //     tableData.push([
+  //       <TouchableOpacity
+  //         onPress={() => navigation.navigate("detailberkas", { user })}
+  //       >
+  //         <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>
+  //           {user.NamaDokumen}
+  //         </Text>
+  //       </TouchableOpacity>,
+  //       renderOpsiIcons(),
+  //     ])
+  //   );
+  // };
 
   const handleFilePick = async () => {
     try {
@@ -166,6 +165,7 @@ const ManajemenBerkas = ({ navigation }) => {
             name="dots-vertical"
             size={30}
             color="black"
+            style={{ marginLeft:-5 }}
           />
         </TouchableOpacity>
         <Modal
@@ -221,6 +221,15 @@ const ManajemenBerkas = ({ navigation }) => {
       </View>
     );
   }
+  const handleEdit = (userId) => {
+    // Implement edit action here
+    // console.log("Edit user with ID:", userId);
+    // const user = users.find((user) => user.id === userId);
+    // setSelectedUser(user);
+    setShowPopover(true);
+    // renderOpsiModalEdit(userId);
+    console.log("yey");
+  };
 
   const renderUserItem = ({ item }) => (
     <View style={styles.userItem}>
@@ -236,9 +245,9 @@ const ManajemenBerkas = ({ navigation }) => {
           {/* <View style={styles.row}>{renderOpsiModalEdit()}</View> */}
           {/* <Text style={[styles.actionText]}>Edit</Text> */}
           {/* <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" /> */}
-          <MaterialCommunityIcons name="menu" size={20} color="#197B40" />
-
-          {renderOpsiModal()}
+          {/* <MaterialCommunityIcons name="menu" size={20} color="#197B40" /> */}
+          <View>{renderOpsiIcons()}</View>
+          
         </TouchableOpacity>
       </View>
     </View>
