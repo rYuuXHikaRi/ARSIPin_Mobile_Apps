@@ -563,7 +563,7 @@ const styles = StyleSheet.create({
     borderBottomColor: "#ccc",
   },
   userName: {
-    flex: 2,
+    flex: 3,
     fontSize: 18,
     fontWeight: "bold",
   },
@@ -571,7 +571,7 @@ const styles = StyleSheet.create({
     flex: 2,
     fontSize: 16,
     color: "#888",
-    paddingLeft: 80,
+    paddingLeft: 30,
   },
   actionsContainer: {
     flexDirection: "row",

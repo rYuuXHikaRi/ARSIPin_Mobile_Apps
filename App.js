@@ -27,12 +27,12 @@ export default function App() {
             component={LoginPage}
             options={{ headerShown: false}}
         /> */}
-{/* 
+
         <Stack.Screen
           name="manajemenakun"
           component={ManajemenAkun}
           options={{ headerShown: false }}
-        /> */}
+        />
 
                  <Stack.Screen
           name="manajemenberkas"

@@ -394,6 +394,7 @@ const ManajemenBerkas = ({ navigation }) => {
                 Edit Arsip
               </Text>
             </View>
+            
             <View>
               <View style={styles.styletitle2}>
                 <Text style={styles.titleform}>Nama Dokumen</Text>
