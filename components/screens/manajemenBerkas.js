@@ -28,6 +28,7 @@ import * as DocumentPicker from "expo-document-picker";
 
 const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
+  const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
   const [namadokumen, setnamadokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
   const [tahun, settahun] = useState("");
@@ -180,12 +181,14 @@ const ManajemenBerkas = ({ navigation }) => {
                 style={styles.opsiButton}
                 onPress={() => {
                   // Logika ketika tombol "Pencil" ditekan
-                  console.log("Pencil button pressed");
-                  setShowPopover(false);
+                  // console.log("Pencil button pressed");
+                setShowPopover(false)
+                {handleEditModal()}
                 }}
               >
                 <Feather name="edit" size={30} color="black" />
                 <Text style={styles.opsiText}>Edit</Text>
+                <View>{renderOpsiModalEdit()}</View>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.opsiButton}
@@ -230,6 +233,10 @@ const ManajemenBerkas = ({ navigation }) => {
     // renderOpsiModalEdit(userId);
     console.log("yey");
   };
+  const handleEditModal = () => {
+    setModalVisibleEdit(true);
+    console.log('cek modal edit')
+  } 
 
   const renderUserItem = ({ item }) => (
     <View style={styles.userItem}>
@@ -361,6 +368,104 @@ const ManajemenBerkas = ({ navigation }) => {
     );
   };
 
+  //Opsi Modal Edit
+  const renderOpsiModalEdit = () => {
+    return (
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={modalVisibleEdit}
+        onRequestClose={() => {
+          Alert.alert("Modal has been closed.");
+          setModalVisibleEdit(!modalVisibleEdit);
+        }}
+      >
+        <View style={styles.centeredView}>
+          <View style={styles.modalView}>
+            <TouchableOpacity
+              style={[styles.buttonX, styles.buttonClose]}
+              onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
+            >
+              <Text style={styles.X}>X</Text>
+            </TouchableOpacity>
+
+            <View style={styles.Headtitle}>
+              <Text style={[styles.bottomLine, styles.titleModal]}>
+                Edit Arsip
+              </Text>
+            </View>
+            <View>
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Nama Dokumen</Text>
+                <TextInput
+                  style={[styles.input]}
+                  placeholder="Nama Dokumen"
+                  value={NamaDokumen}
+                  onChangeText={(text) => setNamaDokumen(text)}
+                />
+              </View>
+
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Keterangan</Text>
+                <TextInput
+                  style={styles.inputketerangan}
+                  placeholder="Keterangan"
+                  value={Keterangan}
+                  onChangeText={(text) => setKeterangan(text)}
+                />
+              </View>
+            </View>
+            <Text style={styles.titleform}>Tahun</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="tahun"
+              value={Tahun}
+              onChangeText={(text) => setTahun(text)}
+            />
+
+            <Text style={styles.titleform}>Nama Desa</Text>
+            <TextInput
+              style={styles.input}
+              placeholder="Nama Desa"
+              value={NamaDesa}
+              onChangeText={(text) => setNamaDesa(text)}
+            />
+
+            <View>
+              <View style={styles.styletitle2}>
+                <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder="Loker"
+                  value={LokasiPenyimpanan}
+                  onChangeText={(text) => setLokasiPenyimpanan(text)}
+                />
+              </View>
+
+              <View style={styles.styletitle4}>
+                <Text style={styles.titleformupload}>Upload File</Text>
+                <Button title="Pilih File" onPress={handleFilePick} />
+                {selectedFiles.map((file, index) => (
+                  <Text key={index}>{file.name}</Text>
+                ))}
+              </View>
+            </View>
+
+            <View style={styles.btnsave}>
+              <TouchableOpacity
+                style={[styles.button, styles.buttonSave]}
+                onPress={handleCreate}
+                
+              >
+                <Text style={styles.textStyle}>Simpan</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
+  };
+
   return (
     <SafeAreaView style={styles.container}>
       <View style={{ position: "absolute", top: 0 }}>
@@ -413,6 +518,7 @@ const ManajemenBerkas = ({ navigation }) => {
       {/* <View style={styles.row}>
         {renderOpsiModal()}
       </View> */}
+      <View>{renderOpsiModalEdit()}</View>
 
       <View style={styles.row}>
         <LinearGradient
@@ -421,6 +527,7 @@ const ManajemenBerkas = ({ navigation }) => {
           end={[1, 0.5]}
           style={styles.button}
         >
+          <View>{renderOpsiModal()}</View>
           <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
           </TouchableOpacity>
