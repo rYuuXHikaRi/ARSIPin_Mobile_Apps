@@ -6,22 +6,27 @@ import {
   TouchableOpacity,
   SafeAreaView,
   Modal,
-  TextInput,ScrollView,Button,
+  TextInput,
+  ScrollView,
+  Button,
   FlatList,
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons,Feather , FontAwesome} from '@expo/vector-icons';
-import { Table, Row } from 'react-native-table-component';
+import {
+  AntDesign,
+  MaterialCommunityIcons,
+  Feather,
+  FontAwesome,
+} from "@expo/vector-icons";
+import { Table, Row } from "react-native-table-component";
 import DropDownPicker from "react-native-dropdown-picker";
-import { LinearGradient } from 'expo-linear-gradient';
+import { LinearGradient } from "expo-linear-gradient";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
 import axios from "axios";
-import * as DocumentPicker from 'expo-document-picker';
+import * as DocumentPicker from "expo-document-picker";
 
-
-
-const ManajemenBerkas = ({navigation}) => {
+const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [namadokumen, setnamadokumen] = useState("");
   const [keterangan, setketerangan] = useState("");
@@ -31,141 +36,137 @@ const ManajemenBerkas = ({navigation}) => {
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
   const [users, setUsers] = useState([]);
-  const [rowData,setRowData]= useState([]);
-  const [NamaDokumen, setNamaDokumen] = useState('');
-  const [Keterangan, setKeterangan] = useState('');
-  const [Tahun, setTahun] = useState('');
-  const [NamaDesa, setNamaDesa] = useState('');
-  const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState('');
-  const [NamaFile, setNamaFile] = useState('');
-  const [showPopover,setShowPopover] = useState('');
+  const [rowData, setRowData] = useState([]);
+  const [NamaDokumen, setNamaDokumen] = useState("");
+  const [Keterangan, setKeterangan] = useState("");
+  const [Tahun, setTahun] = useState("");
+  const [NamaDesa, setNamaDesa] = useState("");
+  const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
+  const [NamaFile, setNamaFile] = useState("");
+  const [showPopover, setShowPopover] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [files, setFiles] = useState([]);
-  
-  
-  
-  
 
   useEffect(() => {
     const fetchUsers = async () => {
-
       try {
-          const response = await fetch('http://192.168.176.213:8000/api/arsips');
-          const data = await response.json();  
-          setUsers(data);
-          tableData.splice(0,tableData.length);
-  
+        const response = await fetch("http://192.168.176.213:8000/api/arsips");
+        const data = await response.json();
+        setUsers(data);
+        tableData.splice(0, tableData.length);
       } catch (error) {
-          console.log(error);
+        console.log(error);
       }
-
-
-  };
+    };
     fetchUsers();
     addUsers();
   }, []);
 
+  const addUsers = () => {
+    users.map((user) =>
+      tableData.push([
+        <TouchableOpacity
+          onPress={() => navigation.navigate("detailberkas", { user })}
+        >
+          <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>
+            {user.NamaDokumen}
+          </Text>
+        </TouchableOpacity>,
+        renderOpsiIcons(),
+      ])
+    );
+  };
 
+  const handleFilePick = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: true,
+        type: "application/pdf", // Adjust the file type based on your requirements
+      });
 
-
-const addUsers = () => {
-  users.map((user) => (
-    tableData.push([<TouchableOpacity onPress={() => navigation.navigate('detailberkas',{user})}>
-    <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>{user.NamaDokumen}</Text>
-    </TouchableOpacity>,renderOpsiIcons()])
- ))
-
-}
-
-const handleFilePick = async () => {
-  try {
-    const result = await DocumentPicker.getDocumentAsync({
-      multiple: true,
-      type: 'application/pdf', // Adjust the file type based on your requirements
-    });
-
-    console.log(result);
-    if (result.type === 'success') {
-      setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
-      const file = {
-        uri: result.uri,
-        name: result.name,
-        type: result.mimeType,
-      };
-      setFiles(file);
-      console.log(result.uri);
-    } else if (result.type === 'cancel') {
-      console.log('User cancelled document picker');
-    }
-  } catch (error) {
-    console.log('DocumentPicker Error: ', error);
-  }
-};
-
-const handleCreate = async () => {
- 
-  // const data = {
-  //   NamaDokumen: NamaDokumen,
-  //   Keterangan: Keterangan,
-  //   Tahun: Tahun,
-  //   NamaDesa: NamaDesa,
-  //   LokasiPenyimpanan: LokasiPenyimpanan,
-  //   NamaFile : "File.txt"
-  // };
-  console.log(files);
-  const formData = new FormData();
-  formData.append('NamaDokumen', NamaDokumen);
-  formData.append('Keterangan', Keterangan);
-  formData.append('Tahun', Tahun);
-  formData.append('NamaDesa', NamaDesa);
-  formData.append('LokasiPenyimpanan', LokasiPenyimpanan);
-  $folderName = NamaDokumen +'-'+ LokasiPenyimpanan;
-  formData.append('NamaFile', $folderName);
-  formData.append('file', files);
-
-
-  // selectedFiles.forEach((file, index) => {
-  //   formData.append(`file[${index}]`, file);
-  // });
-
-  try {
-    // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
-    console.log(formData);
-    const config = {
-      body: formData,
-      method: 'POST',
-      headers: {
-        'Content-Type': 'multipart/form-data'
+      console.log(result);
+      if (result.type === "success") {
+        setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
+        const file = {
+          uri: result.uri,
+          name: result.name,
+          type: result.mimeType,
+        };
+        setFiles(file);
+        console.log(result.uri);
+      } else if (result.type === "cancel") {
+        console.log("User cancelled document picker");
       }
+    } catch (error) {
+      console.log("DocumentPicker Error: ", error);
     }
-    // let response = await axios.post('http://192.168.0.249:8000/api/store', formData, {
-    //   headers: {
-    //     'Content-Type': 'multipart/form-data' // Pastikan Anda mengatur Content-Type sebagai 'multipart/form-data'
-    //   }
+  };
+
+  const handleCreate = async () => {
+    // const data = {
+    //   NamaDokumen: NamaDokumen,
+    //   Keterangan: Keterangan,
+    //   Tahun: Tahun,
+    //   NamaDesa: NamaDesa,
+    //   LokasiPenyimpanan: LokasiPenyimpanan,
+    //   NamaFile : "File.txt"
+    // };
+    console.log(files);
+    const formData = new FormData();
+    formData.append("NamaDokumen", NamaDokumen);
+    formData.append("Keterangan", Keterangan);
+    formData.append("Tahun", Tahun);
+    formData.append("NamaDesa", NamaDesa);
+    formData.append("LokasiPenyimpanan", LokasiPenyimpanan);
+    $folderName = NamaDokumen + "-" + LokasiPenyimpanan;
+    formData.append("NamaFile", $folderName);
+    formData.append("file", files);
+
+    // selectedFiles.forEach((file, index) => {
+    //   formData.append(`file[${index}]`, file);
     // });
 
-    let response = await fetch('http://192.168.216.249:8000/api/store', config);
-  
-    console.log('Data created successfully:', response.data);
-    // Reset input fields if needed
-    console.log('berhasil')
-    setModalVisible(false);
-  } catch (error) {
-    console.error('Error creating data:', error);
-  }
-};
+    try {
+      // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
+      console.log(formData);
+      const config = {
+        body: formData,
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+      // let response = await axios.post('http://192.168.0.249:8000/api/store', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data' // Pastikan Anda mengatur Content-Type sebagai 'multipart/form-data'
+      //   }
+      // });
 
+      let response = await fetch(
+        "http://192.168.216.249:8000/api/store",
+        config
+      );
 
+      console.log("Data created successfully:", response.data);
+      // Reset input fields if needed
+      console.log("berhasil");
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Error creating data:", error);
+    }
+  };
 
-  
-  const tableHead = ['Nama Folder', 'Aksi'];
-
+  const tableHead = ["Nama Folder", "Aksi"];
 
   function renderOpsiIcons() {
     return (
       <View style={styles.opsiContainer}>
         <TouchableOpacity onPress={() => setShowPopover(true)}>
-          <MaterialCommunityIcons name="dots-vertical" size={30} color="black" />
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={30}
+            color="black"
+          />
         </TouchableOpacity>
         <Modal
           animationType="slide"
@@ -179,7 +180,7 @@ const handleCreate = async () => {
                 style={styles.opsiButton}
                 onPress={() => {
                   // Logika ketika tombol "Pencil" ditekan
-                  console.log('Pencil button pressed');
+                  console.log("Pencil button pressed");
                   setShowPopover(false);
                 }}
               >
@@ -190,7 +191,7 @@ const handleCreate = async () => {
                 style={styles.opsiButton}
                 onPress={() => {
                   // Logika ketika tombol "Eye" ditekan
-                  console.log('Eye button pressed');
+                  console.log("Eye button pressed");
                   setShowPopover(false);
                 }}
               >
@@ -201,7 +202,7 @@ const handleCreate = async () => {
                 style={styles.opsiButton}
                 onPress={() => {
                   // Logika ketika tombol "Trash" ditekan
-                  console.log('Trash button pressed');
+                  console.log("Trash button pressed");
                   setShowPopover(false);
                 }}
               >
@@ -223,7 +224,9 @@ const handleCreate = async () => {
 
   const renderUserItem = ({ item }) => (
     <View style={styles.userItem}>
-      <Text style={styles.userName}>{item.NamaDokumen}</Text>
+      <TouchableOpacity style={{ flex:2 }}>
+        <Text style={styles.userName}>{item.NamaDokumen}</Text>
+      </TouchableOpacity>
       {/* <Text style={styles.userRole}>{item.Roles == 1 ? "admin" : "user"}</Text> */}
       <View style={styles.actionsContainer}>
         <TouchableOpacity
@@ -232,7 +235,10 @@ const handleCreate = async () => {
         >
           {/* <View style={styles.row}>{renderOpsiModalEdit()}</View> */}
           {/* <Text style={[styles.actionText]}>Edit</Text> */}
-          <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" />
+          {/* <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" /> */}
+          <MaterialCommunityIcons name="menu" size={20} color="#197B40" />
+
+          {renderOpsiModal()}
         </TouchableOpacity>
       </View>
     </View>
@@ -352,11 +358,11 @@ const handleCreate = async () => {
         <Header />
       </View>
       <LinearGradient
-                      colors={['#197B40', '#79B33B', '#A6CE39']}
-                      start={[0, 0.5]}
-                      end={[1, 0.5]}
-                      style={[styles.card]}
-      > 
+        colors={["#197B40", "#79B33B", "#A6CE39"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={[styles.card]}
+      >
         <Text style={styles.cardTitle}>Manajemen Berkas</Text>
       </LinearGradient>
       <View style={styles.card2}>
@@ -364,7 +370,7 @@ const handleCreate = async () => {
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
         <ScrollView>
-        {/* <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
+          {/* <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
         
           <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
        
@@ -379,7 +385,7 @@ const handleCreate = async () => {
             />
           ))}
         </Table> */}
-                  <View style={styles.containertabel}>
+          <View style={styles.containertabel}>
             <FlatList
               data={users}
               renderItem={renderUserItem}
@@ -401,24 +407,31 @@ const handleCreate = async () => {
 
       <View style={styles.row}>
         <LinearGradient
-                        colors={['#90C13B', '#7CB53C', '#378D3F']}
-                        start={[0, 0.5]}
-                        end={[1, 0.5]}
-                        style={styles.button}
-        > 
-          <TouchableOpacity onPress={() => setModalVisible(true)} >
+          colors={["#90C13B", "#7CB53C", "#378D3F"]}
+          start={[0, 0.5]}
+          end={[1, 0.5]}
+          style={styles.button}
+        >
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>
 
-      <View style={{ position: "absolute", bottom: 0 , backgroundColor: '#F0E5E5'}}>
-        <View style={[styles.row, {paddingLeft: 18, paddingRight: 18, marginBottom: 20}]}>
+      <View
+        style={{ position: "absolute", bottom: 0, backgroundColor: "#F0E5E5" }}
+      >
+        <View
+          style={[
+            styles.row,
+            { paddingLeft: 18, paddingRight: 18, marginBottom: 20 },
+          ]}
+        >
           <View style={styles.searchButton}>
             <AntDesign name="search1" size={20} color="black" />
             <TextInput
-                      placeholder="Cari data..."
-                      style={styles.searchButtonText}
+              placeholder="Cari data..."
+              style={styles.searchButtonText}
             />
           </View>
         </View>
@@ -431,8 +444,8 @@ const handleCreate = async () => {
 export default ManajemenBerkas;
 
 const styles = StyleSheet.create({
-   //TabelContent:
-   containertabel: {
+  //TabelContent:
+  containertabel: {
     flex: 1,
     padding: 16,
   },
@@ -653,7 +666,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     height: 43,
 
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   card2: {
     backgroundColor: "white",
@@ -705,7 +718,7 @@ const styles = StyleSheet.create({
     height: 43,
     marginTop: 17,
 
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   buttonText: {
     color: "white",
@@ -721,31 +734,31 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 43,
     marginTop: 20,
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingLeft: 12,
   },
   searchButtonText: {
-    color: 'black',
-    textAlign: 'left',
+    color: "black",
+    textAlign: "left",
   },
   header: {
     height: 50,
-    backgroundColor: '#A6D17A',
+    backgroundColor: "#A6D17A",
   },
   text: {
-    textAlign: 'center',
-    fontWeight: '300',
+    textAlign: "center",
+    fontWeight: "300",
   },
   boldText: {
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   dataWrapper: {
     marginTop: -1,
   },
   opsiContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   opsiButton: {
     marginHorizontal: 5,
@@ -760,15 +773,15 @@ const styles = StyleSheet.create({
     textAlign: "left",
   },
   tableText: {
-    textAlign: 'center',
+    textAlign: "center",
   },
   opsiContainer: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+    flexDirection: "row",
+    justifyContent: "center",
   },
   opsiButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
+    flexDirection: "row",
+    alignItems: "center",
     paddingVertical: 10,
     paddingHorizontal: 16,
   },
