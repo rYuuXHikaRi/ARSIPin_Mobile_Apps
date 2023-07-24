@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo  } from "react";
 import {
   View,
   Text,
@@ -54,7 +54,7 @@ const ManajemenBerkas = ({ navigation }) => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.176.213:8000/api/arsips");
+      const response = await fetch("http://192.168.134.213:8000/api/arsips");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -238,27 +238,23 @@ const ManajemenBerkas = ({ navigation }) => {
     console.log('cek modal edit')
   } 
 
-  const renderUserItem = ({ item }) => (
+  const RenderUserItem = ({ item, handleEdit, renderOpsiIcons }) => (
     <View style={styles.userItem}>
-      <TouchableOpacity style={{ flex:2 }}>
+      <TouchableOpacity style={{ flex: 2 }}>
         <Text style={styles.userName}>{item.NamaDokumen}</Text>
       </TouchableOpacity>
-      {/* <Text style={styles.userRole}>{item.Roles == 1 ? "admin" : "user"}</Text> */}
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.editButton}
           onPress={() => handleEdit(item.id)}
         >
-          {/* <View style={styles.row}>{renderOpsiModalEdit()}</View> */}
-          {/* <Text style={[styles.actionText]}>Edit</Text> */}
-          {/* <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" /> */}
-          {/* <MaterialCommunityIcons name="menu" size={20} color="#197B40" /> */}
           <View>{renderOpsiIcons()}</View>
-          
         </TouchableOpacity>
       </View>
     </View>
   );
+  
+  const MemoizedRenderUserItem = memo(RenderUserItem);
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -484,7 +480,7 @@ const ManajemenBerkas = ({ navigation }) => {
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
-        <ScrollView>
+       
           {/* <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
         
           <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
@@ -500,21 +496,28 @@ const ManajemenBerkas = ({ navigation }) => {
             />
           ))}
         </Table> */}
-          <View style={styles.containertabel}>
-            <FlatList
-              data={users}
-              renderItem={renderUserItem}
-              keyExtractor={(item) => item.id.toString()}
-              ListHeaderComponent={
-                <View style={styles.tableHeader}>
-                  <Text style={styles.headerText}>Nama Dokumen</Text>
-                  {/* <Text style={styles.headerText}>Roles</Text> */}
-                  <Text style={styles.headerText}>Aksi</Text>
-                </View>
-              }
-            />
-          </View>
-        </ScrollView>
+<View style={styles.containertabel}>
+  <FlatList
+    data={users}
+    renderItem={({ item }) => (
+      <MemoizedRenderUserItem
+        item={item}
+        handleEdit={handleEdit} // Pastikan Anda memiliki fungsi handleEdit yang sesuai
+        renderOpsiIcons={renderOpsiIcons} // Pastikan Anda memiliki fungsi renderOpsiIcons yang sesuai
+      />
+    )}
+    keyExtractor={(item) => item.id.toString()}
+    ListHeaderComponent={
+      <View style={styles.tableHeader}>
+        <Text style={styles.headerText}>Nama Dokumen</Text>
+        {/* <Text style={styles.headerText}>Roles</Text> */}
+        <Text style={styles.headerText}>Aksi</Text>
+      </View>
+    }
+  />
+</View>
+
+   
       </View>
       {/* <View style={styles.row}>
         {renderOpsiModal()}

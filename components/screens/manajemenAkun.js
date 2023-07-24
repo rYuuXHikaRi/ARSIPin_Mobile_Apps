@@ -55,7 +55,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.176.213:8000/api/users");
+      const response = await fetch("http://192.168.134.213:8000/api/users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -656,6 +656,7 @@ const styles = StyleSheet.create({
   buttonSave: {
     width: 109,
     height: 43,
+    backgroundColor: "#6EAD3B",
   },
   btnsave: {
     width: 109,
