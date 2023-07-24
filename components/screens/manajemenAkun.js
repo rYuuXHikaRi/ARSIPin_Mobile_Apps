@@ -18,8 +18,8 @@ import {
   Feather,
 } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 import { Table, Row } from "react-native-table-component";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
@@ -252,7 +252,7 @@ const ManajemenAkun = () => {
                 <View style={styles.styletitle3}>
                   <View style={styles.styletitle2}>
                     <Text style={styles.titleform}>Role</Text>
-                    <View style={styles.inputRole}>
+                    <View style={styles.inputRoleedit}>
                       <Text
                         style={{
                           paddingHorizontal: 10,
@@ -367,11 +367,11 @@ const ManajemenAkun = () => {
         <Header />
       </View>
       <LinearGradient
-                      colors={['#197B40', '#79B33B', '#A6CE39']}
-                      start={[0, 0.5]}
-                      end={[1, 0.5]}
-                      style={[styles.card]}
-      > 
+        colors={["#197B40", "#79B33B", "#A6CE39"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={[styles.card]}
+      >
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </LinearGradient>
       <View style={styles.card2}>
@@ -413,118 +413,125 @@ const ManajemenAkun = () => {
         </ScrollView>
       </View>
       <View style={styles.row}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <TouchableOpacity
-                  style={[styles.buttonX, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <Text style={styles.X}>X</Text>
-                </TouchableOpacity>
+        <Modal
+          animationType="slide"
+          transparent={true}
+          visible={modalVisible}
+          onRequestClose={() => {
+            Alert.alert("Modal has been closed.");
+            setModalVisible(!modalVisible);
+          }}
+        >
+          <View style={styles.centeredView}>
+            <View style={styles.modalView}>
+              <TouchableOpacity
+                style={[styles.buttonX, styles.buttonClose]}
+                onPress={() => setModalVisible(!modalVisible)}
+              >
+                <Text style={styles.X}>X</Text>
+              </TouchableOpacity>
 
-                <View style={styles.Headtitle}>
-                  <Text style={[styles.bottomLine, styles.titleModal]}>
-                    Tambah Akun
-                  </Text>
-                </View>
-                <View style={styles.styletitle}>
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleform}>Nama User</Text>
-                    <TextInput
-                      style={[styles.inputName]}
-                      placeholder="Username"
-                      onChangeText={(text) => setUsername(text)}
-                    />
-                  </View>
-
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleform}>Nama Lengkap</Text>
-                    <TextInput
-                      style={styles.inputName}
-                      placeholder="Nama Lengkap"
-                      onChangeText={(text) => setFullName(text)}
-                    />
-                  </View>
-                </View>
-                <Text style={styles.titleform}>Nomor HP</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  onChangeText={(text) => setEmail(text)}
-                />
-
-                <Text style={styles.titleform}>Kata Sandi</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Katak sandi"
-                  onChangeText={(text) => setPassword(text)}
-                />
-
-                <View style={styles.styletitle3}>
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleform}>Role</Text>
-                    <DropDownPicker
-                      style={styles.inputRole}
-                      items={[
-                        { label: "User", value: "user" },
-                        { label: "Admin", value: "admin" },
-                      ]}
-                      defaultValue={role}
-                      placeholder="Role"
-                      containerStyle={{ height: 40, width: 200 }}
-                      onChangeItem={(item) => setrole(item.value)}
-                    />
-                  </View>
-
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleformFoto}>Foto</Text>
-                    <TextInput style={styles.inputFile} placeholder="Pilih" />
-                  </View>
+              <View style={styles.Headtitle}>
+                <Text style={[styles.bottomLine, styles.titleModal]}>
+                  Tambah Akun
+                </Text>
+              </View>
+              <View style={styles.styletitle}>
+                <View style={styles.styletitle2}>
+                  <Text style={styles.titleform}>Nama User</Text>
+                  <TextInput
+                    style={[styles.inputName]}
+                    placeholder="Username"
+                    onChangeText={(text) => setUsername(text)}
+                  />
                 </View>
 
-                <View style={styles.btnsave}>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonSave]}
-                    onPress={handleSave}
-                  >
-                    <Text style={styles.textStyle}>Simpan</Text>
-                  </TouchableOpacity>
+                <View style={styles.styletitle2}>
+                  <Text style={styles.titleform}>Nama Lengkap</Text>
+                  <TextInput
+                    style={styles.inputName}
+                    placeholder="Nama Lengkap"
+                    onChangeText={(text) => setFullName(text)}
+                  />
                 </View>
               </View>
+              <Text style={styles.titleform}>Nomor HP</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Email"
+                onChangeText={(text) => setEmail(text)}
+              />
+
+              <Text style={styles.titleform}>Kata Sandi</Text>
+              <TextInput
+                style={styles.input}
+                placeholder="Katak sandi"
+                onChangeText={(text) => setPassword(text)}
+              />
+
+              <View style={styles.styletitle3}>
+                <View style={styles.styletitle2}>
+                  <Text style={styles.titleform}>Role</Text>
+                  <DropDownPicker
+                    style={styles.inputRole}
+                    items={[
+                      { label: "User", value: "user" },
+                      { label: "Admin", value: "admin" },
+                    ]}
+                    defaultValue={role}
+                    placeholder="Role"
+                    containerStyle={{ height: 40, width: 200 }}
+                    onChangeItem={(item) => setrole(item.value)}
+                  />
+                </View>
+
+                <View style={styles.styletitle2}>
+                  <Text style={styles.titleformFoto}>Foto</Text>
+                  <TextInput style={styles.inputFile} placeholder="Pilih" />
+                </View>
+              </View>
+
+              <View style={styles.btnsave}>
+                <TouchableOpacity
+                  style={[styles.button, styles.buttonSave]}
+                  onPress={handleSave}
+                >
+                  <Text style={styles.textStyle}>Simpan</Text>
+                </TouchableOpacity>
+              </View>
             </View>
-          </Modal>
-        </View>
-        <View style={styles.row}>
+          </View>
+        </Modal>
+      </View>
+      <View style={styles.row}>
         <LinearGradient
-                        colors={['#90C13B', '#7CB53C', '#378D3F']}
-                        start={[0, 0.5]}
-                        end={[1, 0.5]}
-                        style={styles.button}
-        > 
-          <TouchableOpacity onPress={() => setModalVisible(true)} >
+          colors={["#90C13B", "#7CB53C", "#378D3F"]}
+          start={[0, 0.5]}
+          end={[1, 0.5]}
+          style={styles.button}
+        >
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
             <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>
-        <TouchableOpacity style={styles.button}>
-          <View style={styles.row}>{renderOpsiModalAdd()}</View>
-          </TouchableOpacity>
-      <View style={{ position: "absolute", bottom: 0 , backgroundColor: '#F0E5E5'}}>
-        <View style={[styles.row, {paddingLeft: 18, paddingRight: 18, marginBottom: 20}]}>
+      <TouchableOpacity style={styles.button}>
+        <View style={styles.row}>{renderOpsiModalAdd()}</View>
+      </TouchableOpacity>
+      <View
+        style={{ position: "absolute", bottom: 0, backgroundColor: "#F0E5E5" }}
+      >
+        <View
+          style={[
+            styles.row,
+            { paddingLeft: 18, paddingRight: 18, marginBottom: 20 },
+          ]}
+        >
           <View style={styles.searchButton}>
             <AntDesign name="search1" size={20} color="black" />
             <TextInput
-                      placeholder="Cari data..."
-                      style={styles.searchButtonText}
+              placeholder="Cari data..."
+              style={styles.searchButtonText}
             />
           </View>
         </View>
@@ -706,6 +713,15 @@ const styles = StyleSheet.create({
     height: 40,
     marginLeft: 16,
     paddingHorizontal: 10,
+    backgroundColor: "#F6F6F6",
+    borderColor: "#F6F6F6",
+    borderRadius: 8,
+  },
+  inputRoleedit : {
+    width: 153,
+    height: 40,
+    marginLeft: 16,
+    paddingHorizontal: 10,
     backgroundColor: "#DDDADA",
     borderColor: "#DDDADA",
     borderRadius: 8,
@@ -778,7 +794,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     height: 43,
 
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   card2: {
     backgroundColor: "white",
@@ -833,7 +849,7 @@ const styles = StyleSheet.create({
     height: 43,
     marginTop: 17,
 
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   buttonText: {
     color: "white",
