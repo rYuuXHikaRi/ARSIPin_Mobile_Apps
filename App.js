@@ -12,7 +12,7 @@ import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
 import PopUpTaccnt from './components/screens/popUp';
-import detailBerkas from './components/screens/detailBerkas';
+import detailBerkas from './components/screens/DetailBerkas';
 import ProductListScreen from './components/screens/dropdowntes';
 
 
@@ -34,8 +34,6 @@ export default function App() {
           options={{ headerShown: false }}
         />
 
-        {/* 
-
                  <Stack.Screen
           name="manajemenberkas"
           component={ManajemenBerkas}
@@ -52,11 +50,11 @@ export default function App() {
           component={ProfilePage}
           options={{ headerShown: false }}
         />
-        <Stack.Screen
+        {/* <Stack.Screen
             name="detailberkas"
             component={DetailBerkas}
             options={{ headerShown: false}}
-        /> */}
+        />  */}
       </Stack.Navigator>
     </NavigationContainer>
   );
