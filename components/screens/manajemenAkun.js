@@ -20,21 +20,19 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { Table, Row } from "react-native-table-component";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
-import * as ImagePicker from 'expo-image-picker';
-import { Button } from "react-native-web";
-
+import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
-  const [username, setUsername] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
+  const [UserName, setUserName] = useState("");
+  const [NomorHp, setNomorHp] = useState("");
+  const [NamaLengkap, setNamaLengkap] = useState("");
+  const [password, setpassword] = useState("");
   const [role, setrole] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
@@ -43,8 +41,7 @@ const ManajemenAkun = () => {
   const [selectedImg, setSelectedImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
 
-
-  const pickImage= async () => {
+  const pickImage = async () => {
     try {
       const result = await ImagePicker.launchImageLibraryAsync({
         mediaTypes: ImagePicker.MediaTypeOptions.Images,
@@ -52,14 +49,14 @@ const ManajemenAkun = () => {
         aspect: [1, 1],
         quality: 1,
       });
-  
+
       console.log(result);
 
       if (!result.canceled) {
         setSelectedImg(result.assets[0].uri);
       }
     } catch (error) {
-      console.log('ImagePicker Error: ', error);
+      console.log("ImagePicker Error: ", error);
     }
   };
 
@@ -71,7 +68,7 @@ const ManajemenAkun = () => {
   //       aspect: [4, 3],
   //       quality: 1,
   //     });
-  
+
   //     console.log(result);
   //     if (!result.cancelled) {
   //       setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
@@ -88,42 +85,56 @@ const ManajemenAkun = () => {
   //     console.log("ImagePicker Error: ", error);
   //   }
   // };
-  
+
+  // ... kode lainnya ...
 
   const handleCreate = async () => {
-    console.log(files);
     const formData = new FormData();
-    formData.append("UserName", UserName);
     formData.append("NamaLengkap", NamaLengkap);
-    formData.append("NomorHP", NomorHP);
+    formData.append("UserName", UserName);
+    formData.append("NomorHp", NomorHp);
     formData.append("password", password);
-    formData.append("Roles", Roles);
-    formData.append("Foto", Foto);
+    formData.append("Roles", selectedOption);
+    // Jika ada lebih banyak data yang ingin dikirim, tambahkan di sini sesuai format yang diharapkan oleh API
+
+    // Jika ada gambar yang dipilih, tambahkan gambar ke FormData
+  if(selectedImg != null){
+    if (selectedImg.length > 0) {
+      const fileUri = selectedImg[0];
+      const fileName = fileUri.split("/").pop();
+      formData.append("Foto", {
+        uri: fileUri,
+        name: fileName,
+        type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
+      });
+    }
+  }
 
     try {
-      // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
-      console.log(formData);
-      const config = {
-        body: formData,
-        method: "POST",
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      };
- 
-      let response = await fetch(
-        "http://192.168.170.213:8000/api/store",
-        config
+      // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
+      const response = await axios.post(
+        "http://192.168.170.213:8000/api/users/store",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Jangan lupa atur header untuk FormData
+          },
+        }
       );
 
-      console.log("Data created successfully:", response.data);
-      // Reset input fields if needed
-      console.log("berhasil");
+      console.log("Response from API:", response.data);
+      // Lakukan apa pun yang perlu Anda lakukan setelah berhasil menyimpan data
+      // Misalnya, tampilkan pesan sukses atau perbarui tampilan data di aplikasi Anda
       setModalVisible(false);
     } catch (error) {
-      console.error("Error creating data:", error);
+      // Jika request gagal, Anda dapat menangani error di sini
+      console.log("Error:", error);
+      // Lakukan apa pun yang perlu Anda lakukan jika ada kesalahan dalam menyimpan data
+      // Misalnya, tampilkan pesan error kepada pengguna atau log pesan error
     }
   };
+
+ 
 
   const options = ["User", "Admin"];
 
@@ -195,6 +206,7 @@ const ManajemenAkun = () => {
                 <TextInput
                   style={[styles.inputName]}
                   placeholder="Username"
+                  value={UserName}
                   onChangeText={(text) => setUserName(text)}
                 />
               </View>
@@ -204,6 +216,7 @@ const ManajemenAkun = () => {
                 <TextInput
                   style={styles.inputName}
                   placeholder="Nama Lengkap"
+                  value={NamaLengkap}
                   onChangeText={(text) => setNamaLengkap(text)}
                 />
               </View>
@@ -212,13 +225,15 @@ const ManajemenAkun = () => {
             <TextInput
               style={styles.input}
               placeholder="Nomor HP"
-              onChangeText={(text) => setNomorHP(text)}
+              value={NomorHp}
+              onChangeText={(text) => setNomorHp(text)}
             />
 
             <Text style={styles.titleform}>Kata Sandi</Text>
             <TextInput
               style={styles.input}
               placeholder="Kata Sandi"
+              value={password}
               onChangeText={(text) => setpassword(text)}
             />
 
@@ -258,7 +273,11 @@ const ManajemenAkun = () => {
 
               <View style={styles.styletitle4}>
                 <Text style={styles.titleformFoto}>Foto</Text>
-                <TouchableOpacity style={styles.inputFile} placeholder="Pilih" onPress={pickImage}>
+                <TouchableOpacity
+                  style={styles.inputFile}
+                  placeholder="Pilih"
+                  onPress={pickImage}
+                >
                   <Text style={styles.inputFilestyle}>Pilih Foto</Text>
                 </TouchableOpacity>
               </View>
@@ -267,7 +286,7 @@ const ManajemenAkun = () => {
             <View style={styles.btnsave}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonSave]}
-                onPress={handleSave}
+                onPress={handleCreate}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
               </TouchableOpacity>
@@ -419,112 +438,22 @@ const ManajemenAkun = () => {
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </LinearGradient>
       <View style={styles.card2}>
-          <View style={styles.containertabel}>
-            <FlatList
-              data={users}
-              renderItem={renderUserItem}
-              keyExtractor={(item) => item.id.toString()}
-              ListHeaderComponent={
-                <View style={styles.tableHeader}>
-                  <Text style={styles.headerText}>Nama Lengkap</Text>
-                  <Text style={styles.headerText}>Roles</Text>
-                  <Text style={styles.headerText}>Aksi</Text>
-                </View>
-              }
-            />
-          </View>
+        <View style={styles.containertabel}>
+          <FlatList
+            data={users}
+            renderItem={renderUserItem}
+            keyExtractor={(item) => item.id.toString()}
+            ListHeaderComponent={
+              <View style={styles.tableHeader}>
+                <Text style={styles.headerText}>Nama Lengkap</Text>
+                <Text style={styles.headerText}>Roles</Text>
+                <Text style={styles.headerText}>Aksi</Text>
+              </View>
+            }
+          />
+        </View>
       </View>
-      <View style={styles.row}>
-        <Modal
-          animationType="slide"
-          transparent={true}
-          visible={modalVisible}
-          onRequestClose={() => {
-            Alert.alert("Modal has been closed.");
-            setModalVisible(!modalVisible);
-          }}
-        >
-          <View style={styles.centeredView}>
-            <View style={styles.modalView}>
-              <TouchableOpacity
-                style={[styles.buttonX, styles.buttonClose]}
-                onPress={() => setModalVisible(!modalVisible)}
-              >
-                <Text style={styles.X}>X</Text>
-              </TouchableOpacity>
-
-              <View style={styles.Headtitle}>
-                <Text style={[styles.bottomLine, styles.titleModal]}>
-                  Tambah Akun
-                </Text>
-              </View>
-              <View style={styles.styletitle}>
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Nama User</Text>
-                  <TextInput
-                    style={[styles.inputName]}
-                    placeholder="Username"
-                    onChangeText={(text) => setUsername(text)}
-                  />
-                </View>
-
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Nama Lengkap</Text>
-                  <TextInput
-                    style={styles.inputName}
-                    placeholder="Nama Lengkap"
-                    onChangeText={(text) => setFullName(text)}
-                  />
-                </View>
-              </View>
-              <Text style={styles.titleform}>Nomor HP</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Email"
-                onChangeText={(text) => setEmail(text)}
-              />
-
-              <Text style={styles.titleform}>Kata Sandi</Text>
-              <TextInput
-                style={styles.input}
-                placeholder="Katak sandi"
-                onChangeText={(text) => setPassword(text)}
-              />
-
-              <View style={styles.styletitle3}>
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleform}>Role</Text>
-                  <DropDownPicker
-                    style={styles.inputRole}
-                    items={[
-                      { label: "User", value: "user" },
-                      { label: "Admin", value: "admin" },
-                    ]}
-                    defaultValue={role}
-                    placeholder="Role"
-                    containerStyle={{ height: 40, width: 200 }}
-                    onChangeItem={(item) => setrole(item.value)}
-                  />
-                </View>
-
-                <View style={styles.styletitle2}>
-                  <Text style={styles.titleformFoto}>Foto</Text>
-                  <TextInput style={styles.inputFile} placeholder="Pilih" />
-                </View>
-              </View>
-
-              <View style={styles.btnsave}>
-                <TouchableOpacity
-                  style={[styles.button, styles.buttonSave]}
-                  onPress={handleSave}
-                >
-                  <Text style={styles.textStyle}>Simpan</Text>
-                </TouchableOpacity>
-              </View>
-            </View>
-          </View>
-        </Modal>
-      </View>
+      
       <View style={styles.row}>
         <LinearGradient
           colors={["#90C13B", "#7CB53C", "#378D3F"]}
@@ -777,14 +706,14 @@ const styles = StyleSheet.create({
     borderColor: "#DDDADA",
     borderRadius: 8,
   },
-  inputFilestyle :{
-    paddingVertical:10,
+  inputFilestyle: {
+    paddingVertical: 10,
   },
   inputFile: {
     width: 150,
     height: 40,
     paddingHorizontal: 10,
-    paddingVertical:0,
+    paddingVertical: 0,
     backgroundColor: "#F6F6F6",
     borderRadius: 8,
   },
