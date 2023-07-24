@@ -201,7 +201,7 @@ const ManajemenAkun = () => {
         }}
       >
         <View style={styles.centeredView2}>
-          <View style={styles.modalView}>
+          <View style={styles.modalViewEdit}>
             <TouchableOpacity
               style={[styles.buttonX, styles.buttonClose]}
               onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
@@ -242,13 +242,6 @@ const ManajemenAkun = () => {
                   onChangeText={(text) => setEmail(text)}
                 />
 
-                <Text style={styles.titleform}>Kata Sandi</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder={selectedUser.Password}
-                  onChangeText={(text) => setPassword(text)}
-                />
-
                 <View style={styles.styletitle3}>
                   <View style={styles.styletitle2}>
                     <Text style={styles.titleform}>Role</Text>
@@ -273,9 +266,9 @@ const ManajemenAkun = () => {
               </>
             )}
 
-            <View style={styles.btnsave}>
+            <View style={styles.btnsaveEdit}>
               <TouchableOpacity
-                style={[styles.button, styles.buttonSave]}
+                style={[styles.button, styles.buttonSaveEdit]}
                 onPress={handleSave}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
@@ -310,44 +303,6 @@ const ManajemenAkun = () => {
       </View>
     </View>
   );
-  // const tableHead = ["Nama", "Role", "Aksi"];
-  // const tableData = [
-  //   [
-  //     <TouchableOpacity onPress={() => console.log("Akun 1")}>
-  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Agus</Text>
-  //     </TouchableOpacity>,
-  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
-  //     renderOpsiIcons(),
-  //   ],
-  //   [
-  //     <TouchableOpacity onPress={() => console.log("Akun 2")}>
-  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Sunar</Text>
-  //     </TouchableOpacity>,
-  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Petugas</Text>,
-  //     renderOpsiIcons(),
-  //   ],
-  //   [
-  //     <TouchableOpacity onPress={() => console.log("Akun 3")}>
-  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Yo</Text>
-  //     </TouchableOpacity>,
-  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
-  //     renderOpsiIcons(),
-  //   ],
-  // ];
-
-  // function renderOpsiIcons() {
-  //   return (
-  //     <View style={styles.opsiContainer}>
-  //       <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
-  //         <MaterialCommunityIcons name="pencil" size={25} color="black" />
-  //       </TouchableOpacity>
-
-  //       <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
-  //         <FontAwesome name="trash" size={25} color="black" />
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -375,27 +330,6 @@ const ManajemenAkun = () => {
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </LinearGradient>
       <View style={styles.card2}>
-        <ScrollView>
-          {/* <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
-            <Row
-              data={tableHead}
-              flexArr={[4, 2, 1.3]}
-              style={[styles.header, styles.boldText]}
-              textStyle={[styles.text, styles.boldText, { fontSize: 20 }]}
-            />
-            {tableData.map((rowData, index, columnData) => (
-              <Row
-                key={index}
-                data={rowData}
-                flexArr={[4, 2, 1.3]}
-                style={[
-                  styles.row,
-                  index % 2 && { backgroundColor: "#e1fcc5" },
-                ]}
-                textStyle={styles.text}
-              />
-            ))}
-          </Table> */}
           <View style={styles.containertabel}>
             <FlatList
               data={users}
@@ -410,7 +344,6 @@ const ManajemenAkun = () => {
               }
             />
           </View>
-        </ScrollView>
       </View>
       <View style={styles.row}>
         <Modal
@@ -511,7 +444,7 @@ const ManajemenAkun = () => {
           style={styles.button}
         >
           <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
+            <Text style={styles.buttonText}>+ Tambah Akun Baru</Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>
@@ -635,6 +568,23 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  modalViewEdit: {
+    width: 354,
+    height: 384,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: -130,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
   buttonX: {
     borderRadius: 20,
     width: 40,
@@ -671,6 +621,18 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     paddingTop: 13,
     marginTop: 45,
+  },
+  buttonSaveEdit: {
+    width: 109,
+    height: 43,
+    backgroundColor: "#6EAD3B",
+  },
+  btnsaveEdit: {
+    width: 109,
+    height: 73,
+    marginLeft: 15,
+    paddingTop: 13,
+    // marginTop: 45,
   },
   textStyle: {
     color: "#F6F6F6",
@@ -717,7 +679,7 @@ const styles = StyleSheet.create({
     borderColor: "#F6F6F6",
     borderRadius: 8,
   },
-  inputRoleedit : {
+  inputRoleedit: {
     width: 153,
     height: 40,
     marginLeft: 16,
