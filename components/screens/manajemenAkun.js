@@ -24,6 +24,9 @@ import { Table, Row } from "react-native-table-component";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
+import * as ImagePicker from 'expo-image-picker';
+import { Button } from "react-native-web";
+
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -37,6 +40,90 @@ const ManajemenAkun = () => {
   const [selectedOption, setSelectedOption] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+
+
+  const pickImage= async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+  
+      console.log(result);
+
+      if (!result.canceled) {
+        setSelectedImg(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log('ImagePicker Error: ', error);
+    }
+  };
+
+  // const handleFilePick = async () => {
+  //   try {
+  //     const result = await ImagePicker.launchImageLibraryAsync({
+  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
+  //       allowsEditing: true,
+  //       aspect: [4, 3],
+  //       quality: 1,
+  //     });
+  
+  //     console.log(result);
+  //     if (!result.cancelled) {
+  //       setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
+  //       const file = {
+  //         uri: result.uri,
+  //         name: "image.jpg", // You can set any name for the file
+  //         type: "image/jpeg", // Adjust the file type based on the selected image format
+  //       };
+  //       setFiles(file);
+  //     } else {
+  //       console.log("User cancelled image picker");
+  //     }
+  //   } catch (error) {
+  //     console.log("ImagePicker Error: ", error);
+  //   }
+  // };
+  
+
+  const handleCreate = async () => {
+    console.log(files);
+    const formData = new FormData();
+    formData.append("UserName", UserName);
+    formData.append("NamaLengkap", NamaLengkap);
+    formData.append("NomorHP", NomorHP);
+    formData.append("password", password);
+    formData.append("Roles", Roles);
+    formData.append("Foto", Foto);
+
+    try {
+      // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
+      console.log(formData);
+      const config = {
+        body: formData,
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+ 
+      let response = await fetch(
+        "http://192.168.170.213:8000/api/store",
+        config
+      );
+
+      console.log("Data created successfully:", response.data);
+      // Reset input fields if needed
+      console.log("berhasil");
+      setModalVisible(false);
+    } catch (error) {
+      console.error("Error creating data:", error);
+    }
+  };
 
   const options = ["User", "Admin"];
 
@@ -55,7 +142,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.134.213:8000/api/users");
+      const response = await fetch("http://192.168.170.213:8000/api/users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -108,7 +195,7 @@ const ManajemenAkun = () => {
                 <TextInput
                   style={[styles.inputName]}
                   placeholder="Username"
-                  onChangeText={(text) => setUsername(text)}
+                  onChangeText={(text) => setUserName(text)}
                 />
               </View>
 
@@ -117,7 +204,7 @@ const ManajemenAkun = () => {
                 <TextInput
                   style={styles.inputName}
                   placeholder="Nama Lengkap"
-                  onChangeText={(text) => setFullName(text)}
+                  onChangeText={(text) => setNamaLengkap(text)}
                 />
               </View>
             </View>
@@ -125,14 +212,14 @@ const ManajemenAkun = () => {
             <TextInput
               style={styles.input}
               placeholder="Nomor HP"
-              onChangeText={(text) => setEmail(text)}
+              onChangeText={(text) => setNomorHP(text)}
             />
 
             <Text style={styles.titleform}>Kata Sandi</Text>
             <TextInput
               style={styles.input}
               placeholder="Kata Sandi"
-              onChangeText={(text) => setPassword(text)}
+              onChangeText={(text) => setpassword(text)}
             />
 
             <View style={styles.styletitle3}>
@@ -171,7 +258,9 @@ const ManajemenAkun = () => {
 
               <View style={styles.styletitle4}>
                 <Text style={styles.titleformFoto}>Foto</Text>
-                <TextInput style={styles.inputFile} placeholder="Pilih" />
+                <TouchableOpacity style={styles.inputFile} placeholder="Pilih" onPress={pickImage}>
+                  <Text style={styles.inputFilestyle}>Pilih Foto</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
@@ -688,10 +777,14 @@ const styles = StyleSheet.create({
     borderColor: "#DDDADA",
     borderRadius: 8,
   },
+  inputFilestyle :{
+    paddingVertical:10,
+  },
   inputFile: {
     width: 150,
     height: 40,
     paddingHorizontal: 10,
+    paddingVertical:0,
     backgroundColor: "#F6F6F6",
     borderRadius: 8,
   },
