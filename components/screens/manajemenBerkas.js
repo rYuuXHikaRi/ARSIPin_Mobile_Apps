@@ -854,8 +854,8 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 43,
     marginTop: 20,
-    flexDirection: "row",
-    alignItems: "center",
+    flexDirection: 'row',
+    alignItems: 'center',
     paddingLeft: 12,
   },
   searchButtonText: {
