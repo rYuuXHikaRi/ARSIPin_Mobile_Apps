@@ -98,17 +98,17 @@ const ManajemenAkun = () => {
     // Jika ada lebih banyak data yang ingin dikirim, tambahkan di sini sesuai format yang diharapkan oleh API
 
     // Jika ada gambar yang dipilih, tambahkan gambar ke FormData
-  if(selectedImg != null){
-    if (selectedImg.length > 0) {
-      const fileUri = selectedImg[0];
-      const fileName = fileUri.split("/").pop();
-      formData.append("Foto", {
-        uri: fileUri,
-        name: fileName,
-        type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
-      });
+    if (selectedImg != null) {
+      if (selectedImg.length > 0) {
+        const fileUri = selectedImg[0];
+        const fileName = fileUri.split("/").pop();
+        formData.append("Foto", {
+          uri: fileUri,
+          name: fileName,
+          type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
+        });
+      }
     }
-  }
 
     try {
       // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
@@ -133,8 +133,6 @@ const ManajemenAkun = () => {
       // Misalnya, tampilkan pesan error kepada pengguna atau log pesan error
     }
   };
-
- 
 
   const options = ["User", "Admin"];
 
@@ -330,7 +328,8 @@ const ManajemenAkun = () => {
                     <TextInput
                       style={[styles.inputName]}
                       placeholder={selectedUser.NamaLengkap}
-                      onChangeText={(text) => setUsername(text)}
+                      value={UserName}
+                      onChangeText={(text) => setUserName(text)}
                     />
                   </View>
 
@@ -339,15 +338,18 @@ const ManajemenAkun = () => {
                     <TextInput
                       style={styles.inputName}
                       placeholder={selectedUser.UserName}
-                      onChangeText={(text) => setFullName(text)}
+                      value={NamaLengkap}
+                      onChangeText={(text) => setNamaLengkap(text)}
                     />
                   </View>
                 </View>
+                
                 <Text style={styles.titleform}>Nomor HP</Text>
                 <TextInput
                   style={styles.input}
                   placeholder={selectedUser.NomorHp}
-                  onChangeText={(text) => setEmail(text)}
+                  value={NomorHp}
+                  onChangeText={(text) => setNomorHp(text)}
                 />
 
                 <View style={styles.styletitle3}>
@@ -368,7 +370,13 @@ const ManajemenAkun = () => {
 
                   <View style={styles.styletitle4}>
                     <Text style={styles.titleformFoto}>Foto</Text>
-                    <TextInput style={styles.inputFile} placeholder="Pilih" />
+                    <TouchableOpacity
+                      style={styles.inputFile}
+                      placeholder="Pilih"
+                      onPress={pickImage}
+                    >
+                      <Text style={styles.inputFilestyle}>Pilih Foto</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </>
@@ -453,7 +461,7 @@ const ManajemenAkun = () => {
           />
         </View>
       </View>
-      
+
       <View style={styles.row}>
         <LinearGradient
           colors={["#90C13B", "#7CB53C", "#378D3F"]}
