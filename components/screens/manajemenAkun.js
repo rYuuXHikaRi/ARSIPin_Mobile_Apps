@@ -20,10 +20,12 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Table, Row } from "react-native-table-component";
+import { useEffect } from "react";
+
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { useEffect } from "react";
+import { dataUsersApi } from "../middleware/apiEndpoint";
+
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -55,7 +57,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.176.213:8000/api/users");
+      const response = await fetch(dataUsersApi);
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -375,7 +377,6 @@ const ManajemenAkun = () => {
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </LinearGradient>
       <View style={styles.card2}>
-        <ScrollView>
           {/* <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
             <Row
               data={tableHead}
@@ -410,7 +411,6 @@ const ManajemenAkun = () => {
               }
             />
           </View>
-        </ScrollView>
       </View>
       <View style={styles.row}>
           <Modal
