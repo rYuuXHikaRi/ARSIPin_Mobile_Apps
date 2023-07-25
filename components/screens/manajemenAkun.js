@@ -25,6 +25,8 @@ import Navbar from "../partials/navbar";
 import { useEffect } from "react";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
+import { SvgXml } from 'react-native-svg';
+import { loginBg } from '../../assets/img/svgAssets';
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -42,7 +44,7 @@ const ManajemenAkun = () => {
   const [selectedImg, setSelectedImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
-  const [userNameToDelete, setUserNameToDelete] = useState('');
+  const [userNameToDelete, setUserNameToDelete] = useState("");
 
   const pickImage = async () => {
     try {
@@ -87,7 +89,7 @@ const ManajemenAkun = () => {
     try {
       // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
       const response = await axios.post(
-        "http://192.168.170.213:8000/api/users/store",
+        "http://192.168.84.213:8000/api/users/store",
         formData,
         {
           headers: {
@@ -108,7 +110,7 @@ const ManajemenAkun = () => {
     }
   };
 
-  const options = ["User", "Admin"];
+  const options = ["1", "2"];
 
   const handleSelectOption = (option) => {
     setSelectedOption(option);
@@ -125,7 +127,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.170.213:8000/api/users");
+      const response = await fetch("http://192.168.84.213:8000/api/users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -140,7 +142,7 @@ const ManajemenAkun = () => {
     console.log("yey");
   };
 
-  const handleDelete = (userId,UserNamaLengkap) => {
+  const handleDelete = (userId, UserNamaLengkap) => {
     console.log("Delete user with ID:", userId);
     setUserIdToDelete(userId);
     setUserNameToDelete(UserNamaLengkap);
@@ -157,20 +159,27 @@ const ManajemenAkun = () => {
       >
         <View style={styles.modalContainerdelete}>
           <View style={styles.modalContentdelete}>
-            <Text style={styles.modalTextdelete}>Apakah Anda yakin ingin menghapus user : {userNameToDelete}</Text>
+            <Text style={styles.modalTextdelete}>
+              Apakah Anda Yakin Ingin Menghapus User :{" "}
+              <Text style={styles.modalTextdeleteName}>{userNameToDelete}</Text>
+            </Text>
             <View style={styles.buttonContainerdelete}>
               <TouchableOpacity onPress={() => setModalDelete(false)}>
-                <Text style={styles.cancelButtonmodaldelete}>No</Text>
+                <View style={styles.buttonModalDelClose}>
+                <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
+                </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={handleDelete}>
-                <Text style={styles.confirmButtonmodaldelete}>Yes</Text>
+                <View style={styles.buttonModalDel}>
+                <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
+                </View>
               </TouchableOpacity>
             </View>
           </View>
         </View>
       </Modal>
-    )
-  }
+    );
+  };
 
   const renderOpsiModalAdd = () => {
     return (
@@ -410,7 +419,7 @@ const ManajemenAkun = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deleteButton}
-          onPress={() => handleDelete(item.id,item.NamaLengkap)}
+          onPress={() => handleDelete(item.id, item.NamaLengkap)}
         >
           {/* <Text style={styles.actionText}>Delete</Text> */}
           <View>{renderModalDelete()}</View>
@@ -568,35 +577,57 @@ const styles = StyleSheet.create({
   //Modal style Delete
   modalContainerdelete: {
     flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
   },
   modalContentdelete: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     padding: 20,
     borderRadius: 8,
-    width: '80%',
+    width: "90%",
+    height:"20%",
   },
   modalTextdelete: {
     fontSize: 18,
     marginBottom: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
   buttonContainerdelete: {
-    flexDirection: 'row',
-    justifyContent: 'space-around',
+    flexDirection: "row",
+    justifyContent: "space-around",
   },
-  cancelButton: {
+  cancelButtonmodaldelete: {
+    color: '#6EAD3B',
     fontSize: 18,
-    color: 'black',
+    fontWeight: 'bold',
   },
-  confirmButton: {
+  confirmButtonmodaldelete: {
     fontSize: 18,
-    color: 'red',
+    color: "white",
+  },
+  modalTextdeleteName:{
+    color:'#6EAD3B',
+  },
+  buttonModalDel: {
+    backgroundColor: '#6EAD3B',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#6EAD3B',
+    marginTop:20,
+  },
+  buttonModalDelClose: {
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#6EAD3B',
+    marginTop:20,
   },
   //end modal delete
-
 
   //Modal Style
   centeredView: {
