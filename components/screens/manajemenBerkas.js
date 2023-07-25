@@ -26,6 +26,7 @@ import { useEffect } from "react";
 import axios from "axios";
 import * as DocumentPicker from "expo-document-picker";
 
+
 const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
@@ -56,13 +57,15 @@ const ManajemenBerkas = ({ navigation }) => {
 
   const fetchArchives = async () => {
     try {
-      const response = await fetch("http://192.168.248.249:8000/api/arsips");
+      const response = await fetch("http://192.168.209.249:8000/api/arsips");
       const data = await response.json();
       setArchives(data);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+
 
   // const addUsers = () => {
   //   users.map((user) =>
@@ -145,7 +148,7 @@ const ManajemenBerkas = ({ navigation }) => {
       // });
 
       let response = await fetch(
-        "http://192.168.248.249:8000/api/store",
+        "http://192.168.209.249:8000/api/store",
         config
       );
 

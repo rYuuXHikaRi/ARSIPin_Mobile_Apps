@@ -55,7 +55,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.248.249:8000/api/users");
+      const response = await fetch("http://192.168.209.249:8000/api/users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {

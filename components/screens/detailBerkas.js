@@ -7,9 +7,10 @@ import {
   SafeAreaView,
   Modal,
   TextInput,
-  ScrollView
+  ScrollView,
+  FlatList
 } from "react-native";
-import { AntDesign, MaterialCommunityIcons ,FontAwesome} from '@expo/vector-icons';
+import { AntDesign, MaterialCommunityIcons ,FontAwesome,Feather} from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
@@ -17,6 +18,13 @@ import AndroidSafeView from "../AndroidSafeView";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { useEffect } from "react";
+import * as FileSystem from 'expo-file-system';
+import * as DocumentPicker from 'expo-document-picker';
+import { WebView } from 'react-native-webview';
+import * as MediaLibrary from 'expo-media-library';
+import * as Sharing from 'expo-sharing';
+import * as Linking from 'expo-linking';
+
 
 const DetailBerkas = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -26,7 +34,9 @@ const DetailBerkas = ({route}) => {
   const [NamaDesa, setNamaDesa] = useState("");
   const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
-  const [fileDetail, setFileDetail] = useState(null);
+  const [fileDetail, setFileDetail] = useState([]);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [showWebView, setShowWebView] = useState(false);
   const { arsip } = route.params;
   const folderName= arsip.NamaDokumen +'-'+arsip.LokasiPenyimpanan;
 
@@ -52,14 +62,75 @@ const DetailBerkas = ({route}) => {
   // }, [arsip.id]);
   const fetchDataFromServer = async () => {
     try {
-      const response = await fetch(`http://192.168.248.249:8000/api/files/${folderName}`);
-      const jsonData = await response.json();
-      setFileDetail(jsonData);
+      const response = await fetch(`http://192.168.209.249:8000/api/getfiles/${arsip.id}`);
+      const data = await response.json();
+      setFileDetail(data);
       
     } catch (error) {
       console.error('Error fetching data:', error);
     }
   };
+
+  const handleFileDownload = async (filename) => {
+    try {
+      // Replace 'your-laravel-api-url' with your actual Laravel API URL
+      const apiUrl = `http://192.168.209.249:8000/api/download/${filename}/${arsip.id}`;
+  
+      const downloadResult = await Linking.openURL(apiUrl);
+      if (downloadResult && downloadResult.action === Linking.ACTIONS.OPEN_DOCUMENT) {
+        // Get the downloaded file's URI
+        const downloadedFileUri = downloadResult.fileUri;
+
+        // Save the file to the device's file manager (downloads folder)
+        const destinationUri = `${FileSystem.documentDirectory}${filename}`;
+        await FileSystem.moveAsync({ from: downloadedFileUri, to: destinationUri });
+
+        console.log('File saved in device download folder.');
+      } else {
+        console.error('Error downloading file.');
+      }
+    } catch (error) {
+      console.error('Error downloading and saving file:', error);
+      // Handle error scenario
+    }
+  };
+  
+  
+
+  const handleOpenDocumentPicker = async () => {
+    try {
+      const documentResult = await DocumentPicker.getDocumentAsync();
+      if (documentResult.type === 'success') {
+        // Handle the selected file (e.g., trigger download)
+        handleFileDownload(documentResult.name);
+      }
+    } catch (error) {
+      console.error('Error picking document:', error);
+    }
+  };
+
+  const renderFileItem = ({ item }) => (
+    <View style={styles.userItem}>
+    <TouchableOpacity 
+    style={{ flex:2 }}
+    onPress={() => handleFileDownload(item.filename)}>
+      <Text>{item.filename}</Text>
+    </TouchableOpacity>
+    {/* <Text style={styles.userRole}>{item.Roles == 1 ? "admin" : "user"}</Text> */}
+    <View style={styles.actionsContainer}>
+    <TouchableOpacity
+                style={styles.opsiButton}
+                onPress={() => {
+                  // Logika ketika tombol "Trash" ditekan
+                  moveconsole.log("Trash button pressed");
+                  setShowPopover(false);
+                }}
+              >
+                <Feather name="trash" size={30} color="black" />
+              </TouchableOpacity>
+    </View>
+  </View>
+  );
   
   console.log(fileDetail);
   const tableHead = ['Nama File', 'Aksi'];
@@ -238,20 +309,28 @@ const DetailBerkas = ({route}) => {
         <View style={styles.row}>
           <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : {arsip.LokasiPenyimpanan}</Text>
         </View>
-        <ScrollView>
-        <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
-          <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
-          {tableData.map((rowData, index,columnData) => (
-            <Row
-              key={index}
-              data={rowData}flexArr={[4, 1]}
-              
-              style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
-              textStyle={styles.text}
+        
+    
+          <View style={styles.containertabel}>
+            <FlatList
+             data={fileDetail}
+             renderItem={renderFileItem}
+              keyExtractor={(item) => item.filename}
+              ListHeaderComponent={
+                <View style={styles.tableHeader}>
+                  <Text style={styles.headerText}>Nama File</Text>
+                  <Text style={styles.headerText}>Aksi</Text>
+                </View>
+              }
             />
-          ))}
-        </Table>
-        </ScrollView>
+          </View>
+      
+
+      <TouchableOpacity onPress={handleOpenDocumentPicker}>
+        <Text>Select File</Text>
+      </TouchableOpacity>
+        
+   
       </View>
       <View style={styles.row}>
         {renderOpsiModal()}
@@ -550,5 +629,21 @@ const styles = StyleSheet.create({
   },
   tableText: {
     textAlign: 'center',
+  },
+  containertabel: {
+    flex: 1,
+    padding: 16,
+  },
+  tableHeader: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    paddingHorizontal: 16,
+    paddingVertical: 8,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  },
+  headerText: {
+    fontSize: 16,
+    fontWeight: "bold",
   },
 });
