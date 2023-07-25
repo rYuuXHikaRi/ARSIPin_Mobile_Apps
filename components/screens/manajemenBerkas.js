@@ -7,7 +7,6 @@ import {
   SafeAreaView,
   Modal,
   TextInput,
-  ScrollView,
   Button,
   FlatList,
 } from "react-native";
@@ -15,16 +14,17 @@ import {
   AntDesign,
   MaterialCommunityIcons,
   Feather,
-  FontAwesome,
 } from "@expo/vector-icons";
-import { Table, Row } from "react-native-table-component";
-import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from "expo-linear-gradient";
+import { useEffect } from "react";
+import * as DocumentPicker from "expo-document-picker";
+import { MenuProvider, MenuOption } from "react-native-popup-menu";
+
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { useEffect } from "react";
-import axios from "axios";
-import * as DocumentPicker from "expo-document-picker";
+import PopUpMenu from "../partials/popUpMenu/popUpMenu";
+import ModalEditDoc from "../partials/modals/modalEditDoc";
+import { dataArsipsApi, storeArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
 
 const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -36,7 +36,7 @@ const ManajemenBerkas = ({ navigation }) => {
   const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [docArsips, setDocArsips] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [NamaDokumen, setNamaDokumen] = useState("");
   const [Keterangan, setKeterangan] = useState("");
@@ -47,21 +47,26 @@ const ManajemenBerkas = ({ navigation }) => {
   const [showPopover, setShowPopover] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [files, setFiles] = useState([]);
+  const [curDocSelect, setCurDocSelect] = useState(null);
+  const [isThereNewData, setIsThereNewData] = useState(true);
 
   useEffect(() => {
-    fetchUsers();
-  }, []);
+    fetchDocArsips();
+  }, [isThereNewData]);
 
-  const fetchUsers = async () => {
-    try {
-      const response = await fetch("http://192.168.176.213:8000/api/arsips");
-      const data = await response.json();
-      setUsers(data);
-    } catch (error) {
-      console.error("Error fetching data:", error);
-    }
+  const fetchDocArsips = async () => {
+      try {
+        const response = await fetch(dataArsipsApi);
+        const data = await response.json();
+        setDocArsips(data);
+        console.log('fetched')
+        setIsThereNewData(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+      }
   };
 
+  console.log(curDocSelect);
   // const addUsers = () => {
   //   users.map((user) =>
   //     tableData.push([
@@ -142,15 +147,19 @@ const ManajemenBerkas = ({ navigation }) => {
       //   }
       // });
 
-      let response = await fetch(
-        "http://192.168.216.249:8000/api/store",
-        config
-      );
+      let response = await fetch(storeArsip, config);
+      
 
       console.log("Data created successfully:", response.data);
       // Reset input fields if needed
       console.log("berhasil");
       setModalVisible(false);
+      setNamaDesa('');
+      setNamaDokumen('');
+      setTahun('');
+      setLokasiPenyimpanan('');
+      setKeterangan('');
+      setIsThereNewData(true);
     } catch (error) {
       console.error("Error creating data:", error);
     }
@@ -244,6 +253,7 @@ const ManajemenBerkas = ({ navigation }) => {
         <Text style={styles.userName}>{item.NamaDokumen}</Text>
       </TouchableOpacity>
       {/* <Text style={styles.userRole}>{item.Roles == 1 ? "admin" : "user"}</Text> */}
+      
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.editButton}
@@ -253,8 +263,18 @@ const ManajemenBerkas = ({ navigation }) => {
           {/* <Text style={[styles.actionText]}>Edit</Text> */}
           {/* <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" /> */}
           {/* <MaterialCommunityIcons name="menu" size={20} color="#197B40" /> */}
-          <View>{renderOpsiIcons()}</View>
-          
+          {/* <View>{renderOpsiIcons()}</View> */}
+          <PopUpMenu>
+            <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalVisibleEdit(true);}}>
+              <Feather name="edit" size={20} color="white" />
+            </MenuOption>
+            <MenuOption style={{backgroundColor: 'green', borderRadius: 8}}>
+              <Feather name="eye" size={20} color="white" />
+            </MenuOption>
+            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}}>
+              <Feather name="trash" size={20} color="white" />
+            </MenuOption>
+          </PopUpMenu>
         </TouchableOpacity>
       </View>
     </View>
@@ -368,58 +388,149 @@ const ManajemenBerkas = ({ navigation }) => {
     );
   };
 
-  //Opsi Modal Edit
-  const renderOpsiModalEdit = () => {
-    return (
-      <Modal
-        animationType="slide"
-        transparent={true}
-        visible={modalVisibleEdit}
-        onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
-          setModalVisibleEdit(!modalVisibleEdit);
-        }}
-      >
+  // //Opsi Modal Edit
+  // const renderOpsiModalEdit = () => {
+  //   return (
+  //     <Modal
+  //       animationType="slide"
+  //       transparent={true}
+  //       visible={modalVisibleEdit}
+  //       onRequestClose={() => {
+  //         Alert.alert("Modal has been closed.");
+  //         setModalVisibleEdit(!modalVisibleEdit);
+  //       }}
+  //     >
+  //       <View style={styles.centeredView}>
+  //         <View style={styles.modalView}>
+  //           <TouchableOpacity
+  //             style={[styles.buttonX, styles.buttonClose]}
+  //             onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
+  //           >
+  //             <Text style={styles.X}>X</Text>
+  //           </TouchableOpacity>
+
+  //           <View style={styles.Headtitle}>
+  //             <Text style={[styles.bottomLine, styles.titleModal]}>
+  //               Edit Arsip
+  //             </Text>
+  //           </View>
+            
+  //           <View>
+  //             <View style={styles.styletitle2}>
+  //               <Text style={styles.titleform}>Nama Dokumen</Text>
+  //               <TextInput
+  //                 style={[styles.input]}
+  //                 placeholder="Nama Dokumen"
+  //                 value={NamaDokumen}
+  //                 onChangeText={(text) => setNamaDokumen(text)}
+  //               />
+  //             </View>
+
+  //             <View style={styles.styletitle2}>
+  //               <Text style={styles.titleform}>Keterangan</Text>
+  //               <TextInput
+  //                 style={styles.inputketerangan}
+  //                 placeholder="Keterangan"
+  //                 value={Keterangan}
+  //                 onChangeText={(text) => setKeterangan(text)}
+  //               />
+  //             </View>
+  //           </View>
+  //           <Text style={styles.titleform}>Tahun</Text>
+  //           <TextInput
+  //             style={styles.input}
+  //             placeholder="tahun"
+  //             value={Tahun}
+  //             onChangeText={(text) => setTahun(text)}
+  //           />
+
+  //           <Text style={styles.titleform}>Nama Desa</Text>
+  //           <TextInput
+  //             style={styles.input}
+  //             placeholder="Nama Desa"
+  //             value={NamaDesa}
+  //             onChangeText={(text) => setNamaDesa(text)}
+  //           />
+
+  //           <View>
+  //             <View style={styles.styletitle2}>
+  //               <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
+  //               <TextInput
+  //                 style={styles.input}
+  //                 placeholder="Loker"
+  //                 value={LokasiPenyimpanan}
+  //                 onChangeText={(text) => setLokasiPenyimpanan(text)}
+  //               />
+  //             </View>
+
+  //             <View style={styles.styletitle4}>
+  //               <Text style={styles.titleformupload}>Upload File</Text>
+  //               <Button title="Pilih File" onPress={handleFilePick} />
+  //               {selectedFiles.map((file, index) => (
+  //                 <Text key={index}>{file.name}</Text>
+  //               ))}
+  //             </View>
+  //           </View>
+
+  //           <View style={styles.btnsave}>
+  //             <TouchableOpacity
+  //               style={[styles.button, styles.buttonSave]}
+  //               onPress={handleCreate}
+                
+  //             >
+  //               <Text style={styles.textStyle}>Simpan</Text>
+  //             </TouchableOpacity>
+  //           </View>
+  //         </View>
+  //       </View>
+  //     </Modal>
+  //   );
+  // };
+
+  return (
+    <SafeAreaView style={styles.container}>
+      {/* Modal for Edit Document */}
+      <ModalEditDoc isVisible={modalVisibleEdit}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
             <TouchableOpacity
-              style={[styles.buttonX, styles.buttonClose]}
-              onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
+            style={[styles.buttonX, styles.buttonClose]}
+            onPress={() => {setCurDocSelect(null); setModalVisibleEdit(!modalVisibleEdit);}}
             >
-              <Text style={styles.X}>X</Text>
+            <Text style={styles.X}>X</Text>
             </TouchableOpacity>
 
             <View style={styles.Headtitle}>
-              <Text style={[styles.bottomLine, styles.titleModal]}>
-                Edit Arsip
-              </Text>
+            <Text style={[styles.bottomLine, styles.titleModal]}>
+            Edit Arsip
+            </Text>
             </View>
-            
+
             <View>
               <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Nama Dokumen</Text>
-                <TextInput
-                  style={[styles.input]}
-                  placeholder="Nama Dokumen"
-                  value={NamaDokumen}
-                  onChangeText={(text) => setNamaDokumen(text)}
-                />
+              <Text style={styles.titleform}>Nama Dokumen</Text>
+              <TextInput
+              style={[styles.input]}
+              placeholder={curDocSelect !== null ? curDocSelect.NamaDokumen : "Nama Dokumen"}
+              value={NamaDokumen}
+              onChangeText={(text) => setNamaDokumen(text)}
+              />
               </View>
 
               <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Keterangan</Text>
-                <TextInput
-                  style={styles.inputketerangan}
-                  placeholder="Keterangan"
-                  value={Keterangan}
-                  onChangeText={(text) => setKeterangan(text)}
-                />
+              <Text style={styles.titleform}>Keterangan</Text>
+              <TextInput
+              style={styles.inputketerangan}
+              placeholder={curDocSelect !== null ? curDocSelect.Keterangan : "Keterangan"}
+              value={Keterangan}
+              onChangeText={(text) => setKeterangan(text)}
+              />
               </View>
             </View>
             <Text style={styles.titleform}>Tahun</Text>
             <TextInput
               style={styles.input}
-              placeholder="tahun"
+              placeholder={curDocSelect !== null ? curDocSelect.Tahun : "Tahun"}
               value={Tahun}
               onChangeText={(text) => setTahun(text)}
             />
@@ -427,51 +538,46 @@ const ManajemenBerkas = ({ navigation }) => {
             <Text style={styles.titleform}>Nama Desa</Text>
             <TextInput
               style={styles.input}
-              placeholder="Nama Desa"
+              placeholder={curDocSelect !== null ? curDocSelect.NamaDesa : "Nama Desa"}
               value={NamaDesa}
               onChangeText={(text) => setNamaDesa(text)}
             />
 
             <View>
               <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Loker"
-                  value={LokasiPenyimpanan}
-                  onChangeText={(text) => setLokasiPenyimpanan(text)}
-                />
+              <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
+              <TextInput
+              style={styles.input}
+              placeholder={curDocSelect !== null ? curDocSelect.LokasiPenyimpanan : "Loker"}
+              value={LokasiPenyimpanan}
+              onChangeText={(text) => setLokasiPenyimpanan(text)}
+              />
               </View>
 
               <View style={styles.styletitle4}>
-                <Text style={styles.titleformupload}>Upload File</Text>
-                <Button title="Pilih File" onPress={handleFilePick} />
-                {selectedFiles.map((file, index) => (
-                  <Text key={index}>{file.name}</Text>
-                ))}
+              <Text style={styles.titleformupload}>Upload File</Text>
+              <Button title="Pilih File" onPress={handleFilePick} />
+              {selectedFiles.map((file, index) => (
+              <Text key={index}>{file.name}</Text>
+              ))}
               </View>
             </View>
 
             <View style={styles.btnsave}>
-              <TouchableOpacity
-                style={[styles.button, styles.buttonSave]}
-                onPress={handleCreate}
-                
-              >
-                <Text style={styles.textStyle}>Simpan</Text>
-              </TouchableOpacity>
-            </View>
+            <TouchableOpacity
+              style={[styles.button, styles.buttonSave]}
+              onPress={() => {setCurDocSelect(null); handleCreate}}
+            >
+              <Text style={styles.textStyle}>Simpan</Text>
+            </TouchableOpacity>
+          </View>
           </View>
         </View>
-      </Modal>
-    );
-  };
-
-  return (
-    <SafeAreaView style={styles.container}>
+      </ModalEditDoc>
       <View style={{ position: "absolute", top: 0 }}>
         <Header />
       </View>
+
       <LinearGradient
         colors={["#197B40", "#79B33B", "#A6CE39"]}
         start={[0, 0.5]}
@@ -484,7 +590,6 @@ const ManajemenBerkas = ({ navigation }) => {
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
-        <ScrollView>
           {/* <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
         
           <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
@@ -500,26 +605,21 @@ const ManajemenBerkas = ({ navigation }) => {
             />
           ))}
         </Table> */}
-          <View style={styles.containertabel}>
+          <MenuProvider style={styles.containertabel}>
             <FlatList
-              data={users}
+              data={docArsips}
               renderItem={renderUserItem}
               keyExtractor={(item) => item.id.toString()}
               ListHeaderComponent={
                 <View style={styles.tableHeader}>
                   <Text style={styles.headerText}>Nama Dokumen</Text>
-                  {/* <Text style={styles.headerText}>Roles</Text> */}
                   <Text style={styles.headerText}>Aksi</Text>
                 </View>
               }
+
             />
-          </View>
-        </ScrollView>
+          </MenuProvider>
       </View>
-      {/* <View style={styles.row}>
-        {renderOpsiModal()}
-      </View> */}
-      <View>{renderOpsiModalEdit()}</View>
 
       <View style={styles.row}>
         <LinearGradient
@@ -608,7 +708,6 @@ const styles = StyleSheet.create({
     paddingHorizontal: 6,
     paddingVertical: 6,
     borderRadius: 6,
-    width: 35,
   },
   deleteButton: {
     backgroundColor: "#197B40",
