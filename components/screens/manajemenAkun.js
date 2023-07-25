@@ -55,7 +55,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.176.213:8000/api/users");
+      const response = await fetch("http://192.168.248.249:8000/api/users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -375,7 +375,7 @@ const ManajemenAkun = () => {
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </LinearGradient>
       <View style={styles.card2}>
-        <ScrollView>
+  
           {/* <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
             <Row
               data={tableHead}
@@ -410,7 +410,6 @@ const ManajemenAkun = () => {
               }
             />
           </View>
-        </ScrollView>
       </View>
       <View style={styles.row}>
           <Modal

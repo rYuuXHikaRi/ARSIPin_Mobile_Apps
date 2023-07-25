@@ -27,23 +27,39 @@ const DetailBerkas = ({route}) => {
   const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
   const [fileDetail, setFileDetail] = useState(null);
-  const { user } = route.params;
+  const { arsip } = route.params;
+  const folderName= arsip.NamaDokumen +'-'+arsip.LokasiPenyimpanan;
 
-  console.log(1);
-  console.log(user);
-  console.log(1);
+  console.log(folderName)
+
+  console.log(arsip);
+  console.log('dsfisghdkjsdhkfgsdgdkjvhvkjdsg');
 
   useEffect(() => {
-    // Lakukan pengambilan data detail file dari endpoint Laravel menggunakan fileId
-    fetch(`http://192.168.192.213:8000/api/arsips/8`)
-    .then(response => response.json())
-    .then(data => {
-      setFileDetail(data);
-    })
-    .catch(error => {
-      console.error('Error fetching user detail:', error);
-    });
-  }, [user.id]);
+    fetchDataFromServer();
+  }, []);
+
+  // useEffect(() => {
+  //   // Lakukan pengambilan data detail file dari endpoint Laravel menggunakan fileId
+  //   fetch(`http://192.168.248.249:8000/api/arsips/2`)
+  //   .then(response => response.json())
+  //   .then(data => {
+  //     setFileDetail(data);
+  //   })
+  //   .catch(error => {
+  //     console.error('Error fetching user detail:', error);
+  //   });
+  // }, [arsip.id]);
+  const fetchDataFromServer = async () => {
+    try {
+      const response = await fetch(`http://192.168.248.249:8000/api/files/${folderName}`);
+      const jsonData = await response.json();
+      setFileDetail(jsonData);
+      
+    } catch (error) {
+      console.error('Error fetching data:', error);
+    }
+  };
   
   console.log(fileDetail);
   const tableHead = ['Nama File', 'Aksi'];
@@ -211,16 +227,16 @@ const DetailBerkas = ({route}) => {
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Detail Arsip</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Nama : {user.NamaDokumen}</Text>
+          <Text style={[styles.cardTitle2]}>Nama : {arsip.NamaDokumen}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Tahun: {user.Tahun}</Text>
+          <Text style={[styles.cardTitle2]}>Tahun: {arsip.Tahun}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Desa : {user.NamaDesa}</Text>
+          <Text style={[styles.cardTitle2]}>Desa : {arsip.NamaDesa}</Text>
         </View>
         <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : {user.LokasiPenyimpanan}</Text>
+          <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : {arsip.LokasiPenyimpanan}</Text>
         </View>
         <ScrollView>
         <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
