@@ -29,17 +29,20 @@ import axios from "axios";
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
+  const [modalDelete, setModalDelete] = useState(false);
   const [UserName, setUserName] = useState("");
   const [NomorHp, setNomorHp] = useState("");
   const [NamaLengkap, setNamaLengkap] = useState("");
   const [password, setpassword] = useState("");
-  const [role, setrole] = useState("");
+  const [Roles, setRoles] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
   const [selectedImg, setSelectedImg] = useState(null);
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const [userNameToDelete, setUserNameToDelete] = useState('');
 
   const pickImage = async () => {
     try {
@@ -60,34 +63,6 @@ const ManajemenAkun = () => {
     }
   };
 
-  // const handleFilePick = async () => {
-  //   try {
-  //     const result = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //       allowsEditing: true,
-  //       aspect: [4, 3],
-  //       quality: 1,
-  //     });
-
-  //     console.log(result);
-  //     if (!result.cancelled) {
-  //       setSelectedFiles([result.uri]); // Store the URI in the selectedFiles state
-  //       const file = {
-  //         uri: result.uri,
-  //         name: "image.jpg", // You can set any name for the file
-  //         type: "image/jpeg", // Adjust the file type based on the selected image format
-  //       };
-  //       setFiles(file);
-  //     } else {
-  //       console.log("User cancelled image picker");
-  //     }
-  //   } catch (error) {
-  //     console.log("ImagePicker Error: ", error);
-  //   }
-  // };
-
-  // ... kode lainnya ...
-
   const handleCreate = async () => {
     const formData = new FormData();
     formData.append("NamaLengkap", NamaLengkap);
@@ -95,7 +70,6 @@ const ManajemenAkun = () => {
     formData.append("NomorHp", NomorHp);
     formData.append("password", password);
     formData.append("Roles", selectedOption);
-    // Jika ada lebih banyak data yang ingin dikirim, tambahkan di sini sesuai format yang diharapkan oleh API
 
     // Jika ada gambar yang dipilih, tambahkan gambar ke FormData
     if (selectedImg != null) {
@@ -159,19 +133,44 @@ const ManajemenAkun = () => {
     }
   };
   const handleEdit = (userId) => {
-    // Implement edit action here
     console.log("Edit user with ID:", userId);
     const user = users.find((user) => user.id === userId);
     setSelectedUser(user);
     setModalVisibleEdit(true);
-    // renderOpsiModalEdit(userId);
     console.log("yey");
   };
 
-  const handleDelete = (userId) => {
-    // Implement delete action here
+  const handleDelete = (userId,UserNamaLengkap) => {
     console.log("Delete user with ID:", userId);
+    setUserIdToDelete(userId);
+    setUserNameToDelete(UserNamaLengkap);
+    setModalDelete(true);
   };
+
+  const renderModalDelete = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalDelete}
+        onRequestClose={() => setModalDelete(false)}
+      >
+        <View style={styles.modalContainerdelete}>
+          <View style={styles.modalContentdelete}>
+            <Text style={styles.modalTextdelete}>Apakah Anda yakin ingin menghapus user : {userNameToDelete}</Text>
+            <View style={styles.buttonContainerdelete}>
+              <TouchableOpacity onPress={() => setModalDelete(false)}>
+                <Text style={styles.cancelButtonmodaldelete}>No</Text>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={handleDelete}>
+                <Text style={styles.confirmButtonmodaldelete}>Yes</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    )
+  }
 
   const renderOpsiModalAdd = () => {
     return (
@@ -343,7 +342,7 @@ const ManajemenAkun = () => {
                     />
                   </View>
                 </View>
-                
+
                 <Text style={styles.titleform}>Nomor HP</Text>
                 <TextInput
                   style={styles.input}
@@ -411,9 +410,10 @@ const ManajemenAkun = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deleteButton}
-          onPress={() => handleDelete(item.id)}
+          onPress={() => handleDelete(item.id,item.NamaLengkap)}
         >
           {/* <Text style={styles.actionText}>Delete</Text> */}
+          <View>{renderModalDelete()}</View>
           <FontAwesome name="trash" size={25} color="#A6D17A" />
         </TouchableOpacity>
       </View>
@@ -564,6 +564,40 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+
+  //Modal style Delete
+  modalContainerdelete: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+  },
+  modalContentdelete: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 8,
+    width: '80%',
+  },
+  modalTextdelete: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: 'center',
+  },
+  buttonContainerdelete: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+  },
+  cancelButton: {
+    fontSize: 18,
+    color: 'black',
+  },
+  confirmButton: {
+    fontSize: 18,
+    color: 'red',
+  },
+  //end modal delete
+
+
   //Modal Style
   centeredView: {
     flex: 1,
