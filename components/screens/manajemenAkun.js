@@ -149,6 +149,19 @@ const ManajemenAkun = () => {
     setModalDelete(true);
   };
 
+  // const DeleteUser = () => {
+  //   axios
+  //   .delete(`http://192.168.84.213:8000/api/users/destroy/${userId}`)
+  //   .then((response) => {
+  //     // Proses respons API jika diperlukan
+  //     console.log('User deleted successfully');
+  //     setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+  //   })
+  //   .catch((error) => {
+  //     console.error('Error deleting user:', error);
+  //   });
+  // }
+
   const renderModalDelete = () => {
     return (
       <Modal
