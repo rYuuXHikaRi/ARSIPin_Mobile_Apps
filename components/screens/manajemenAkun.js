@@ -23,7 +23,7 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from "react";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { dataUsersApi } from "../middleware/apiEndpoint";
+import { dataUsersApi, storeUser, destroyUser } from "../middleware/apiEndpoint";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { SvgXml } from 'react-native-svg';
@@ -45,6 +45,7 @@ const ManajemenAkun = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [userNameToDelete, setUserNameToDelete] = useState("");
+  const [isThereNewData, setIsThereNewData] = useState(true);
 
   const pickImage = async () => {
     try {
@@ -93,9 +94,7 @@ const ManajemenAkun = () => {
 
     try {
       // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
-      const response = await axios.post(
-        "http://192.168.154.213:8000/api/users/store",
-        formData,
+      const response = await axios.post(storeUser, formData,
         {
           headers: {
             "Content-Type": "multipart/form-data", // Jangan lupa atur header untuk FormData
@@ -133,13 +132,14 @@ const ManajemenAkun = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [isThereNewData]);
 
   const fetchUsers = async () => {
     try {
       const response = await fetch(dataUsersApi);
       const data = await response.json();
       setUsers(data);
+      setIsThereNewData(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -162,11 +162,12 @@ const ManajemenAkun = () => {
   const DeleteUser = () => {
     console.log(userIdToDelete)
     axios
-    .delete(`http://192.168.154.213:8000/api/users/destroy/${userIdToDelete}`)
+    .delete(destroyUser + `/${userIdToDelete}`)
     .then((response) => {
       // Proses respons API jika diperlukan
       console.log('User deleted successfully');
       setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+      setIsThereNewData(true);
     })
     .catch((error) => {
       console.error('Error deleting user:', error);
