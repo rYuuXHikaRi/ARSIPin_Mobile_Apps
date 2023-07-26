@@ -6,6 +6,7 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
+    "platforms": ["ios", "android"],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
@@ -21,7 +22,9 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
-      }
+      },
+      "permissions": ["MANAGE_EXTERNAL_STORAGE"]
+
     },
     "web": {
       "favicon": "./assets/favicon.png"

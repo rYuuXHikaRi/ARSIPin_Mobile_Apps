@@ -1,0 +1,178 @@
+// manajemenBerkas - 01
+  // const addUsers = () => {
+  //   users.map((user) =>
+  //     tableData.push([
+  //       <TouchableOpacity
+  //         onPress={() => navigation.navigate("detailberkas", { user })}
+  //       >
+  //         <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>
+  //           {user.NamaDokumen}
+  //         </Text>
+  //       </TouchableOpacity>,
+  //       renderOpsiIcons(),
+  //     ])
+  //   );
+  // };
+
+// manajemenBerkas - 02
+    // const data = {
+    //   NamaDokumen: NamaDokumen,
+    //   Keterangan: Keterangan,
+    //   Tahun: Tahun,
+    //   NamaDesa: NamaDesa,
+    //   LokasiPenyimpanan: LokasiPenyimpanan,
+    //   NamaFile : "File.txt"
+    // };
+
+// manajemenBerkas - 03
+    // selectedFiles.forEach((file, index) => {
+    //   formData.append(`file[${index}]`, file);
+    // });
+
+// manajemenBerkas - 04
+      // let response = await axios.post('http://192.168.0.249:8000/api/store', formData, {
+      //   headers: {
+      //     'Content-Type': 'multipart/form-data' // Pastikan Anda mengatur Content-Type sebagai 'multipart/form-data'
+      //   }
+      // });
+
+// manajemenBerkas - 05
+    {/* <TouchableOpacity onPress={() => setShowPopover(true)}>
+        <MaterialCommunityIcons
+        name="dots-vertical"
+        size={30}
+        color="black"
+        style={{ marginLeft:-5 }}
+        />
+    </TouchableOpacity> */}
+
+// manajemenBerkas - 06
+    {/* <Text style={styles.userRole}>{item.Roles == 1 ? "admin" : "user"}</Text> */}
+
+// manajemenBerkas - 07
+    {/* <View style={styles.row}>{renderOpsiModalEdit()}</View> */}
+    {/* <Text style={[styles.actionText]}>Edit</Text> */}
+    {/* <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" /> */}
+    {/* <MaterialCommunityIcons name="menu" size={20} color="#197B40" /> */}
+    {/* <View>{renderOpsiIcons()}</View> */}
+
+// manajemenBerkas - 08 (remove bracket before paste the code)
+ {//Opsi Modal Edit
+  // const renderOpsiModalEdit = () => {
+  //   return (
+  //     <Modal
+  //       animationType="slide"
+  //       transparent={true}
+  //       visible={modalVisibleEdit}
+  //       onRequestClose={() => {
+  //         Alert.alert("Modal has been closed.");
+  //         setModalVisibleEdit(!modalVisibleEdit);
+  //       }}
+  //     >
+  //       <View style={styles.centeredView}>
+  //         <View style={styles.modalView}>
+  //           <TouchableOpacity
+  //             style={[styles.buttonX, styles.buttonClose]}
+  //             onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
+  //           >
+  //             <Text style={styles.X}>X</Text>
+  //           </TouchableOpacity>
+
+  //           <View style={styles.Headtitle}>
+  //             <Text style={[styles.bottomLine, styles.titleModal]}>
+  //               Edit Arsip
+  //             </Text>
+  //           </View>
+            
+  //           <View>
+  //             <View style={styles.styletitle2}>
+  //               <Text style={styles.titleform}>Nama Dokumen</Text>
+  //               <TextInput
+  //                 style={[styles.input]}
+  //                 placeholder="Nama Dokumen"
+  //                 value={NamaDokumen}
+  //                 onChangeText={(text) => setNamaDokumen(text)}
+  //               />
+  //             </View>
+
+  //             <View style={styles.styletitle2}>
+  //               <Text style={styles.titleform}>Keterangan</Text>
+  //               <TextInput
+  //                 style={styles.inputketerangan}
+  //                 placeholder="Keterangan"
+  //                 value={Keterangan}
+  //                 onChangeText={(text) => setKeterangan(text)}
+  //               />
+  //             </View>
+  //           </View>
+  //           <Text style={styles.titleform}>Tahun</Text>
+  //           <TextInput
+  //             style={styles.input}
+  //             placeholder="tahun"
+  //             value={Tahun}
+  //             onChangeText={(text) => setTahun(text)}
+  //           />
+
+  //           <Text style={styles.titleform}>Nama Desa</Text>
+  //           <TextInput
+  //             style={styles.input}
+  //             placeholder="Nama Desa"
+  //             value={NamaDesa}
+  //             onChangeText={(text) => setNamaDesa(text)}
+  //           />
+
+  //           <View>
+  //             <View style={styles.styletitle2}>
+  //               <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
+  //               <TextInput
+  //                 style={styles.input}
+  //                 placeholder="Loker"
+  //                 value={LokasiPenyimpanan}
+  //                 onChangeText={(text) => setLokasiPenyimpanan(text)}
+  //               />
+  //             </View>
+
+  //             <View style={styles.styletitle4}>
+  //               <Text style={styles.titleformupload}>Upload File</Text>
+  //               <Button title="Pilih File" onPress={handleFilePick} />
+  //               {selectedFiles.map((file, index) => (
+  //                 <Text key={index}>{file.name}</Text>
+  //               ))}
+  //             </View>
+  //           </View>
+
+  //           <View style={styles.btnsave}>
+  //             <TouchableOpacity
+  //               style={[styles.button, styles.buttonSave]}
+  //               onPress={handleCreate}
+                
+  //             >
+  //               <Text style={styles.textStyle}>Simpan</Text>
+  //             </TouchableOpacity>
+  //           </View>
+  //         </View>
+  //       </View>
+  //     </Modal>
+  //   );
+  // };
+ }
+
+// manajemenBerkas - 09
+    {/* 
+    
+    <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
+
+        <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
+
+    
+        {tableData.map((rowData, index,) => (
+            <Row
+                key={index}
+                data={rowData}flexArr={[4, 1]}
+                
+                style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
+                textStyle={styles.text}
+            />
+        ))}
+    </Table> */}
+

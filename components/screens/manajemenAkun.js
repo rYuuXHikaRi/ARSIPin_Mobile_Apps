@@ -18,11 +18,12 @@ import {
   Feather,
 } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { LinearGradient } from "expo-linear-gradient";
+import { SafeAreaView } from 'react-native-safe-area-context';
+import { LinearGradient } from 'expo-linear-gradient';
+import { useEffect } from "react";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { useEffect } from "react";
+import { dataUsersApi } from "../middleware/apiEndpoint";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { SvgXml } from 'react-native-svg';
@@ -136,7 +137,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.154.213:8000/api/users");
+      const response = await fetch(dataUsersApi);
       const data = await response.json();
       setUsers(data);
     } catch (error) {
