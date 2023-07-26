@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -15,15 +15,18 @@ import { Table, Row } from 'react-native-table-component';
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
 import AndroidSafeView from "../AndroidSafeView";
-import Header from "../partials/header";
-import Navbar from "../partials/navbar";
-import { useEffect } from "react";
 import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
 import { WebView } from 'react-native-webview';
 import * as MediaLibrary from 'expo-media-library';
 import * as Sharing from 'expo-sharing';
 import * as Linking from 'expo-linking';
+
+//local
+import Header from "../partials/header";
+import Navbar from "../partials/navbar";
+import { getListDocApi } from "../middleware/apiEndpoint";
+
 
 
 const DetailBerkas = ({route}) => {
@@ -62,9 +65,9 @@ const DetailBerkas = ({route}) => {
   // }, [arsip.id]);
   const fetchDataFromServer = async () => {
     try {
-      const response = await fetch(`http://192.168.209.249:8000/api/getfiles/${arsip.id}`);
-      const data = await response.json();
-      setFileDetail(data);
+      const response = await fetch(getListDocApi + `/${arsip.id}`);
+      const jsonData = await response.json();
+      setFileDetail(jsonData);
       
     } catch (error) {
       console.error('Error fetching data:', error);
