@@ -13,7 +13,6 @@ import {
 
 import {
   AntDesign,
-  MaterialCommunityIcons,
   Feather,
 } from "@expo/vector-icons";
 
@@ -179,7 +178,7 @@ const ManajemenBerkas = ({ navigation }) => {
                 onPress={() => {
                   // Logika ketika tombol "Eye" ditekan
                   console.log(selectedArchive);
-                  navigation.navigate("detailberkas", { arsip: selectedArchive })
+                  navigation.navigate("detailberkas", { arsip: curDocSelect })
                 }}
               >
                 <Feather name="eye" size={30} color="black" />
@@ -252,7 +251,7 @@ const ManajemenBerkas = ({ navigation }) => {
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalVisibleEdit(true);}}>
               <Feather name="edit" size={20} color="white" />
             </MenuOption>
-            <MenuOption style={{backgroundColor: 'green', borderRadius: 8}}>
+            <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {console.log("Moved to detail document page at " + item.NamaDokumen + " document"); navigation.navigate('detailberkas', {arsip: item})}}>
               <Feather name="eye" size={20} color="white" />
             </MenuOption>
             <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}}>
