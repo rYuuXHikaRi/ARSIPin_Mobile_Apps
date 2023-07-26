@@ -377,6 +377,7 @@ const ManajemenAkun = () => {
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </LinearGradient>
       <View style={styles.card2}>
+  
           {/* <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
             <Row
               data={tableHead}

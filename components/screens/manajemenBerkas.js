@@ -10,11 +10,13 @@ import {
   Button,
   FlatList,
 } from "react-native";
+
 import {
   AntDesign,
   MaterialCommunityIcons,
   Feather,
 } from "@expo/vector-icons";
+
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
 import * as DocumentPicker from "expo-document-picker";
@@ -36,7 +38,8 @@ const ManajemenBerkas = ({ navigation }) => {
   const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
-  const [docArsips, setDocArsips] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [archives, setArchives] = useState([]);
   const [rowData, setRowData] = useState([]);
   const [NamaDokumen, setNamaDokumen] = useState("");
   const [Keterangan, setKeterangan] = useState("");
@@ -46,24 +49,25 @@ const ManajemenBerkas = ({ navigation }) => {
   const [NamaFile, setNamaFile] = useState("");
   const [showPopover, setShowPopover] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
+  const [selectedArchive, setSelectedArchive] = useState([]);
   const [files, setFiles] = useState([]);
   const [curDocSelect, setCurDocSelect] = useState(null);
   const [isThereNewData, setIsThereNewData] = useState(true);
 
   useEffect(() => {
-    fetchDocArsips();
+    fetchArchives();
   }, [isThereNewData]);
 
-  const fetchDocArsips = async () => {
-      try {
-        const response = await fetch(dataArsipsApi);
-        const data = await response.json();
-        setDocArsips(data);
-        console.log('fetched')
-        setIsThereNewData(false);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      }
+  const fetchArchives = async () => {
+    try {
+      const response = await fetch(dataArsipsApi);
+      const data = await response.json();
+      setArchives(data);
+      console.log('fetched')
+      setIsThereNewData(false);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
   };
 
   console.log(curDocSelect);
@@ -168,16 +172,19 @@ const ManajemenBerkas = ({ navigation }) => {
   const tableHead = ["Nama Folder", "Aksi"];
 
   function renderOpsiIcons() {
+ 
+   
     return (
       <View style={styles.opsiContainer}>
-        <TouchableOpacity onPress={() => setShowPopover(true)}>
+        
+        {/* <TouchableOpacity onPress={() => setShowPopover(true)}>
           <MaterialCommunityIcons
             name="dots-vertical"
             size={30}
             color="black"
             style={{ marginLeft:-5 }}
           />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
         <Modal
           animationType="slide"
           transparent={true}
@@ -203,8 +210,8 @@ const ManajemenBerkas = ({ navigation }) => {
                 style={styles.opsiButton}
                 onPress={() => {
                   // Logika ketika tombol "Eye" ditekan
-                  console.log("Eye button pressed");
-                  setShowPopover(false);
+                  console.log(selectedArchive);
+                  navigation.navigate("detailberkas", { arsip: selectedArchive })
                 }}
               >
                 <Feather name="eye" size={30} color="black" />
@@ -214,7 +221,7 @@ const ManajemenBerkas = ({ navigation }) => {
                 style={styles.opsiButton}
                 onPress={() => {
                   // Logika ketika tombol "Trash" ditekan
-                  console.log("Trash button pressed");
+                  moveconsole.log("Trash button pressed");
                   setShowPopover(false);
                 }}
               >
@@ -233,23 +240,32 @@ const ManajemenBerkas = ({ navigation }) => {
       </View>
     );
   }
-  const handleEdit = (userId) => {
-    // Implement edit action here
-    // console.log("Edit user with ID:", userId);
-    // const user = users.find((user) => user.id === userId);
-    // setSelectedUser(user);
+  const catchArchiveId = (archiveId) => {
+    console.log("Catch archive with ID:", archiveId);
+    const archive = archives.find((archive) => archive.id === archiveId);
+    setSelectedArchive(archive);
     setShowPopover(true);
-    // renderOpsiModalEdit(userId);
+    renderOpsiIcons();
     console.log("yey");
+  };
+
+  const moveToDetailBerkas = (archiveId) => {
+    console.log(archiveId);
+    const archive = archives.find((archive) => archive.id === archiveId);
+    setSelectedArchive(archive);
+    navigation.navigate("detailberkas", { archive })
+
   };
   const handleEditModal = () => {
     setModalVisibleEdit(true);
     console.log('cek modal edit')
   } 
 
-  const renderUserItem = ({ item }) => (
+  const renderArchiveItem = ({ item }) => (
     <View style={styles.userItem}>
-      <TouchableOpacity style={{ flex:2 }}>
+      <TouchableOpacity 
+      style={{ flex:2 }}
+      onPress={()=>moveToDetailBerkas(item.id)}>
         <Text style={styles.userName}>{item.NamaDokumen}</Text>
       </TouchableOpacity>
       {/* <Text style={styles.userRole}>{item.Roles == 1 ? "admin" : "user"}</Text> */}
@@ -257,8 +273,15 @@ const ManajemenBerkas = ({ navigation }) => {
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.editButton}
-          onPress={() => handleEdit(item.id)}
+          onPress={() => catchArchiveId(item.id)}
+          
         >
+          <MaterialCommunityIcons
+            name="dots-vertical"
+            size={30}
+            color="black"
+            style={{ marginLeft:-5 }}
+          />
           {/* <View style={styles.row}>{renderOpsiModalEdit()}</View> */}
           {/* <Text style={[styles.actionText]}>Edit</Text> */}
           {/* <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" /> */}
@@ -323,7 +346,7 @@ const ManajemenBerkas = ({ navigation }) => {
                 <TextInput
                   style={[styles.input]}
                   placeholder="Nama Dokumen"
-                  value={NamaDokumen}
+                  value={NamaDokumen}                         
                   onChangeText={(text) => setNamaDokumen(text)}
                 />
               </View>
@@ -501,9 +524,7 @@ const ManajemenBerkas = ({ navigation }) => {
             </TouchableOpacity>
 
             <View style={styles.Headtitle}>
-            <Text style={[styles.bottomLine, styles.titleModal]}>
-            Edit Arsip
-            </Text>
+              <Text style={[styles.bottomLine, styles.titleModal]}>Edit Arsip</Text>
             </View>
 
             <View>
@@ -562,7 +583,6 @@ const ManajemenBerkas = ({ navigation }) => {
               ))}
               </View>
             </View>
-
             <View style={styles.btnsave}>
             <TouchableOpacity
               style={[styles.button, styles.buttonSave]}
@@ -607,8 +627,8 @@ const ManajemenBerkas = ({ navigation }) => {
         </Table> */}
           <MenuProvider style={styles.containertabel}>
             <FlatList
-              data={docArsips}
-              renderItem={renderUserItem}
+              data={archives}
+              renderItem={renderArchiveItem}
               keyExtractor={(item) => item.id.toString()}
               ListHeaderComponent={
                 <View style={styles.tableHeader}>
