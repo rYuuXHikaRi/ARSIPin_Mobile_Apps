@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo  } from "react";
 import {
   View,
   Text,
@@ -26,6 +26,7 @@ import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
 import { dataArsipsApi, storeArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
+
 
 const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -262,6 +263,8 @@ const ManajemenBerkas = ({ navigation }) => {
       </View>
     </View>
   );
+  
+  const MemoizedRenderUserItem = memo(RenderUserItem);
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
