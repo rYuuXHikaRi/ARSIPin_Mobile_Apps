@@ -23,12 +23,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from "react";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { dataUsersApi } from "../middleware/apiEndpoint";
+import { dataUsersApi, storeUser, destroyUser } from "../middleware/apiEndpoint";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { SvgXml } from 'react-native-svg';
 import { loginBg } from '../../assets/img/svgAssets';
-import { storeUser, destroyUser } from "../middleware/apiEndpoint";
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
