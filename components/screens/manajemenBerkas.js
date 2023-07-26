@@ -246,12 +246,6 @@ const ManajemenBerkas = ({ navigation }) => {
           onPress={() => catchArchiveId(item.id)}
           
         >
-          <MaterialCommunityIcons
-            name="dots-vertical"
-            size={30}
-            color="black"
-            style={{ marginLeft:-5 }}
-          />
 
           {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 07 */ }
 
@@ -481,7 +475,7 @@ const ManajemenBerkas = ({ navigation }) => {
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
-        
+
         {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 09 */ }
 
           <MenuProvider style={styles.containertabel}>
