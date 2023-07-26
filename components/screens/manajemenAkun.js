@@ -21,29 +21,104 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from "react";
-
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { dataUsersApi } from "../middleware/apiEndpoint";
-
+import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
+import { SvgXml } from 'react-native-svg';
+import { loginBg } from '../../assets/img/svgAssets';
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
-  const [username, setUsername] = useState("");
-  const [fullName, setFullName] = useState("");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [role, setrole] = useState("");
+  const [modalDelete, setModalDelete] = useState(false);
+  const [UserName, setUserName] = useState("");
+  const [NomorHp, setNomorHp] = useState("");
+  const [NamaLengkap, setNamaLengkap] = useState("");
+  const [password, setpassword] = useState("");
+  const [Roles, setRoles] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [users, setUsers] = useState([]);
   const [selectedUser, setSelectedUser] = useState(null);
+  const [selectedImg, setSelectedImg] = useState(null);
+  const [selectedFiles, setSelectedFiles] = useState([]);
+  const [userIdToDelete, setUserIdToDelete] = useState(null);
+  const [userNameToDelete, setUserNameToDelete] = useState("");
 
-  const options = ["User", "Admin"];
+  const pickImage = async () => {
+    try {
+      const result = await ImagePicker.launchImageLibraryAsync({
+        mediaTypes: ImagePicker.MediaTypeOptions.Images,
+        allowsEditing: true,
+        aspect: [1, 1],
+        quality: 1,
+      });
+
+      console.log(result);
+
+      if (!result.canceled) {
+        setSelectedImg(result.assets[0].uri);
+      }
+    } catch (error) {
+      console.log("ImagePicker Error: ", error);
+    }
+  };
+
+  const handleCreate = async () => {
+    const formData = new FormData();
+    formData.append("NamaLengkap", NamaLengkap);
+    formData.append("UserName", UserName);
+    formData.append("NomorHp", NomorHp);
+    formData.append("password", password);
+    formData.append("Roles", selectedOption);
+
+    // Jika ada gambar yang dipilih, tambahkan gambar ke FormData
+    if (selectedImg != null) {
+      if (selectedImg.length > 0) {
+        const fileUri = selectedImg[0];
+        const fileName = fileUri.split("/").pop();
+        formData.append("Foto", {
+          uri: fileUri,
+          name: fileName,
+          type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
+        });
+      }
+    }
+
+    try {
+      // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
+      const response = await axios.post(
+        "http://192.168.154.213:8000/api/users/store",
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Jangan lupa atur header untuk FormData
+          },
+        }
+      );
+
+      console.log("Response from API:", response.data);
+      // Lakukan apa pun yang perlu Anda lakukan setelah berhasil menyimpan data
+      // Misalnya, tampilkan pesan sukses atau perbarui tampilan data di aplikasi Anda
+      setModalVisible(false);
+    } catch (error) {
+      // Jika request gagal, Anda dapat menangani error di sini
+      console.log("Error:", error);
+      // Lakukan apa pun yang perlu Anda lakukan jika ada kesalahan dalam menyimpan data
+      // Misalnya, tampilkan pesan error kepada pengguna atau log pesan error
+    }
+  };
+
+  const options = ["Admin", "User"];
 
   const handleSelectOption = (option) => {
-    setSelectedOption(option);
+    if (option === "Admin") {
+      setSelectedOption(1);
+    } else if (option === "User") {
+      setSelectedOption(2);
+    }
     setIsOpen(false);
   };
 
@@ -65,18 +140,64 @@ const ManajemenAkun = () => {
     }
   };
   const handleEdit = (userId) => {
-    // Implement edit action here
     console.log("Edit user with ID:", userId);
     const user = users.find((user) => user.id === userId);
     setSelectedUser(user);
     setModalVisibleEdit(true);
-    // renderOpsiModalEdit(userId);
     console.log("yey");
   };
 
-  const handleDelete = (userId) => {
-    // Implement delete action here
+  const handleDelete = (userId, UserNamaLengkap) => {
     console.log("Delete user with ID:", userId);
+    setUserIdToDelete(userId);
+    setUserNameToDelete(UserNamaLengkap);
+    setModalDelete(true);
+  };
+
+  const DeleteUser = () => {
+    console.log(userIdToDelete)
+    axios
+    .delete(`http://192.168.154.213:8000/api/users/destroy/${userIdToDelete}`)
+    .then((response) => {
+      // Proses respons API jika diperlukan
+      console.log('User deleted successfully');
+      setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+    })
+    .catch((error) => {
+      console.error('Error deleting user:', error);
+    });
+  }
+
+  const renderModalDelete = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalDelete}
+        onRequestClose={() => setModalDelete(false)}
+      >
+        <View style={styles.modalContainerdelete}>
+          <View style={styles.modalContentdelete}>
+            <Text style={styles.modalTextdelete}>
+              Apakah Anda Yakin Ingin Menghapus User :{" "}
+              <Text style={styles.modalTextdeleteName}>{userNameToDelete}</Text>
+            </Text>
+            <View style={styles.buttonContainerdelete}>
+              <TouchableOpacity onPress={() => setModalDelete(false)}>
+                <View style={styles.buttonModalDelClose}>
+                <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={DeleteUser}>
+                <View style={styles.buttonModalDel}>
+                <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
   };
 
   const renderOpsiModalAdd = () => {
@@ -110,7 +231,8 @@ const ManajemenAkun = () => {
                 <TextInput
                   style={[styles.inputName]}
                   placeholder="Username"
-                  onChangeText={(text) => setUsername(text)}
+                  value={UserName}
+                  onChangeText={(text) => setUserName(text)}
                 />
               </View>
 
@@ -119,7 +241,8 @@ const ManajemenAkun = () => {
                 <TextInput
                   style={styles.inputName}
                   placeholder="Nama Lengkap"
-                  onChangeText={(text) => setFullName(text)}
+                  value={NamaLengkap}
+                  onChangeText={(text) => setNamaLengkap(text)}
                 />
               </View>
             </View>
@@ -127,14 +250,16 @@ const ManajemenAkun = () => {
             <TextInput
               style={styles.input}
               placeholder="Nomor HP"
-              onChangeText={(text) => setEmail(text)}
+              value={NomorHp}
+              onChangeText={(text) => setNomorHp(text)}
             />
 
             <Text style={styles.titleform}>Kata Sandi</Text>
             <TextInput
               style={styles.input}
               placeholder="Kata Sandi"
-              onChangeText={(text) => setPassword(text)}
+              value={password}
+              onChangeText={(text) => setpassword(text)}
             />
 
             <View style={styles.styletitle3}>
@@ -144,15 +269,16 @@ const ManajemenAkun = () => {
                   <TouchableOpacity onPress={toggleDropdown}>
                     <Text
                       style={{
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 0,
                         backgroundColor: "#F6F6F6",
                         paddingVertical: 10,
+                        marginLeft:2,
                       }}
                     >
                       {selectedOption !== ""
                         ? selectedOption
                         : "Plih Role          "}
-                      <Feather name="chevron-down" size={20} color={"black"} />
+                      <Feather name="chevron-down" marginLeft={10} paddingLeft={10} size={20} color={"black"} />
                     </Text>
                   </TouchableOpacity>
 
@@ -173,14 +299,20 @@ const ManajemenAkun = () => {
 
               <View style={styles.styletitle4}>
                 <Text style={styles.titleformFoto}>Foto</Text>
-                <TextInput style={styles.inputFile} placeholder="Pilih" />
+                <TouchableOpacity
+                  style={styles.inputFile}
+                  placeholder="Pilih"
+                  onPress={pickImage}
+                >
+                  <Text style={styles.inputFilestyle}>Pilih Foto</Text>
+                </TouchableOpacity>
               </View>
             </View>
 
             <View style={styles.btnsave}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonSave]}
-                onPress={handleSave}
+                onPress={handleCreate}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
               </TouchableOpacity>
@@ -203,7 +335,7 @@ const ManajemenAkun = () => {
         }}
       >
         <View style={styles.centeredView2}>
-          <View style={styles.modalView}>
+          <View style={styles.modalViewEdit}>
             <TouchableOpacity
               style={[styles.buttonX, styles.buttonClose]}
               onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
@@ -224,7 +356,8 @@ const ManajemenAkun = () => {
                     <TextInput
                       style={[styles.inputName]}
                       placeholder={selectedUser.NamaLengkap}
-                      onChangeText={(text) => setUsername(text)}
+                      value={UserName}
+                      onChangeText={(text) => setUserName(text)}
                     />
                   </View>
 
@@ -233,28 +366,24 @@ const ManajemenAkun = () => {
                     <TextInput
                       style={styles.inputName}
                       placeholder={selectedUser.UserName}
-                      onChangeText={(text) => setFullName(text)}
+                      value={NamaLengkap}
+                      onChangeText={(text) => setNamaLengkap(text)}
                     />
                   </View>
                 </View>
+
                 <Text style={styles.titleform}>Nomor HP</Text>
                 <TextInput
                   style={styles.input}
                   placeholder={selectedUser.NomorHp}
-                  onChangeText={(text) => setEmail(text)}
-                />
-
-                <Text style={styles.titleform}>Kata Sandi</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder={selectedUser.Password}
-                  onChangeText={(text) => setPassword(text)}
+                  value={NomorHp}
+                  onChangeText={(text) => setNomorHp(text)}
                 />
 
                 <View style={styles.styletitle3}>
                   <View style={styles.styletitle2}>
                     <Text style={styles.titleform}>Role</Text>
-                    <View style={styles.inputRole}>
+                    <View style={styles.inputRoleedit}>
                       <Text
                         style={{
                           paddingHorizontal: 10,
@@ -269,15 +398,21 @@ const ManajemenAkun = () => {
 
                   <View style={styles.styletitle4}>
                     <Text style={styles.titleformFoto}>Foto</Text>
-                    <TextInput style={styles.inputFile} placeholder="Pilih" />
+                    <TouchableOpacity
+                      style={styles.inputFile}
+                      placeholder="Pilih"
+                      onPress={pickImage}
+                    >
+                      <Text style={styles.inputFilestyle}>Pilih Foto</Text>
+                    </TouchableOpacity>
                   </View>
                 </View>
               </>
             )}
 
-            <View style={styles.btnsave}>
+            <View style={styles.btnsaveEdit}>
               <TouchableOpacity
-                style={[styles.button, styles.buttonSave]}
+                style={[styles.button, styles.buttonSaveEdit]}
                 onPress={handleSave}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
@@ -304,52 +439,15 @@ const ManajemenAkun = () => {
         </TouchableOpacity>
         <TouchableOpacity
           style={styles.deleteButton}
-          onPress={() => handleDelete(item.id)}
+          onPress={() => handleDelete(item.id, item.NamaLengkap)}
         >
           {/* <Text style={styles.actionText}>Delete</Text> */}
+          <View>{renderModalDelete()}</View>
           <FontAwesome name="trash" size={25} color="#A6D17A" />
         </TouchableOpacity>
       </View>
     </View>
   );
-  // const tableHead = ["Nama", "Role", "Aksi"];
-  // const tableData = [
-  //   [
-  //     <TouchableOpacity onPress={() => console.log("Akun 1")}>
-  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Agus</Text>
-  //     </TouchableOpacity>,
-  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
-  //     renderOpsiIcons(),
-  //   ],
-  //   [
-  //     <TouchableOpacity onPress={() => console.log("Akun 2")}>
-  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Sunar</Text>
-  //     </TouchableOpacity>,
-  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Petugas</Text>,
-  //     renderOpsiIcons(),
-  //   ],
-  //   [
-  //     <TouchableOpacity onPress={() => console.log("Akun 3")}>
-  //       <Text style={[styles.tableText, { fontSize: 20 }]}>Yo</Text>
-  //     </TouchableOpacity>,
-  //     <Text style={[styles.tableText, { fontSize: 20 }]}>Admin</Text>,
-  //     renderOpsiIcons(),
-  //   ],
-  // ];
-
-  // function renderOpsiIcons() {
-  //   return (
-  //     <View style={styles.opsiContainer}>
-  //       <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
-  //         <MaterialCommunityIcons name="pencil" size={25} color="black" />
-  //       </TouchableOpacity>
-
-  //       <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
-  //         <FontAwesome name="trash" size={25} color="black" />
-  //       </TouchableOpacity>
-  //     </View>
-  //   );
-  // }
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -369,163 +467,59 @@ const ManajemenAkun = () => {
         <Header />
       </View>
       <LinearGradient
-                      colors={['#197B40', '#79B33B', '#A6CE39']}
-                      start={[0, 0.5]}
-                      end={[1, 0.5]}
-                      style={[styles.card]}
-      > 
+        colors={["#197B40", "#79B33B", "#A6CE39"]}
+        start={[0, 0.5]}
+        end={[1, 0.5]}
+        style={[styles.card]}
+      >
         <Text style={styles.cardTitle}>Manajemen Akun</Text>
       </LinearGradient>
       <View style={styles.card2}>
-  
-          {/* <Table borderStyle={{ borderWidth: 1, borderColor: "white" }}>
-            <Row
-              data={tableHead}
-              flexArr={[4, 2, 1.3]}
-              style={[styles.header, styles.boldText]}
-              textStyle={[styles.text, styles.boldText, { fontSize: 20 }]}
-            />
-            {tableData.map((rowData, index, columnData) => (
-              <Row
-                key={index}
-                data={rowData}
-                flexArr={[4, 2, 1.3]}
-                style={[
-                  styles.row,
-                  index % 2 && { backgroundColor: "#e1fcc5" },
-                ]}
-                textStyle={styles.text}
-              />
-            ))}
-          </Table> */}
-          <View style={styles.containertabel}>
-            <FlatList
-              data={users}
-              renderItem={renderUserItem}
-              keyExtractor={(item) => item.id.toString()}
-              ListHeaderComponent={
-                <View style={styles.tableHeader}>
-                  <Text style={styles.headerText}>Nama Lengkap</Text>
-                  <Text style={styles.headerText}>Roles</Text>
-                  <Text style={styles.headerText}>Aksi</Text>
-                </View>
-              }
-            />
-          </View>
-      </View>
-      <View style={styles.row}>
-          <Modal
-            animationType="slide"
-            transparent={true}
-            visible={modalVisible}
-            onRequestClose={() => {
-              Alert.alert("Modal has been closed.");
-              setModalVisible(!modalVisible);
-            }}
-          >
-            <View style={styles.centeredView}>
-              <View style={styles.modalView}>
-                <TouchableOpacity
-                  style={[styles.buttonX, styles.buttonClose]}
-                  onPress={() => setModalVisible(!modalVisible)}
-                >
-                  <Text style={styles.X}>X</Text>
-                </TouchableOpacity>
-
-                <View style={styles.Headtitle}>
-                  <Text style={[styles.bottomLine, styles.titleModal]}>
-                    Tambah Akun
-                  </Text>
-                </View>
-                <View style={styles.styletitle}>
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleform}>Nama User</Text>
-                    <TextInput
-                      style={[styles.inputName]}
-                      placeholder="Username"
-                      onChangeText={(text) => setUsername(text)}
-                    />
-                  </View>
-
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleform}>Nama Lengkap</Text>
-                    <TextInput
-                      style={styles.inputName}
-                      placeholder="Nama Lengkap"
-                      onChangeText={(text) => setFullName(text)}
-                    />
-                  </View>
-                </View>
-                <Text style={styles.titleform}>Nomor HP</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Email"
-                  onChangeText={(text) => setEmail(text)}
-                />
-
-                <Text style={styles.titleform}>Kata Sandi</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Katak sandi"
-                  onChangeText={(text) => setPassword(text)}
-                />
-
-                <View style={styles.styletitle3}>
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleform}>Role</Text>
-                    <DropDownPicker
-                      style={styles.inputRole}
-                      items={[
-                        { label: "User", value: "user" },
-                        { label: "Admin", value: "admin" },
-                      ]}
-                      defaultValue={role}
-                      placeholder="Role"
-                      containerStyle={{ height: 40, width: 200 }}
-                      onChangeItem={(item) => setrole(item.value)}
-                    />
-                  </View>
-
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleformFoto}>Foto</Text>
-                    <TextInput style={styles.inputFile} placeholder="Pilih" />
-                  </View>
-                </View>
-
-                <View style={styles.btnsave}>
-                  <TouchableOpacity
-                    style={[styles.button, styles.buttonSave]}
-                    onPress={handleSave}
-                  >
-                    <Text style={styles.textStyle}>Simpan</Text>
-                  </TouchableOpacity>
-                </View>
+        <View style={styles.containertabel}>
+          <FlatList
+            data={users}
+            renderItem={renderUserItem}
+            keyExtractor={(item) => item.id.toString()}
+            ListHeaderComponent={
+              <View style={styles.tableHeader}>
+                <Text style={styles.headerText}>Nama Lengkap</Text>
+                <Text style={styles.headerText}>Roles</Text>
+                <Text style={styles.headerText}>Aksi</Text>
               </View>
-            </View>
-          </Modal>
+            }
+          />
         </View>
-        <View style={styles.row}>
+      </View>
+
+      <View style={styles.row}>
         <LinearGradient
-                        colors={['#90C13B', '#7CB53C', '#378D3F']}
-                        start={[0, 0.5]}
-                        end={[1, 0.5]}
-                        style={styles.button}
-        > 
-          <TouchableOpacity onPress={() => setModalVisible(true)} >
-            <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
+          colors={["#90C13B", "#7CB53C", "#378D3F"]}
+          start={[0, 0.5]}
+          end={[1, 0.5]}
+          style={styles.button}
+        >
+          <TouchableOpacity onPress={() => setModalVisible(true)}>
+            <Text style={styles.buttonText}>+ Tambah Akun Baru</Text>
           </TouchableOpacity>
         </LinearGradient>
       </View>
-        <TouchableOpacity style={styles.button}>
-          <View style={styles.row}>{renderOpsiModalAdd()}</View>
-          </TouchableOpacity>
-      <View style={{ position: "absolute", bottom: 0 , backgroundColor: '#F0E5E5'}}>
-        <View style={[styles.row, {paddingLeft: 18, paddingRight: 18, marginBottom: 20}]}>
+      <TouchableOpacity style={styles.button}>
+        <View style={styles.row}>{renderOpsiModalAdd()}</View>
+      </TouchableOpacity>
+      <View
+        style={{ position: "absolute", bottom: 0, backgroundColor: "#F0E5E5" }}
+      >
+        <View
+          style={[
+            styles.row,
+            { paddingLeft: 18, paddingRight: 18, marginBottom: 20 },
+          ]}
+        >
           <View style={styles.searchButton}>
             <AntDesign name="search1" size={20} color="black" />
             <TextInput
-                      placeholder="Cari data..."
-                      style={styles.searchButtonText}
+              placeholder="Cari data..."
+              style={styles.searchButtonText}
             />
           </View>
         </View>
@@ -599,6 +593,62 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+
+  //Modal style Delete
+  modalContainerdelete: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  modalContentdelete: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 8,
+    width: "90%",
+    height:"20%",
+  },
+  modalTextdelete: {
+    fontSize: 18,
+    marginBottom: 20,
+    textAlign: "center",
+  },
+  buttonContainerdelete: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  cancelButtonmodaldelete: {
+    color: '#6EAD3B',
+    fontSize: 18,
+    fontWeight: 'bold',
+  },
+  confirmButtonmodaldelete: {
+    fontSize: 18,
+    color: "white",
+  },
+  modalTextdeleteName:{
+    color:'#6EAD3B',
+  },
+  buttonModalDel: {
+    backgroundColor: '#6EAD3B',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#6EAD3B',
+    marginTop:20,
+  },
+  buttonModalDelClose: {
+    backgroundColor: 'white',
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: '#6EAD3B',
+    marginTop:20,
+  },
+  //end modal delete
+
   //Modal Style
   centeredView: {
     flex: 1,
@@ -615,6 +665,23 @@ const styles = StyleSheet.create({
   modalView: {
     width: 354,
     height: 504,
+    marginLeft: 20,
+    marginRight: 20,
+    marginTop: -130,
+    backgroundColor: "white",
+    borderRadius: 10,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  modalViewEdit: {
+    width: 354,
+    height: 384,
     marginLeft: 20,
     marginRight: 20,
     marginTop: -130,
@@ -657,6 +724,7 @@ const styles = StyleSheet.create({
   buttonSave: {
     width: 109,
     height: 43,
+    backgroundColor: "#6EAD3B",
   },
   btnsave: {
     width: 109,
@@ -664,6 +732,18 @@ const styles = StyleSheet.create({
     marginLeft: 15,
     paddingTop: 13,
     marginTop: 45,
+  },
+  buttonSaveEdit: {
+    width: 109,
+    height: 43,
+    backgroundColor: "#6EAD3B",
+  },
+  btnsaveEdit: {
+    width: 109,
+    height: 73,
+    marginLeft: 15,
+    paddingTop: 13,
+    // marginTop: 45,
   },
   textStyle: {
     color: "#F6F6F6",
@@ -706,14 +786,27 @@ const styles = StyleSheet.create({
     height: 40,
     marginLeft: 16,
     paddingHorizontal: 10,
+    backgroundColor: "#F6F6F6",
+    borderColor: "#F6F6F6",
+    borderRadius: 8,
+  },
+  inputRoleedit: {
+    width: 153,
+    height: 40,
+    marginLeft: 16,
+    paddingHorizontal: 10,
     backgroundColor: "#DDDADA",
     borderColor: "#DDDADA",
     borderRadius: 8,
+  },
+  inputFilestyle: {
+    paddingVertical: 10,
   },
   inputFile: {
     width: 150,
     height: 40,
     paddingHorizontal: 10,
+    paddingVertical: 0,
     backgroundColor: "#F6F6F6",
     borderRadius: 8,
   },
@@ -778,7 +871,7 @@ const styles = StyleSheet.create({
     paddingLeft: 12,
     height: 43,
 
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   card2: {
     backgroundColor: "white",
@@ -833,7 +926,7 @@ const styles = StyleSheet.create({
     height: 43,
     marginTop: 17,
 
-    justifyContent: 'center'
+    justifyContent: "center",
   },
   buttonText: {
     color: "white",

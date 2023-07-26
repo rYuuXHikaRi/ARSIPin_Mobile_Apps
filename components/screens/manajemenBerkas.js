@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo  } from "react";
 import {
   View,
   Text,
@@ -264,6 +264,8 @@ const ManajemenBerkas = ({ navigation }) => {
       </View>
     </View>
   );
+  
+  const MemoizedRenderUserItem = memo(RenderUserItem);
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
