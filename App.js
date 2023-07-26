@@ -12,7 +12,7 @@ import ManajemenAkun from './components/screens/manajemenAkun';
 import RiwayatUnduhan from './components/screens/riwayatUnduhan';
 import ProfilePage from './components/screens/profilePage';
 import PopUpTaccnt from './components/screens/popUp';
-import DetailBerkas from './components/screens/detailberkas';
+import DetailBerkas from './components/screens/detailBerkas';
 import ProductListScreen from './components/screens/dropdowntes';
 
 

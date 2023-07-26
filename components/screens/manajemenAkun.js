@@ -20,10 +20,12 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
-import { Table, Row } from "react-native-table-component";
+import { useEffect } from "react";
+
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { useEffect } from "react";
+import { dataUsersApi } from "../middleware/apiEndpoint";
+
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -55,7 +57,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.209.249:8000/api/users");
+      const response = await fetch(dataUsersApi);
       const data = await response.json();
       setUsers(data);
     } catch (error) {
