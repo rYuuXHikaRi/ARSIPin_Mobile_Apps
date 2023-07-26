@@ -18,16 +18,21 @@ import {
   Feather,
 } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { LinearGradient } from 'expo-linear-gradient';
+import { SafeAreaView } from "react-native-safe-area-context";
+import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { dataUsersApi, storeUser, destroyUser } from "../middleware/apiEndpoint";
+import {
+  dataUsersApi,
+  storeUser,
+  destroyUser,
+  editUser,
+} from "../middleware/apiEndpoint";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
-import { SvgXml } from 'react-native-svg';
-import { loginBg } from '../../assets/img/svgAssets';
+import { SvgXml } from "react-native-svg";
+import { loginBg } from "../../assets/img/svgAssets";
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -92,13 +97,11 @@ const ManajemenAkun = () => {
 
     try {
       // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
-      const response = await axios.post(storeUser, formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Jangan lupa atur header untuk FormData
-          },
-        }
-      );
+      const response = await axios.post(storeUser, formData, {
+        headers: {
+          "Content-Type": "multipart/form-data", // Jangan lupa atur header untuk FormData
+        },
+      });
 
       console.log("Response from API:", response.data);
       // Lakukan apa pun yang perlu Anda lakukan setelah berhasil menyimpan data
@@ -115,6 +118,58 @@ const ManajemenAkun = () => {
     } catch (error) {
       // Jika request gagal, Anda dapat menangani error di sini
       console.log("Error:", error);
+      // Lakukan apa pun yang perlu Anda lakukan jika ada kesalahan dalam menyimpan data
+      // Misalnya, tampilkan pesan error kepada pengguna atau log pesan error
+    }
+  };
+
+  const handleEditModal = async () => {
+    const formData = new FormData();
+    formData.append("NamaLengkap", NamaLengkap);
+    formData.append("UserName", UserName);
+    formData.append("NomorHp", NomorHp);
+    formData.append("password", password);
+    formData.append("Roles", selectedOption);
+
+    if (selectedImg != null) {
+      if (selectedImg.length > 0) {
+        const fileUri = selectedImg[0];
+        const fileName = fileUri.split("/").pop();
+        formData.append("Foto", {
+          uri: fileUri,
+          name: fileName,
+          type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
+        });
+      }
+    }
+
+    try {
+      // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
+      const response = await axios.put(
+        editUser + `/${setSelectedUser}`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data", // Jangan lupa atur header untuk FormData
+          },
+        }
+      );
+
+      console.log("Response from API:", response.data);
+      // Lakukan apa pun yang perlu Anda lakukan setelah berhasil menyimpan data
+      // Misalnya, tampilkan pesan sukses atau perbarui tampilan data di aplikasi Anda
+      setIsThereNewData(true);
+      // setSelectedOption("");
+      setSelectedImg(null);
+    } catch (error) {
+      // Jika request gagal, Anda dapat menangani error di sini
+      console.log("Error:", error);
+      console.log(NamaLengkap);
+      console.log(UserName);
+      console.log("ini password", password);
+      console.log(NomorHp);
+      console.log(selectedOption);
+
       // Lakukan apa pun yang perlu Anda lakukan jika ada kesalahan dalam menyimpan data
       // Misalnya, tampilkan pesan error kepada pengguna atau log pesan error
     }
@@ -161,19 +216,19 @@ const ManajemenAkun = () => {
   };
 
   const DeleteUser = () => {
-    console.log(userIdToDelete)
+    console.log(userIdToDelete);
     axios
-    .delete(destroyUser + `/${userIdToDelete}`)
-    .then((response) => {
-      // Proses respons API jika diperlukan
-      console.log('User deleted successfully');
-      setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
-      setIsThereNewData(true);
-    })
-    .catch((error) => {
-      console.error('Error deleting user:', error);
-    });
-  }
+      .delete(destroyUser + `/${userIdToDelete}`)
+      .then((response) => {
+        // Proses respons API jika diperlukan
+        console.log("User deleted successfully");
+        setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+        setIsThereNewData(true);
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+      });
+  };
 
   const renderModalDelete = () => {
     return (
@@ -192,12 +247,12 @@ const ManajemenAkun = () => {
             <View style={styles.buttonContainerdelete}>
               <TouchableOpacity onPress={() => setModalDelete(false)}>
                 <View style={styles.buttonModalDelClose}>
-                <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
+                  <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
                 </View>
               </TouchableOpacity>
               <TouchableOpacity onPress={DeleteUser}>
                 <View style={styles.buttonModalDel}>
-                <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
+                  <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
                 </View>
               </TouchableOpacity>
             </View>
@@ -279,13 +334,19 @@ const ManajemenAkun = () => {
                         paddingHorizontal: 0,
                         backgroundColor: "#F6F6F6",
                         paddingVertical: 10,
-                        marginLeft:2,
+                        marginLeft: 2,
                       }}
                     >
                       {selectedOption !== ""
                         ? selectedOption
                         : "Plih Role          "}
-                      <Feather name="chevron-down" marginLeft={10} paddingLeft={10} size={20} color={"black"} />
+                      <Feather
+                        name="chevron-down"
+                        marginLeft={10}
+                        paddingLeft={10}
+                        size={20}
+                        color={"black"}
+                      />
                     </Text>
                   </TouchableOpacity>
 
@@ -364,7 +425,13 @@ const ManajemenAkun = () => {
                       style={[styles.inputName]}
                       placeholder={selectedUser.NamaLengkap}
                       value={UserName}
-                      onChangeText={(text) => setUserName(text)}
+                      onChangeText={(text) => {
+                        if (text.trim() === '') {
+                          setUserName(selectedUser.NamaLengkap); // Kembalikan ke nilai asli jika input kosong
+                        } else {
+                          setUserName(text);
+                        }
+                      }}
                     />
                   </View>
 
@@ -374,7 +441,13 @@ const ManajemenAkun = () => {
                       style={styles.inputName}
                       placeholder={selectedUser.UserName}
                       value={NamaLengkap}
-                      onChangeText={(text) => setNamaLengkap(text)}
+                      onChangeText={(text) => {
+                        if (text.trim() === '') {
+                          setNamaLengkap(selectedUser.UserName); // Kembalikan ke nilai asli jika input kosong
+                        } else {
+                          setNamaLengkap(text);
+                        }
+                      }}
                     />
                   </View>
                 </View>
@@ -384,8 +457,29 @@ const ManajemenAkun = () => {
                   style={styles.input}
                   placeholder={selectedUser.NomorHp}
                   value={NomorHp}
-                  onChangeText={(text) => setNomorHp(text)}
+                  onChangeText={(text) => {
+                    if (text.trim() === '') {
+                      setNomorHp(selectedUser.NomorHp); // Kembalikan ke nilai asli jika input kosong
+                    } else {
+                      setNomorHp(text);
+                    }
+                  }}
                 />
+
+              <View style={styles.noneItem}>
+                <Text style={styles.titleform}>Kata Sandi</Text>
+                <TextInput
+                  style={styles.input}
+                  placeholder={selectedUser.password}
+                  value={password}
+                  onChangeText={(text) => {
+                    if (text.trim() === '') {
+                      setpassword(selectedUser.password); // Kembalikan ke nilai asli jika input kosong
+                    } else {
+                      setpassword(text);
+                    }
+                  }}
+                /></View>
 
                 <View style={styles.styletitle3}>
                   <View style={styles.styletitle2}>
@@ -420,7 +514,7 @@ const ManajemenAkun = () => {
             <View style={styles.btnsaveEdit}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonSaveEdit]}
-                onPress={handleSave}
+                onPress={handleEditModal}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
               </TouchableOpacity>
@@ -455,18 +549,6 @@ const ManajemenAkun = () => {
       </View>
     </View>
   );
-
-  const handleSave = () => {
-    // Lakukan sesuatu dengan data yang diisi
-    console.log("Username:", username);
-    console.log("Nama Lengkap:", fullName);
-    console.log("Email:", email);
-    console.log("Password:", password);
-    console.log("Role:", role);
-
-    // Setelah melakukan sesuatu, tutup modal
-    setModalVisible(false);
-  };
 
   return (
     <SafeAreaView style={styles.container}>
@@ -613,7 +695,7 @@ const styles = StyleSheet.create({
     padding: 20,
     borderRadius: 8,
     width: "90%",
-    height:"20%",
+    height: "20%",
   },
   modalTextdelete: {
     fontSize: 18,
@@ -625,34 +707,34 @@ const styles = StyleSheet.create({
     justifyContent: "space-around",
   },
   cancelButtonmodaldelete: {
-    color: '#6EAD3B',
+    color: "#6EAD3B",
     fontSize: 18,
-    fontWeight: 'bold',
+    fontWeight: "bold",
   },
   confirmButtonmodaldelete: {
     fontSize: 18,
     color: "white",
   },
-  modalTextdeleteName:{
-    color:'#6EAD3B',
+  modalTextdeleteName: {
+    color: "#6EAD3B",
   },
   buttonModalDel: {
-    backgroundColor: '#6EAD3B',
+    backgroundColor: "#6EAD3B",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#6EAD3B',
-    marginTop:20,
+    borderColor: "#6EAD3B",
+    marginTop: 20,
   },
   buttonModalDelClose: {
-    backgroundColor: 'white',
+    backgroundColor: "white",
     paddingVertical: 10,
     paddingHorizontal: 20,
     borderRadius: 20,
     borderWidth: 2,
-    borderColor: '#6EAD3B',
-    marginTop:20,
+    borderColor: "#6EAD3B",
+    marginTop: 20,
   },
   //end modal delete
 
@@ -843,6 +925,9 @@ const styles = StyleSheet.create({
     color: "#6EAD3B",
     height: 30,
     flexDirection: "column",
+  },
+  noneItem :{
+    display :'none',
   },
   styletitle: {
     flexDirection: "row",
