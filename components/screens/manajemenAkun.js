@@ -110,7 +110,7 @@ const ManajemenAkun = () => {
     }
   };
 
-  const options = ["1", "2"];
+  const options = ["Admin", "User"];
 
   const handleSelectOption = (option) => {
     setSelectedOption(option);
@@ -264,15 +264,16 @@ const ManajemenAkun = () => {
                   <TouchableOpacity onPress={toggleDropdown}>
                     <Text
                       style={{
-                        paddingHorizontal: 10,
+                        paddingHorizontal: 0,
                         backgroundColor: "#F6F6F6",
                         paddingVertical: 10,
+                        marginLeft:2,
                       }}
                     >
                       {selectedOption !== ""
                         ? selectedOption
                         : "Plih Role          "}
-                      <Feather name="chevron-down" size={20} color={"black"} />
+                      <Feather name="chevron-down" marginLeft={10} paddingLeft={10} size={20} color={"black"} />
                     </Text>
                   </TouchableOpacity>
 
