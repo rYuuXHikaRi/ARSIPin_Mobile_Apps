@@ -71,20 +71,7 @@ const ManajemenBerkas = ({ navigation }) => {
   };
 
   console.log(curDocSelect);
-  // const addUsers = () => {
-  //   users.map((user) =>
-  //     tableData.push([
-  //       <TouchableOpacity
-  //         onPress={() => navigation.navigate("detailberkas", { user })}
-  //       >
-  //         <Text key={user.id} style={[styles.tableText, { fontSize: 20 }]}>
-  //           {user.NamaDokumen}
-  //         </Text>
-  //       </TouchableOpacity>,
-  //       renderOpsiIcons(),
-  //     ])
-  //   );
-  // };
+  // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 01
 
   const handleFilePick = async () => {
     try {
@@ -112,14 +99,7 @@ const ManajemenBerkas = ({ navigation }) => {
   };
 
   const handleCreate = async () => {
-    // const data = {
-    //   NamaDokumen: NamaDokumen,
-    //   Keterangan: Keterangan,
-    //   Tahun: Tahun,
-    //   NamaDesa: NamaDesa,
-    //   LokasiPenyimpanan: LokasiPenyimpanan,
-    //   NamaFile : "File.txt"
-    // };
+    // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 02
     console.log(files);
     const formData = new FormData();
     formData.append("NamaDokumen", NamaDokumen);
@@ -131,9 +111,7 @@ const ManajemenBerkas = ({ navigation }) => {
     formData.append("NamaFile", $folderName);
     formData.append("file", files);
 
-    // selectedFiles.forEach((file, index) => {
-    //   formData.append(`file[${index}]`, file);
-    // });
+    // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 03
 
     try {
       // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
@@ -145,11 +123,8 @@ const ManajemenBerkas = ({ navigation }) => {
           "Content-Type": "multipart/form-data",
         },
       };
-      // let response = await axios.post('http://192.168.0.249:8000/api/store', formData, {
-      //   headers: {
-      //     'Content-Type': 'multipart/form-data' // Pastikan Anda mengatur Content-Type sebagai 'multipart/form-data'
-      //   }
-      // });
+
+      // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 04
 
       let response = await fetch(storeArsip, config);
       
@@ -176,15 +151,8 @@ const ManajemenBerkas = ({ navigation }) => {
    
     return (
       <View style={styles.opsiContainer}>
-        
-        {/* <TouchableOpacity onPress={() => setShowPopover(true)}>
-          <MaterialCommunityIcons
-            name="dots-vertical"
-            size={30}
-            color="black"
-            style={{ marginLeft:-5 }}
-          />
-        </TouchableOpacity> */}
+        {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 05 */ }
+
         <Modal
           animationType="slide"
           transparent={true}
@@ -268,7 +236,8 @@ const ManajemenBerkas = ({ navigation }) => {
       onPress={()=>moveToDetailBerkas(item.id)}>
         <Text style={styles.userName}>{item.NamaDokumen}</Text>
       </TouchableOpacity>
-      {/* <Text style={styles.userRole}>{item.Roles == 1 ? "admin" : "user"}</Text> */}
+      {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 06 */ }
+      
       
       <View style={styles.actionsContainer}>
         <TouchableOpacity
@@ -282,11 +251,9 @@ const ManajemenBerkas = ({ navigation }) => {
             color="black"
             style={{ marginLeft:-5 }}
           />
-          {/* <View style={styles.row}>{renderOpsiModalEdit()}</View> */}
-          {/* <Text style={[styles.actionText]}>Edit</Text> */}
-          {/* <FontAwesome name="dots-three-vertical" size={25} color="#A6D17A" /> */}
-          {/* <MaterialCommunityIcons name="menu" size={20} color="#197B40" /> */}
-          {/* <View>{renderOpsiIcons()}</View> */}
+
+          {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 07 */ }
+
           <PopUpMenu>
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalVisibleEdit(true);}}>
               <Feather name="edit" size={20} color="white" />
@@ -411,105 +378,8 @@ const ManajemenBerkas = ({ navigation }) => {
     );
   };
 
-  // //Opsi Modal Edit
-  // const renderOpsiModalEdit = () => {
-  //   return (
-  //     <Modal
-  //       animationType="slide"
-  //       transparent={true}
-  //       visible={modalVisibleEdit}
-  //       onRequestClose={() => {
-  //         Alert.alert("Modal has been closed.");
-  //         setModalVisibleEdit(!modalVisibleEdit);
-  //       }}
-  //     >
-  //       <View style={styles.centeredView}>
-  //         <View style={styles.modalView}>
-  //           <TouchableOpacity
-  //             style={[styles.buttonX, styles.buttonClose]}
-  //             onPress={() => setModalVisibleEdit(!modalVisibleEdit)}
-  //           >
-  //             <Text style={styles.X}>X</Text>
-  //           </TouchableOpacity>
-
-  //           <View style={styles.Headtitle}>
-  //             <Text style={[styles.bottomLine, styles.titleModal]}>
-  //               Edit Arsip
-  //             </Text>
-  //           </View>
-            
-  //           <View>
-  //             <View style={styles.styletitle2}>
-  //               <Text style={styles.titleform}>Nama Dokumen</Text>
-  //               <TextInput
-  //                 style={[styles.input]}
-  //                 placeholder="Nama Dokumen"
-  //                 value={NamaDokumen}
-  //                 onChangeText={(text) => setNamaDokumen(text)}
-  //               />
-  //             </View>
-
-  //             <View style={styles.styletitle2}>
-  //               <Text style={styles.titleform}>Keterangan</Text>
-  //               <TextInput
-  //                 style={styles.inputketerangan}
-  //                 placeholder="Keterangan"
-  //                 value={Keterangan}
-  //                 onChangeText={(text) => setKeterangan(text)}
-  //               />
-  //             </View>
-  //           </View>
-  //           <Text style={styles.titleform}>Tahun</Text>
-  //           <TextInput
-  //             style={styles.input}
-  //             placeholder="tahun"
-  //             value={Tahun}
-  //             onChangeText={(text) => setTahun(text)}
-  //           />
-
-  //           <Text style={styles.titleform}>Nama Desa</Text>
-  //           <TextInput
-  //             style={styles.input}
-  //             placeholder="Nama Desa"
-  //             value={NamaDesa}
-  //             onChangeText={(text) => setNamaDesa(text)}
-  //           />
-
-  //           <View>
-  //             <View style={styles.styletitle2}>
-  //               <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
-  //               <TextInput
-  //                 style={styles.input}
-  //                 placeholder="Loker"
-  //                 value={LokasiPenyimpanan}
-  //                 onChangeText={(text) => setLokasiPenyimpanan(text)}
-  //               />
-  //             </View>
-
-  //             <View style={styles.styletitle4}>
-  //               <Text style={styles.titleformupload}>Upload File</Text>
-  //               <Button title="Pilih File" onPress={handleFilePick} />
-  //               {selectedFiles.map((file, index) => (
-  //                 <Text key={index}>{file.name}</Text>
-  //               ))}
-  //             </View>
-  //           </View>
-
-  //           <View style={styles.btnsave}>
-  //             <TouchableOpacity
-  //               style={[styles.button, styles.buttonSave]}
-  //               onPress={handleCreate}
-                
-  //             >
-  //               <Text style={styles.textStyle}>Simpan</Text>
-  //             </TouchableOpacity>
-  //           </View>
-  //         </View>
-  //       </View>
-  //     </Modal>
-  //   );
-  // };
-
+  //commented code in here moved to /dump/unusedCode -> manajemenBerkas - 08
+  
   return (
     <SafeAreaView style={styles.container}>
       {/* Modal for Edit Document */}
@@ -610,21 +480,9 @@ const ManajemenBerkas = ({ navigation }) => {
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
-          {/* <Table borderStyle={{ borderWidth: 1, borderColor: 'white' }}>
         
-          <Row data={tableHead} flexArr={[4, 1]} style={[styles.header, styles.boldText]} textStyle={[styles.text, styles.boldText, { fontSize: 20 }]} />
-       
-          
-          {tableData.map((rowData, index,) => (
-            <Row
-              key={index}
-              data={rowData}flexArr={[4, 1]}
-              
-              style={[styles.row, index % 2 && { backgroundColor: '#e1fcc5' }]}
-              textStyle={styles.text}
-            />
-          ))}
-        </Table> */}
+        {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 09 */ }
+
           <MenuProvider style={styles.containertabel}>
             <FlatList
               data={archives}
