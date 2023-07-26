@@ -56,8 +56,6 @@ const ManajemenAkun = () => {
         quality: 1,
       });
 
-      // console.log(result);
-
       if (!result.canceled) {
         setSelectedImg(result.assets[0].uri);
       }
@@ -105,7 +103,15 @@ const ManajemenAkun = () => {
       console.log("Response from API:", response.data);
       // Lakukan apa pun yang perlu Anda lakukan setelah berhasil menyimpan data
       // Misalnya, tampilkan pesan sukses atau perbarui tampilan data di aplikasi Anda
+      setIsThereNewData(true);
       setModalVisible(false);
+      setModalVisible(false);
+      setUserName("");
+      setNamaLengkap("");
+      setNomorHp("");
+      setpassword("");
+      setSelectedOption("");
+      setSelectedImg(null);
     } catch (error) {
       // Jika request gagal, Anda dapat menangani error di sini
       console.log("Error:", error);
@@ -117,11 +123,6 @@ const ManajemenAkun = () => {
   const options = ["Admin", "User"];
 
   const handleSelectOption = (option) => {
-    // if (option === "Admin") {
-    //   setSelectedOption(1);
-    // } else if (option === "User") {
-    //   setSelectedOption(2);
-    // }
     setSelectedOption(option);
     setIsOpen(false);
   };
