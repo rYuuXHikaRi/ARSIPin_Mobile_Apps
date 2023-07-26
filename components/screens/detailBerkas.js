@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   View,
   Text,
@@ -14,9 +14,11 @@ import { Table, Row } from 'react-native-table-component';
 import DropDownPicker from "react-native-dropdown-picker";
 import { LinearGradient } from 'expo-linear-gradient';
 import AndroidSafeView from "../AndroidSafeView";
+
+//local
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { useEffect } from "react";
+import { getListDocApi } from "../middleware/apiEndpoint";
 
 const DetailBerkas = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -52,7 +54,7 @@ const DetailBerkas = ({route}) => {
   // }, [arsip.id]);
   const fetchDataFromServer = async () => {
     try {
-      const response = await fetch(`http://192.168.248.249:8000/api/files/${folderName}`);
+      const response = await fetch(getListDocApi + `/${arsip.id}`);
       const jsonData = await response.json();
       setFileDetail(jsonData);
       
