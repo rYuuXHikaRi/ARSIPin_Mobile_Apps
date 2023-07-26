@@ -89,7 +89,7 @@ const ManajemenAkun = () => {
     try {
       // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
       const response = await axios.post(
-        "http://192.168.84.213:8000/api/users/store",
+        "http://192.168.154.213:8000/api/users/store",
         formData,
         {
           headers: {
@@ -127,7 +127,7 @@ const ManajemenAkun = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch("http://192.168.84.213:8000/api/users");
+      const response = await fetch("http://192.168.154.213:8000/api/users");
       const data = await response.json();
       setUsers(data);
     } catch (error) {
@@ -149,18 +149,19 @@ const ManajemenAkun = () => {
     setModalDelete(true);
   };
 
-  // const DeleteUser = () => {
-  //   axios
-  //   .delete(`http://192.168.84.213:8000/api/users/destroy/${userId}`)
-  //   .then((response) => {
-  //     // Proses respons API jika diperlukan
-  //     console.log('User deleted successfully');
-  //     setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
-  //   })
-  //   .catch((error) => {
-  //     console.error('Error deleting user:', error);
-  //   });
-  // }
+  const DeleteUser = () => {
+    console.log(userIdToDelete)
+    axios
+    .delete(`http://192.168.154.213:8000/api/users/destroy/${userIdToDelete}`)
+    .then((response) => {
+      // Proses respons API jika diperlukan
+      console.log('User deleted successfully');
+      setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+    })
+    .catch((error) => {
+      console.error('Error deleting user:', error);
+    });
+  }
 
   const renderModalDelete = () => {
     return (
@@ -182,7 +183,7 @@ const ManajemenAkun = () => {
                 <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={handleDelete}>
+              <TouchableOpacity onPress={DeleteUser}>
                 <View style={styles.buttonModalDel}>
                 <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
                 </View>
