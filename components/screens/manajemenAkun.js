@@ -28,6 +28,7 @@ import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { SvgXml } from 'react-native-svg';
 import { loginBg } from '../../assets/img/svgAssets';
+import { storeUser, destroyUser } from "../middleware/apiEndpoint";
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -89,9 +90,7 @@ const ManajemenAkun = () => {
 
     try {
       // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
-      const response = await axios.post(
-        "http://192.168.154.213:8000/api/users/store",
-        formData,
+      const response = await axios.post(storeUser, formData,
         {
           headers: {
             "Content-Type": "multipart/form-data", // Jangan lupa atur header untuk FormData
@@ -157,7 +156,7 @@ const ManajemenAkun = () => {
   const DeleteUser = () => {
     console.log(userIdToDelete)
     axios
-    .delete(`http://192.168.154.213:8000/api/users/destroy/${userIdToDelete}`)
+    .delete(destroyUser + `/${userIdToDelete}`)
     .then((response) => {
       // Proses respons API jika diperlukan
       console.log('User deleted successfully');
