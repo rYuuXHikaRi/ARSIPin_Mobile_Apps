@@ -113,7 +113,11 @@ const ManajemenAkun = () => {
   const options = ["Admin", "User"];
 
   const handleSelectOption = (option) => {
-    setSelectedOption(option);
+    if (option === "Admin") {
+      setSelectedOption(1);
+    } else if (option === "User") {
+      setSelectedOption(2);
+    }
     setIsOpen(false);
   };
 
