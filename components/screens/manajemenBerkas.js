@@ -173,7 +173,7 @@ const ManajemenBerkas = ({ navigation }) => {
               >
                 <Feather name="edit" size={30} color="black" />
                 <Text style={styles.opsiText}>Edit</Text>
-                <View>{renderOpsiModalEdit()}</View>
+                <View>{}</View>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.opsiButton}
@@ -265,7 +265,7 @@ const ManajemenBerkas = ({ navigation }) => {
     </View>
   );
   
-  const MemoizedRenderUserItem = memo(RenderUserItem);
+  // const MemoizedRenderUserItem = memo(RenderUserItem);
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
