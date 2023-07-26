@@ -31,13 +31,7 @@ import { dataArsipsApi, storeArsip } from "../middleware/apiEndpoint"; // API EN
 const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
-  const [namadokumen, setnamadokumen] = useState("");
-  const [keterangan, setketerangan] = useState("");
-  const [tahun, settahun] = useState("");
-  const [namadesa, setnamadesa] = useState("");
-  const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
-  const [namafile, setnamafile] = useState("");
-  const [tableData, setTableData] = useState([]);
+  const [modalDelete, setModalDelete] = useState(false);
   const [users, setUsers] = useState([]);
   const [archives, setArchives] = useState([]);
   const [rowData, setRowData] = useState([]);
@@ -255,7 +249,7 @@ const ManajemenBerkas = ({ navigation }) => {
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {console.log("Moved to detail document page at " + item.NamaDokumen + " document"); navigation.navigate('detailberkas', {arsip: item})}}>
               <Feather name="eye" size={20} color="white" />
             </MenuOption>
-            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}}>
+            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalDelete(true);}}>
               <Feather name="trash" size={20} color="white" />
             </MenuOption>
           </PopUpMenu>
