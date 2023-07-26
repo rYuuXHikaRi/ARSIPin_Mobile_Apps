@@ -108,7 +108,6 @@ const ManajemenAkun = () => {
       // Misalnya, tampilkan pesan sukses atau perbarui tampilan data di aplikasi Anda
       setIsThereNewData(true);
       setModalVisible(false);
-      setModalVisible(false);
       setUserName("");
       setNamaLengkap("");
       setNomorHp("");
