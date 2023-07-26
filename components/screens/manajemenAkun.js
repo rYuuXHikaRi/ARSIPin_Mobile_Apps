@@ -46,6 +46,7 @@ const ManajemenAkun = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [userNameToDelete, setUserNameToDelete] = useState("");
+  const [isThereNewData, setIsThereNewData] = useState(true);
 
   const pickImage = async () => {
     try {
@@ -126,13 +127,14 @@ const ManajemenAkun = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [isThereNewData]);
 
   const fetchUsers = async () => {
     try {
       const response = await fetch(dataUsersApi);
       const data = await response.json();
       setUsers(data);
+      setIsThereNewData(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
@@ -160,6 +162,7 @@ const ManajemenAkun = () => {
       // Proses respons API jika diperlukan
       console.log('User deleted successfully');
       setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+      setIsThereNewData(true);
     })
     .catch((error) => {
       console.error('Error deleting user:', error);
