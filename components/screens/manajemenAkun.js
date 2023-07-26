@@ -36,7 +36,6 @@ const ManajemenAkun = () => {
   const [NomorHp, setNomorHp] = useState("");
   const [NamaLengkap, setNamaLengkap] = useState("");
   const [password, setpassword] = useState("");
-  const [Roles, setRoles] = useState("");
   const [isOpen, setIsOpen] = useState(false);
   const [selectedOption, setSelectedOption] = useState("");
   const [users, setUsers] = useState([]);
@@ -55,7 +54,7 @@ const ManajemenAkun = () => {
         quality: 1,
       });
 
-      console.log(result);
+      // console.log(result);
 
       if (!result.canceled) {
         setSelectedImg(result.assets[0].uri);
@@ -71,6 +70,11 @@ const ManajemenAkun = () => {
     formData.append("UserName", UserName);
     formData.append("NomorHp", NomorHp);
     formData.append("password", password);
+    if (selectedOption === "Admin") {
+      selectedOption == 1;
+    } else if (selectedOption === "User") {
+      selectedOption == 2;
+    }
     formData.append("Roles", selectedOption);
 
     // Jika ada gambar yang dipilih, tambahkan gambar ke FormData
@@ -113,11 +117,12 @@ const ManajemenAkun = () => {
   const options = ["Admin", "User"];
 
   const handleSelectOption = (option) => {
-    if (option === "Admin") {
-      setSelectedOption(1);
-    } else if (option === "User") {
-      setSelectedOption(2);
-    }
+    // if (option === "Admin") {
+    //   setSelectedOption(1);
+    // } else if (option === "User") {
+    //   setSelectedOption(2);
+    // }
+    setSelectedOption(option);
     setIsOpen(false);
   };
 
