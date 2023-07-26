@@ -264,7 +264,7 @@ const ManajemenBerkas = ({ navigation }) => {
     </View>
   );
   
-  const MemoizedRenderUserItem = memo(RenderUserItem);
+  //const MemoizedRenderUserItem = memo(RenderUserItem);
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
