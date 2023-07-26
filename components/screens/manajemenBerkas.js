@@ -264,16 +264,36 @@ const ManajemenBerkas = ({ navigation }) => {
     </View>
   );
 
-  const handleSave = () => {
-    // Lakukan sesuatu dengan data yang diisi
-    console.log("namadokumen:", namadokumen);
-    console.log("Nama Lengkap:", keterangan);
-    console.log("tahun:", tahun);
-    console.log("namadesa:", namadesa);
-    console.log("namafile:", namafile);
-
-    // Setelah melakukan sesuatu, tutup modal
-    setModalVisible(false);
+  const renderModalDelete = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalDelete}
+        onRequestClose={() => setModalDelete(false)}
+      >
+        <View style={styles.modalContainerdelete}>
+          <View style={styles.modalContentdelete}>
+            <Text style={styles.modalTextdelete}>
+              Apakah Anda Yakin Ingin Menghapus User :{" "}
+              <Text style={styles.modalTextdeleteName}>{userNameToDelete}</Text>
+            </Text>
+            <View style={styles.buttonContainerdelete}>
+              <TouchableOpacity onPress={() => setModalDelete(false)}>
+                <View style={styles.buttonModalDelClose}>
+                  <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={DeleteUser}>
+                <View style={styles.buttonModalDel}>
+                  <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
   };
 
   const renderOpsiModal = () => {
