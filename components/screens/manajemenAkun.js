@@ -699,6 +699,7 @@ const styles = StyleSheet.create({
   modalTextdelete: {
     fontSize: 18,
     marginBottom: 20,
+    fontWeight: '450',
     textAlign: "center",
   },
   buttonContainerdelete: {
@@ -709,10 +710,12 @@ const styles = StyleSheet.create({
     color: "#6EAD3B",
     fontSize: 18,
     fontWeight: "bold",
+    textAlign:'center',
   },
   confirmButtonmodaldelete: {
     fontSize: 18,
     color: "white",
+    textAlign:'center',
   },
   modalTextdeleteName: {
     color: "#6EAD3B",
@@ -725,6 +728,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#6EAD3B",
     marginTop: 20,
+    width:150,
   },
   buttonModalDelClose: {
     backgroundColor: "white",
@@ -734,6 +738,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#6EAD3B",
     marginTop: 20,
+    width:150,
   },
   //end modal delete
 
