@@ -176,3 +176,33 @@
         ))}
     </Table> */}
 
+
+// detailBerkas - 01
+// const tableHead = ['Nama File', 'Aksi'];
+// const tableData = [
+//   [<TouchableOpacity onPress={() => console.log('File 1')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 1</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],
+//   [<TouchableOpacity onPress={() => console.log('File 2')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 2</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],
+//   [<TouchableOpacity onPress={() => console.log('File 3')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],
+//       [<TouchableOpacity onPress={() => console.log('File 3')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
+//     <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
+//   </TouchableOpacity>, renderOpsiIcons()],
+//   // tambahkan data lainnya di sini sesuai kebutuhan
+// ];
+
+
