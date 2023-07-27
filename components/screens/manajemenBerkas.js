@@ -198,8 +198,12 @@ const ManajemenBerkas = ({ navigation }) => {
       console.log("Data updated successfully:", data);
       // Reset input fields if needed
       console.log("berhasil");
-      setModalVisible(false);
-     
+      setModalVisibleEdit(false);
+      setNamaDesa('');
+      setNamaDokumen('');
+      setTahun('');
+      setLokasiPenyimpanan('');
+      setKeterangan('');
       setIsThereNewData(true);
     } catch (error) {
       console.error("Error updating data:", error);
