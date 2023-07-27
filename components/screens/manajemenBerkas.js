@@ -20,12 +20,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
 import * as DocumentPicker from "expo-document-picker";
 import { MenuProvider, MenuOption } from "react-native-popup-menu";
-
+import axios from "axios";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
-import { dataArsipsApi, storeArsip ,DeleteArsip} from "../middleware/apiEndpoint"; // API ENDPOINT
+import { dataArsipsApi, storeArsip ,destroyArsip} from "../middleware/apiEndpoint"; // API ENDPOINT
 
 
 const ManajemenBerkas = ({ navigation }) => {
@@ -251,10 +251,10 @@ const ManajemenBerkas = ({ navigation }) => {
     </View>
   );
 
-  const DeleteUser = () => {
-    console.log(userIdToDelete);
+  const DeleteArsip = () => {
+    console.log(arsipIdToDelete);
     axios
-      .delete(destroyUser + `/${userIdToDelete}`)
+      .delete(destroyArsip + `/${arsipIdToDelete}`)
       .then((response) => {
         // Proses respons API jika diperlukan
         console.log("User deleted successfully");
@@ -284,7 +284,7 @@ const ManajemenBerkas = ({ navigation }) => {
         <View style={styles.modalContainerdelete}>
           <View style={styles.modalContentdelete}>
             <Text style={styles.modalTextdelete}>
-              Apakah Anda Yakin Ingin Menghapus User :{" "}
+              Apakah Anda Yakin Ingin Menghapus Dokumen :{" "}
               <Text style={styles.modalTextdeleteName}>{arsipNameToDelete}</Text>
             </Text>
             <View style={styles.buttonContainerdelete}>
@@ -293,7 +293,7 @@ const ManajemenBerkas = ({ navigation }) => {
                   <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={DeleteUser}>
+              <TouchableOpacity onPress={DeleteArsip}>
                 <View style={styles.buttonModalDel}>
                   <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
                 </View>
@@ -503,7 +503,7 @@ const ManajemenBerkas = ({ navigation }) => {
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
-        
+
         <View>{renderModalDelete()}</View>
 
           <MenuProvider style={styles.containertabel}>
