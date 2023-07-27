@@ -188,7 +188,7 @@ const ManajemenBerkas = ({ navigation }) => {
       // };
   
       // Kirim data ke server menggunakan axios.put dengan FormData sebagai payload
-
+ 
       const response = await axios.put(updateUrl, data);
       const jsondata = response.data;
       // const response = await fetch(updateUrl, config);

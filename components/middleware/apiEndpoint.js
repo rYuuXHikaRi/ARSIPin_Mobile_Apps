@@ -7,3 +7,5 @@ export const getListDocApi = apiEndpoint + '/api/getfiles';
 export const storeUser = apiEndpoint + '/api/users/store';
 export const destroyUser = apiEndpoint + '/api/users/destroy';
 export const LoginUrl = apiEndpoint + '/api/login';
+export const profileUser = apiEndpoint + '/api/users/profile';
+export const editProfile = apiEndpoint + '/api/users/profile/edit'
