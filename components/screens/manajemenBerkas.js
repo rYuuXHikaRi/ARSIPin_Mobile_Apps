@@ -607,6 +607,67 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+
+  //Modal style Delete
+  modalContainerdelete: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  modalContentdelete: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 8,
+    width: "90%",
+    height: "20%",
+  },
+  modalTextdelete: {
+    fontSize: 18,
+    marginBottom: 20,
+    fontWeight: '450',
+    textAlign: "center",
+  },
+  buttonContainerdelete: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  cancelButtonmodaldelete: {
+    color: "#6EAD3B",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign:'center',
+  },
+  confirmButtonmodaldelete: {
+    fontSize: 18,
+    color: "white",
+    textAlign:'center',
+  },
+  modalTextdeleteName: {
+    color: "#6EAD3B",
+  },
+  buttonModalDel: {
+    backgroundColor: "#6EAD3B",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#6EAD3B",
+    marginTop: 20,
+    width:150,
+  },
+  buttonModalDelClose: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#6EAD3B",
+    marginTop: 20,
+    width:150,
+  },
+  //end modal delete
+  
   //Modal Style
   centeredView: {
     flex: 1,
