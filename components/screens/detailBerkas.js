@@ -25,7 +25,7 @@ import * as Linking from 'expo-linking';
 //local
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { getListDocApi } from "../middleware/apiEndpoint";
+import { getListDocApi, downloadDocApi } from "../middleware/apiEndpoint";
 
 
 
@@ -77,7 +77,7 @@ const DetailBerkas = ({route}) => {
   const handleFileDownload = async (filename) => {
     try {
       // Replace 'your-laravel-api-url' with your actual Laravel API URL
-      const apiUrl = `http://192.168.209.249:8000/api/download/${filename}/${arsip.id}`;
+      const apiUrl = downloadDocApi + `/${filename}/${arsip.id}`;
   
       const downloadResult = await Linking.openURL(apiUrl);
       if (downloadResult && downloadResult.action === Linking.ACTIONS.OPEN_DOCUMENT) {
@@ -136,32 +136,8 @@ const DetailBerkas = ({route}) => {
   );
   
   console.log(fileDetail);
-  const tableHead = ['Nama File', 'Aksi'];
-  const tableData = [
-    [<TouchableOpacity onPress={() => console.log('File 1')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 1</Text>
-    </TouchableOpacity>, renderOpsiIcons()],
-    [<TouchableOpacity onPress={() => console.log('File 2')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 2</Text>
-    </TouchableOpacity>, renderOpsiIcons()],
-    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],
-        [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],    [<TouchableOpacity onPress={() => console.log('File 3')}>
-      <Text style={[styles.tableText, { fontSize: 20 }]}>File 3</Text>
-    </TouchableOpacity>, renderOpsiIcons()],
-    // tambahkan data lainnya di sini sesuai kebutuhan
-  ];
+  // Unused code in here was moved to /dump/unusedCode -> detailBerkas - 01
+
 
   function renderOpsiIcons() {
     return (
@@ -327,12 +303,6 @@ const DetailBerkas = ({route}) => {
               }
             />
           </View>
-      
-
-      <TouchableOpacity onPress={handleOpenDocumentPicker}>
-        <Text>Select File</Text>
-      </TouchableOpacity>
-        
    
       </View>
       <View style={styles.row}>
@@ -342,9 +312,9 @@ const DetailBerkas = ({route}) => {
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => setModalVisible(true)}
+          onPress={() => handleOpenDocumentPicker()}
         >
-          <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
+          <Text style={styles.buttonText}>+ Tambah Dokumen</Text>
         </TouchableOpacity>
       </View>
       <View style={styles.row}>
@@ -649,4 +619,12 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+  userItem: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+    alignItems: "center",
+    paddingVertical: 10,
+    borderBottomWidth: 1,
+    borderBottomColor: "#ccc",
+  }
 });
