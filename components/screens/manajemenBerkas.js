@@ -25,22 +25,22 @@ import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
-import { dataArsipsApi, storeArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
+import { dataArsipsApi, storeArsip ,DeleteArsip} from "../middleware/apiEndpoint"; // API ENDPOINT
 
 
 const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
   const [modalDelete, setModalDelete] = useState(false);
+  const [arsipIdToDelete, setArsipIdToDelete] = useState(null);
+  const [arsipNameToDelete, setArsipNameToDelete] = useState("");
   const [users, setUsers] = useState([]);
   const [archives, setArchives] = useState([]);
-  const [rowData, setRowData] = useState([]);
   const [NamaDokumen, setNamaDokumen] = useState("");
   const [Keterangan, setKeterangan] = useState("");
   const [Tahun, setTahun] = useState("");
   const [NamaDesa, setNamaDesa] = useState("");
   const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
-  const [NamaFile, setNamaFile] = useState("");
   const [showPopover, setShowPopover] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedArchive, setSelectedArchive] = useState([]);
@@ -230,18 +230,11 @@ const ManajemenBerkas = ({ navigation }) => {
       onPress={()=>moveToDetailBerkas(item.id)}>
         <Text style={styles.userName}>{item.NamaDokumen}</Text>
       </TouchableOpacity>
-      {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 06 */ }
-      
-      
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.editButton}
-          onPress={() => catchArchiveId(item.id)}
-          
+          onPress={() => catchArchiveId(item.id)} 
         >
-
-          {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 07 */ }
-
           <PopUpMenu>
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalVisibleEdit(true);}}>
               <Feather name="edit" size={20} color="white" />
@@ -249,7 +242,7 @@ const ManajemenBerkas = ({ navigation }) => {
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {console.log("Moved to detail document page at " + item.NamaDokumen + " document"); navigation.navigate('detailberkas', {arsip: item})}}>
               <Feather name="eye" size={20} color="white" />
             </MenuOption>
-            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalDelete(true);}}>
+            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); handleDelete(item.id,item.NamaDokumen);}}>
               <Feather name="trash" size={20} color="white" />
             </MenuOption>
           </PopUpMenu>
@@ -257,6 +250,28 @@ const ManajemenBerkas = ({ navigation }) => {
       </View>
     </View>
   );
+
+  const DeleteUser = () => {
+    console.log(userIdToDelete);
+    axios
+      .delete(destroyUser + `/${userIdToDelete}`)
+      .then((response) => {
+        // Proses respons API jika diperlukan
+        console.log("User deleted successfully");
+        setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+        setIsThereNewData(true);
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+      });
+  };
+
+  const handleDelete = (ArsipId, ArsipNamaDokumen) => {
+    console.log("Delete user with ID:", ArsipId);
+    setArsipIdToDelete(ArsipId);
+    setArsipNameToDelete(ArsipNamaDokumen);
+    setModalDelete(true);
+  };
 
   const renderModalDelete = () => {
     return (
@@ -270,7 +285,7 @@ const ManajemenBerkas = ({ navigation }) => {
           <View style={styles.modalContentdelete}>
             <Text style={styles.modalTextdelete}>
               Apakah Anda Yakin Ingin Menghapus User :{" "}
-              <Text style={styles.modalTextdeleteName}>{userNameToDelete}</Text>
+              <Text style={styles.modalTextdeleteName}>{arsipNameToDelete}</Text>
             </Text>
             <View style={styles.buttonContainerdelete}>
               <TouchableOpacity onPress={() => setModalDelete(false)}>
@@ -488,8 +503,8 @@ const ManajemenBerkas = ({ navigation }) => {
         <View style={styles.row}>
           <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
         </View>
-
-        {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 09 */ }
+        
+        <View>{renderModalDelete()}</View>
 
           <MenuProvider style={styles.containertabel}>
             <FlatList

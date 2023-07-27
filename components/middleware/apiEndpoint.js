@@ -5,4 +5,5 @@ export const storeArsip = apiEndpoint + '/api/store';
 export const getListDocApi = apiEndpoint + '/api/getfiles';
 export const storeUser = apiEndpoint + '/api/users/store';
 export const destroyUser = apiEndpoint + '/api/users/destroy';
+export const destroyArsip = apiEndpoint + '/api/arsips/destroy';
 export const editUser = apiEndpoint + '/api/users/update';
