@@ -22,11 +22,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <Stack.Navigator>
-        {/* <Stack.Screen
+        <Stack.Screen
             name="login"
             component={LoginPage}
             options={{ headerShown: false}}
-        /> */}
+        />
 
         <Stack.Screen
           name="manajemenakun"

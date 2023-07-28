@@ -25,7 +25,8 @@ import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
-import { dataArsipsApi, storeArsip ,destroyArsip} from "../middleware/apiEndpoint"; // API ENDPOINT
+import { dataArsipsApi, storeArsip, updateArsip,destroyArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
+import axios from "axios";
 
 
 const ManajemenBerkas = ({ navigation }) => {
@@ -34,6 +35,12 @@ const ManajemenBerkas = ({ navigation }) => {
   const [modalDelete, setModalDelete] = useState(false);
   const [arsipIdToDelete, setArsipIdToDelete] = useState(null);
   const [arsipNameToDelete, setArsipNameToDelete] = useState("");
+  const [namadokumen, setnamadokumen] = useState("");
+  const [keterangan, setketerangan] = useState("");
+  const [tahun, settahun] = useState("");
+  const [namadesa, setnamadesa] = useState("");
+  const [namafile, setnamafile] = useState("");
+  const [tableData, setTableData] = useState([]);
   const [users, setUsers] = useState([]);
   const [archives, setArchives] = useState([]);
   const [NamaDokumen, setNamaDokumen] = useState("");
@@ -92,6 +99,9 @@ const ManajemenBerkas = ({ navigation }) => {
     }
   };
 
+
+  
+
   const handleCreate = async () => {
     // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 02
     console.log(files);
@@ -138,7 +148,82 @@ const ManajemenBerkas = ({ navigation }) => {
     }
   };
 
+  const handleUpdate = async () => {
+
+    const folderName = NamaDokumen + "-" + LokasiPenyimpanan;
+
+    const data = {
+      NamaDokumen: NamaDokumen,
+      Keterangan: Keterangan,
+      Tahun: Tahun,
+      NamaDesa: NamaDesa,
+      LokasiPenyimpanan: LokasiPenyimpanan,
+      NamaFile: folderName,
+    };
+  
+
+    // const formData = new FormData();
+    // formData.append("NamaDokumen",NamaDokumen);
+    // formData.append("Keterangan", Keterangan);
+    // formData.append("Tahun", Tahun);
+    // formData.append("NamaDesa", NamaDesa);
+    // formData.append("LokasiPenyimpanan", LokasiPenyimpanan);
+    // const folderName = NamaDokumen + "-" + LokasiPenyimpanan;
+    // formData.append("NamaFile", folderName);
+    // console.log(formData)
+
+    
+    updateUrl=updateArsip+`/${curDocSelect.id}`;
+
+  
+  
+    try {
+      // Ganti URL endpoint dengan URL untuk update data
+  
+      // const config = {
+      //   body: formData.toString(),
+      //   method: "PUT", // Ganti metode HTTP menjadi PUT
+      //   headers: {
+      //     "Content-Type": "application/x-www-form-urlencoded",
+      //   },
+      // };
+  
+      // Kirim data ke server menggunakan axios.put dengan FormData sebagai payload
+
+      const response = await axios.put(updateUrl, data);
+      const jsondata = response.data;
+      // const response = await fetch(updateUrl, config);
+      // const data = await response.json();
+    
+  
+      console.log("Data updated successfully:", data);
+      // Reset input fields if needed
+      console.log("berhasil");
+      setModalVisibleEdit(false);
+      setNamaDesa('');
+      setNamaDokumen('');
+      setTahun('');
+      setLokasiPenyimpanan('');
+      setKeterangan('');
+      setIsThereNewData(true);
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+
+  };
+  
+
+
+
   const tableHead = ["Nama Folder", "Aksi"];
+
+  function assignItem(item){
+    setNamaDokumen(item.NamaDokumen);
+    setTahun(item.Tahun);
+    setNamaDesa(item.NamaDesa);
+    setKeterangan(item.Keterangan);
+    setLokasiPenyimpanan(item.LokasiPenyimpanan);
+  }
 
   function renderOpsiIcons() {
  
@@ -236,7 +321,7 @@ const ManajemenBerkas = ({ navigation }) => {
           onPress={() => catchArchiveId(item.id)} 
         >
           <PopUpMenu>
-            <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalVisibleEdit(true);}}>
+            <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item);assignItem(item);setModalVisibleEdit(true)}}>
               <Feather name="edit" size={20} color="white" />
             </MenuOption>
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {console.log("Moved to detail document page at " + item.NamaDokumen + " document"); navigation.navigate('detailberkas', {arsip: item})}}>
@@ -337,7 +422,7 @@ const ManajemenBerkas = ({ navigation }) => {
                   style={[styles.input]}
                   placeholder="Nama Dokumen"
                   value={NamaDokumen}                         
-                  onChangeText={(text) => setNamaDokumen(text)}
+                  onChange={(text) => setNamaDokumen(text)}
                 />
               </View>
 
@@ -437,7 +522,7 @@ const ManajemenBerkas = ({ navigation }) => {
               style={styles.inputketerangan}
               placeholder={curDocSelect !== null ? curDocSelect.Keterangan : "Keterangan"}
               value={Keterangan}
-              onChangeText={(text) => setKeterangan(text)}
+              onChangeText={(text) => {text === '' ? setKeterangan(curDocSelect.Keterangan) : setKeterangan(text)} }
               />
               </View>
             </View>
@@ -467,19 +552,11 @@ const ManajemenBerkas = ({ navigation }) => {
               onChangeText={(text) => setLokasiPenyimpanan(text)}
               />
               </View>
-
-              <View style={styles.styletitle4}>
-              <Text style={styles.titleformupload}>Upload File</Text>
-              <Button title="Pilih File" onPress={handleFilePick} />
-              {selectedFiles.map((file, index) => (
-              <Text key={index}>{file.name}</Text>
-              ))}
-              </View>
             </View>
             <View style={styles.btnsave}>
             <TouchableOpacity
               style={[styles.button, styles.buttonSave]}
-              onPress={() => {setCurDocSelect(null); handleCreate}}
+              onPress={handleUpdate}
             >
               <Text style={styles.textStyle}>Simpan</Text>
             </TouchableOpacity>
