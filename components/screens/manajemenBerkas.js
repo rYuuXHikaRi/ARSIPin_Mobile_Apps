@@ -25,8 +25,7 @@ import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
-import { dataArsipsApi, storeArsip, updateArsip,destroyArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
-import axios from "axios";
+import { dataArsipsApi, storeArsip, updateArsip, destroyArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
 
 
 const ManajemenBerkas = ({ navigation }) => {
@@ -35,13 +34,6 @@ const ManajemenBerkas = ({ navigation }) => {
   const [modalDelete, setModalDelete] = useState(false);
   const [arsipIdToDelete, setArsipIdToDelete] = useState(null);
   const [arsipNameToDelete, setArsipNameToDelete] = useState("");
-  const [namadokumen, setnamadokumen] = useState("");
-  const [keterangan, setketerangan] = useState("");
-  const [tahun, settahun] = useState("");
-  const [namadesa, setnamadesa] = useState("");
-  const [namafile, setnamafile] = useState("");
-  const [tableData, setTableData] = useState([]);
-  const [users, setUsers] = useState([]);
   const [archives, setArchives] = useState([]);
   const [NamaDokumen, setNamaDokumen] = useState("");
   const [Keterangan, setKeterangan] = useState("");
@@ -160,18 +152,6 @@ const ManajemenBerkas = ({ navigation }) => {
       LokasiPenyimpanan: LokasiPenyimpanan,
       NamaFile: folderName,
     };
-  
-
-    // const formData = new FormData();
-    // formData.append("NamaDokumen",NamaDokumen);
-    // formData.append("Keterangan", Keterangan);
-    // formData.append("Tahun", Tahun);
-    // formData.append("NamaDesa", NamaDesa);
-    // formData.append("LokasiPenyimpanan", LokasiPenyimpanan);
-    // const folderName = NamaDokumen + "-" + LokasiPenyimpanan;
-    // formData.append("NamaFile", folderName);
-    // console.log(formData)
-
     
     updateUrl=updateArsip+`/${curDocSelect.id}`;
 

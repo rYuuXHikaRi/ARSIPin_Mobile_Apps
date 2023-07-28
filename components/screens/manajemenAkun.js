@@ -364,7 +364,7 @@ const ManajemenAkun = () => {
                 </View>
               </View>
 
-              <View style={styles.styletitle4}>
+              {/* <View style={styles.styletitle4}>
                 <Text style={styles.titleformFoto}>Foto</Text>
                 <TouchableOpacity
                   style={styles.inputFile}
@@ -373,7 +373,7 @@ const ManajemenAkun = () => {
                 >
                   <Text style={styles.inputFilestyle}>Pilih Foto</Text>
                 </TouchableOpacity>
-              </View>
+              </View> */}
             </View>
 
             <View style={styles.btnsave}>
@@ -421,11 +421,11 @@ const ManajemenAkun = () => {
                   <View style={styles.styletitle2}>
                     <Text style={styles.titleform}>Nama User</Text>
                     <TextInput
-                      style={[styles.inputName]}
+                      style={[styles.input]}
                       placeholder={selectedUser.NamaLengkap}
                       value={UserName}
                       onChangeText={(text) => {
-                        if (text.trim() === '') {
+                        if (text.trim() === "") {
                           setUserName(selectedUser.NamaLengkap); // Kembalikan ke nilai asli jika input kosong
                         } else {
                           setUserName(text);
@@ -433,52 +433,37 @@ const ManajemenAkun = () => {
                       }}
                     />
                   </View>
+                </View>
 
-                  <View style={styles.styletitle2}>
-                    <Text style={styles.titleform}>Nama Lengkap</Text>
-                    <TextInput
-                      style={styles.inputName}
+                <Text style={styles.titleform}>Nama Lengkap</Text>
+                <TextInput
+                      style={styles.input}
                       placeholder={selectedUser.UserName}
                       value={NamaLengkap}
                       onChangeText={(text) => {
-                        if (text.trim() === '') {
+                        if (text.trim() === "") {
                           setNamaLengkap(selectedUser.UserName); // Kembalikan ke nilai asli jika input kosong
                         } else {
                           setNamaLengkap(text);
                         }
                       }}
                     />
-                  </View>
+
+                <View style={styles.noneItem}>
+                  <Text style={styles.titleform}>Kata Sandi</Text>
+                  <TextInput
+                    style={styles.input}
+                    placeholder={selectedUser.password}
+                    value={password}
+                    onChangeText={(text) => {
+                      if (text.trim() === "") {
+                        setpassword(selectedUser.password); // Kembalikan ke nilai asli jika input kosong
+                      } else {
+                        setpassword(text);
+                      }
+                    }}
+                  />
                 </View>
-
-                <Text style={styles.titleform}>Nomor HP</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder={selectedUser.NomorHp}
-                  value={NomorHp}
-                  onChangeText={(text) => {
-                    if (text.trim() === '') {
-                      setNomorHp(selectedUser.NomorHp); // Kembalikan ke nilai asli jika input kosong
-                    } else {
-                      setNomorHp(text);
-                    }
-                  }}
-                />
-
-              <View style={styles.noneItem}>
-                <Text style={styles.titleform}>Kata Sandi</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder={selectedUser.password}
-                  value={password}
-                  onChangeText={(text) => {
-                    if (text.trim() === '') {
-                      setpassword(selectedUser.password); // Kembalikan ke nilai asli jika input kosong
-                    } else {
-                      setpassword(text);
-                    }
-                  }}
-                /></View>
 
                 <View style={styles.styletitle3}>
                   <View style={styles.styletitle2}>
@@ -497,6 +482,22 @@ const ManajemenAkun = () => {
                   </View>
 
                   <View style={styles.styletitle4}>
+                    <Text style={styles.titleformFoto}>Nomor HP</Text>
+                    <TextInput
+                      style={styles.inputFile}
+                      placeholder={selectedUser.NomorHp}
+                      value={NomorHp}
+                      onChangeText={(text) => {
+                        if (text.trim() === "") {
+                          setNomorHp(selectedUser.NomorHp); // Kembalikan ke nilai asli jika input kosong
+                        } else {
+                          setNomorHp(text);
+                        }
+                      }}
+                    />
+                  </View>
+
+                  {/* <View style={styles.styletitle4}>
                     <Text style={styles.titleformFoto}>Foto</Text>
                     <TouchableOpacity
                       style={styles.inputFile}
@@ -505,7 +506,7 @@ const ManajemenAkun = () => {
                     >
                       <Text style={styles.inputFilestyle}>Pilih Foto</Text>
                     </TouchableOpacity>
-                  </View>
+                  </View> */}
                 </View>
               </>
             )}
@@ -699,7 +700,7 @@ const styles = StyleSheet.create({
   modalTextdelete: {
     fontSize: 18,
     marginBottom: 20,
-    fontWeight: '450',
+    fontWeight: "450",
     textAlign: "center",
   },
   buttonContainerdelete: {
@@ -710,12 +711,12 @@ const styles = StyleSheet.create({
     color: "#6EAD3B",
     fontSize: 18,
     fontWeight: "bold",
-    textAlign:'center',
+    textAlign: "center",
   },
   confirmButtonmodaldelete: {
     fontSize: 18,
     color: "white",
-    textAlign:'center',
+    textAlign: "center",
   },
   modalTextdeleteName: {
     color: "#6EAD3B",
@@ -728,7 +729,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#6EAD3B",
     marginTop: 20,
-    width:150,
+    width: 150,
   },
   buttonModalDelClose: {
     backgroundColor: "white",
@@ -738,7 +739,7 @@ const styles = StyleSheet.create({
     borderWidth: 2,
     borderColor: "#6EAD3B",
     marginTop: 20,
-    width:150,
+    width: 150,
   },
   //end modal delete
 
@@ -930,8 +931,8 @@ const styles = StyleSheet.create({
     height: 30,
     flexDirection: "column",
   },
-  noneItem :{
-    display :'none',
+  noneItem: {
+    display: "none",
   },
   styletitle: {
     flexDirection: "row",
