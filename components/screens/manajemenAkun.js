@@ -28,6 +28,7 @@ import {
   storeUser,
   destroyUser,
   editUser,
+  updateUser,
 } from "../middleware/apiEndpoint";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
@@ -123,56 +124,52 @@ const ManajemenAkun = () => {
   };
 
   const handleEditModal = async () => {
-    const formData = new FormData();
-    formData.append("NamaLengkap", NamaLengkap);
-    formData.append("UserName", UserName);
-    formData.append("NomorHp", NomorHp);
-    formData.append("password", password);
-    formData.append("Roles", selectedOption);
 
-    if (selectedImg != null) {
-      if (selectedImg.length > 0) {
-        const fileUri = selectedImg[0];
-        const fileName = fileUri.split("/").pop();
-        formData.append("Foto", {
-          uri: fileUri,
-          name: fileName,
-          type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
-        });
-      }
-    }
+    const roleValue = selectedOption === "Admin" ? 1 : 2;
+
+    const data = {
+      NamaLengkap: NamaLengkap,
+      UserName: UserName,
+      NomorHp: NomorHp,
+      password: password,
+      Roles: roleValue,
+    };
+
+    // updateUrl=updateUser+`/${selectedFiles.id}`;
+    uriuserupdate = updateUser + `/${selectedFiles.id}`;
 
     try {
-      // Kirim data ke API menggunakan axios.post dengan FormData sebagai payload
-      const response = await axios.put(
-        editUser + `/${setSelectedUser}`,
-        formData,
-        {
-          headers: {
-            "Content-Type": "multipart/form-data", // Jangan lupa atur header untuk FormData
-          },
-        }
-      );
-
       console.log("Response from API:", response.data);
+      const response = await axios.put(uriuserupdate, data);
+      const jsondata = response.data;
       // Lakukan apa pun yang perlu Anda lakukan setelah berhasil menyimpan data
       // Misalnya, tampilkan pesan sukses atau perbarui tampilan data di aplikasi Anda
       setIsThereNewData(true);
       // setSelectedOption("");
-      setSelectedImg(null);
+      // setSelectedImg(null);
     } catch (error) {
       // Jika request gagal, Anda dapat menangani error di sini
       console.log("Error:", error);
       console.log(NamaLengkap);
       console.log(UserName);
       console.log("ini password", password);
+      console.log(password);
       console.log(NomorHp);
-      console.log(selectedOption);
+      console.log(roleValue);
 
       // Lakukan apa pun yang perlu Anda lakukan jika ada kesalahan dalam menyimpan data
       // Misalnya, tampilkan pesan error kepada pengguna atau log pesan error
     }
   };
+
+
+  function assignItem(item){
+    setNamaLengkap(item.NamaLengkap);
+    setUserName(item.UssetUserName);
+    setpassword(item.password);
+    setNomorHp(item.NomorHp);
+    setSelectedOption(item.SelectedOption);
+  }
 
   const options = ["Admin", "User"];
 
@@ -203,6 +200,7 @@ const ManajemenAkun = () => {
     console.log("Edit user with ID:", userId);
     const user = users.find((user) => user.id === userId);
     setSelectedUser(user);
+    assignItem(user)
     setModalVisibleEdit(true);
     console.log("yey");
   };
@@ -421,12 +419,12 @@ const ManajemenAkun = () => {
                   <View style={styles.styletitle2}>
                     <Text style={styles.titleform}>Nama User</Text>
                     <TextInput
-                      style={[styles.input]}
-                      placeholder={selectedUser.NamaLengkap}
+                      style={styles.input}
+                      placeholder={selectedUser.UserName}
                       value={UserName}
                       onChangeText={(text) => {
                         if (text.trim() === "") {
-                          setUserName(selectedUser.NamaLengkap); // Kembalikan ke nilai asli jika input kosong
+                          setUserName(selectedUser.UserName);
                         } else {
                           setUserName(text);
                         }
@@ -437,17 +435,17 @@ const ManajemenAkun = () => {
 
                 <Text style={styles.titleform}>Nama Lengkap</Text>
                 <TextInput
-                      style={styles.input}
-                      placeholder={selectedUser.UserName}
-                      value={NamaLengkap}
-                      onChangeText={(text) => {
-                        if (text.trim() === "") {
-                          setNamaLengkap(selectedUser.UserName); // Kembalikan ke nilai asli jika input kosong
-                        } else {
-                          setNamaLengkap(text);
-                        }
-                      }}
-                    />
+                  style={[styles.input]}
+                  placeholder={selectedUser.NamaLengkap}
+                  value={NamaLengkap}
+                  onChangeText={(text) => {
+                    if (text.trim() === "") {
+                      setNamaLengkap(selectedUser.NamaLengkap); // Kembalikan ke nilai asli jika input kosong
+                    } else {
+                      setNamaLengkap(text);
+                    }
+                  }}
+                />
 
                 <View style={styles.noneItem}>
                   <Text style={styles.titleform}>Kata Sandi</Text>
