@@ -105,9 +105,6 @@ const ManajemenBerkas = ({ navigation }) => {
     }
   };
 
-
-  
-
   const handleCreate = async () => {
     // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 02
     console.log(files);
@@ -120,8 +117,6 @@ const ManajemenBerkas = ({ navigation }) => {
     $folderName = NamaDokumen + "-" + LokasiPenyimpanan;
     formData.append("NamaFile", $folderName);
     formData.append("file", files);
-
-    // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 03
 
     try {
       // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
@@ -206,9 +201,6 @@ const ManajemenBerkas = ({ navigation }) => {
 
   };
   
-
-
-
   const tableHead = ["Nama Folder", "Aksi"];
 
   function assignItem(item){
@@ -220,8 +212,6 @@ const ManajemenBerkas = ({ navigation }) => {
   }
 
   function renderOpsiIcons() {
- 
-   
     return (
       <View style={styles.opsiContainer}>
         {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 05 */ }
@@ -363,7 +353,7 @@ const ManajemenBerkas = ({ navigation }) => {
         <View style={styles.modalContainerdelete}>
           <View style={styles.modalContentdelete}>
             <Text style={styles.modalTextdelete}>
-              Apakah Anda Yakin Ingin Menghapus Dokumen :{" "}
+              Apakah Anda Yakin Ingin Menghapus Folder :{" "}
               <Text style={styles.modalTextdeleteName}>{arsipNameToDelete}</Text>
             </Text>
             <View style={styles.buttonContainerdelete}>

@@ -90,11 +90,6 @@ const ManajemenAkun = () => {
       if (selectedImg.length > 0) {
         const fileUri = selectedImg[0];
         const fileName = fileUri.split("/").pop();
-        // formData.append("Foto", {
-        //   uri: fileUri,
-        //   name: fileName,
-        //   type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
-        // });
       }
     }
 

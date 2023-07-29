@@ -11,3 +11,4 @@ export const destroyArsip = apiEndpoint + '/api/arsips/destroy';
 export const LoginUrl = apiEndpoint + '/api/login';
 export const downloadDocApi = apiEndpoint + '/api/download';
 export const loginUserApi = apiEndpoint + '/api/login';
+export const DeleteArsipFileName = apiEndpoint + '/api/arips/destroy';
