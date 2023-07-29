@@ -9,6 +9,7 @@ import Header from '../partials/header';
 import { apiEndpoint, editProfile, profileUser } from '../middleware/apiEndpoint';
 import axios from 'axios';
 import * as DocumentPicker from "expo-document-picker";
+import { focusProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
 
 const ProfilePage = () => {
@@ -28,7 +29,7 @@ const ProfilePage = () => {
   }, [isThereNewData]);
 
   const fetchUsers = async () => {
-    profilUrl=profileUser+`/1`
+    profilUrl=profileUser+`/7`
     try {
       const response = await fetch(profilUrl);
       const data = await response.json();
@@ -87,8 +88,6 @@ const ProfilePage = () => {
               uri: result.uri,
               name: result.name, // Use the original file name
               type: result.mimeType,
-              size: result.size,
-              type: result.type
             };
             setFoto(file);
             console.log(2)
@@ -142,20 +141,30 @@ const ProfilePage = () => {
 
 
   const handleUpdate = async () => {
-    console.log('test')
-    gambar= JSON.stringify(Foto);
+    console.log('ini foto',Foto)
+
+    datanew= new FormData();
+    datanew.append("_method", "PUT");
+    datanew.append("NamaLengkap",NamaLengkap);
+    datanew.append("UserName",UserName);
+    datanew.append("NomorHp",NomorHp);
+    datanew.append("password",password);
+    datanew.append("passwordBaru",passwordBaru);
+    datanew.append("Foto",Foto);
+    console.log(Foto)
 
 
-    const data = {
-      NamaLengkap: NamaLengkap,
-      UserName: UserName,
-      NomorHp: NomorHp,
-      password: password,
-      passwordBaru: passwordBaru,
-      Foto: gambar,
-    };
+    // const data = {
+    //   NamaLengkap: NamaLengkap,
+    //   UserName: UserName,
+    //   NomorHp: NomorHp,
+    //   password: password,
+    //   passwordBaru: passwordBaru,
+    //   Foto: gambar,
+    // };
 
-    console.log(data)
+    console.log(datanew)
+    console.log(datanew)
   
 
     // const formData = new FormData();
@@ -174,7 +183,7 @@ const ProfilePage = () => {
   
   
     try {
-      editUrl=editProfile+'/1'
+      editUrl=editProfile+'/7'
       
       // Ganti URL endpoint dengan URL untuk update data
   
@@ -188,14 +197,18 @@ const ProfilePage = () => {
   
       // Kirim data ke server menggunakan axios.put dengan FormData sebagai payload
     
-      const response = await axios.put(editUrl, data);
+      const response = await axios.post(editUrl, datanew, {
+        headers: {
+          "Content-Type": "multipart/form-data" // Set the Content-Type header to multipart/form-data
+        }
+      });
       
-      const jsondata = response.data;
+      const jsondata = response.datanew;
       // const response = await fetch(updateUrl, config);
       // const data = await response.json();
     
   
-      console.log("Data updated successfully:", data);
+      console.log("Data updated successfully:", datanew);
       // Reset input fields if needed
       console.log("berhasil");
       setNamaLengkap('');
