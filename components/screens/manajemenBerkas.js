@@ -103,7 +103,7 @@ const ManajemenBerkas = ({ navigation }) => {
           type: result.mimeType,
         };
         setFiles(file);
-        console.log(result.uri);
+        console.log(files);
       } else if (result.type === "cancel") {
         console.log("User cancelled document picker");
       }
