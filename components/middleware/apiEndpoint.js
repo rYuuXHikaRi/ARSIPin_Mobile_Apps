@@ -9,3 +9,5 @@ export const storeUser = apiEndpoint + '/api/users/store';
 export const destroyUser = apiEndpoint + '/api/users/destroy';
 export const destroyArsip = apiEndpoint + '/api/arsips/destroy';
 export const LoginUrl = apiEndpoint + '/api/login';
+export const downloadDocApi = apiEndpoint + '/api/download';
+export const loginUserApi = apiEndpoint + '/api/login';

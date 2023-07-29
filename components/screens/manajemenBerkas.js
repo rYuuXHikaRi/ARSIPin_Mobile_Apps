@@ -46,6 +46,8 @@ const ManajemenBerkas = ({ navigation }) => {
   const [files, setFiles] = useState([]);
   const [curDocSelect, setCurDocSelect] = useState(null);
   const [isThereNewData, setIsThereNewData] = useState(true);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [filteredArchives, setFilteredArchives] = useState([]);
 
   useEffect(() => {
     fetchArchives();
@@ -63,7 +65,19 @@ const ManajemenBerkas = ({ navigation }) => {
     }
   };
 
-  console.log(curDocSelect);
+  console.log(searchKeyword);
+
+  const searchArchives = (query) => {
+    setSearchKeyword(query);
+    const filteringData = archives.filter(
+      (item) => {
+        return item.NamaDokumen.toLowerCase().includes(query.toLowerCase());
+      }
+    )
+    setFilteredArchives(filteringData);
+    console.log(filteredArchives);
+  }
+  
   // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 01
 
   const handleFilePick = async () => {
@@ -82,7 +96,7 @@ const ManajemenBerkas = ({ navigation }) => {
           type: result.mimeType,
         };
         setFiles(file);
-        console.log(result.uri);
+        console.log(files);
       } else if (result.type === "cancel") {
         console.log("User cancelled document picker");
       }
@@ -565,7 +579,7 @@ const ManajemenBerkas = ({ navigation }) => {
 
           <MenuProvider style={styles.containertabel}>
             <FlatList
-              data={archives}
+              data={searchKeyword === '' ? archives : filteredArchives}
               renderItem={renderArchiveItem}
               keyExtractor={(item) => item.id.toString()}
               ListHeaderComponent={
@@ -607,6 +621,8 @@ const ManajemenBerkas = ({ navigation }) => {
             <TextInput
               placeholder="Cari data..."
               style={styles.searchButtonText}
+              onChangeText={(text) => {searchArchives(text)}}
+              value={searchKeyword}
             />
           </View>
         </View>
@@ -973,10 +989,6 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingLeft: 12,
   },
-  searchButtonText: {
-    color: "black",
-    textAlign: "left",
-  },
   header: {
     height: 50,
     backgroundColor: "#A6D17A",
@@ -1004,7 +1016,7 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     color: "black",
-    fontWeight: "bold",
+    fontWeight: "400",
     textAlign: "left",
   },
   tableText: {

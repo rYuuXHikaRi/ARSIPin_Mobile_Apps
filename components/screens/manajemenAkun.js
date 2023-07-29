@@ -52,6 +52,8 @@ const ManajemenAkun = () => {
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [userNameToDelete, setUserNameToDelete] = useState("");
   const [isThereNewData, setIsThereNewData] = useState(true);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   const pickImage = async () => {
     try {
@@ -88,11 +90,11 @@ const ManajemenAkun = () => {
       if (selectedImg.length > 0) {
         const fileUri = selectedImg[0];
         const fileName = fileUri.split("/").pop();
-        formData.append("Foto", {
-          uri: fileUri,
-          name: fileName,
-          type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
-        });
+        // formData.append("Foto", {
+        //   uri: fileUri,
+        //   name: fileName,
+        //   type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
+        // });
       }
     }
 
@@ -187,6 +189,19 @@ const ManajemenAkun = () => {
       console.error("Error fetching data:", error);
     }
   };
+
+  console.log(users);
+
+  const searchUsers = (query) => {
+    setSearchKeyword(query);
+    const filteringData = users.filter(
+      (item) => {
+        return item.NamaLengkap.toLowerCase().includes(query.toLowerCase());
+      }
+    )
+    setFilteredUsers(filteringData);
+    console.log(filteredUsers);
+  }
   const handleEdit = (userId) => {
     console.log("Edit user with ID:", userId);
     const user = users.find((user) => user.id === userId);
@@ -555,7 +570,7 @@ const ManajemenAkun = () => {
       <View style={styles.card2}>
         <View style={styles.containertabel}>
           <FlatList
-            data={users}
+            data={searchKeyword === '' ? users : filteredUsers}
             renderItem={renderUserItem}
             keyExtractor={(item) => item.id.toString()}
             ListHeaderComponent={
@@ -598,6 +613,8 @@ const ManajemenAkun = () => {
             <TextInput
               placeholder="Cari data..."
               style={styles.searchButtonText}
+              value={searchKeyword}
+              onChangeText={(text) => {searchUsers(text)}}
             />
           </View>
         </View>
@@ -1033,11 +1050,6 @@ const styles = StyleSheet.create({
 
     paddingLeft: 7,
   },
-  searchButtonText: {
-    color: "black",
-    fontWeight: "bold",
-    textAlign: "left",
-  },
   header: {
     height: 50,
     backgroundColor: "#A6D17A",
@@ -1063,7 +1075,7 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     color: "black",
-    fontWeight: "bold",
+    fontWeight: "400",
     textAlign: "left",
   },
   tableText: {
