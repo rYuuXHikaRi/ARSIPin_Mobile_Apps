@@ -134,34 +134,25 @@ const ManajemenAkun = () => {
       password: password,
       Roles: roleValue,
     };
-
-    // updateUrl=updateUser+`/${selectedFiles.id}`;
-    uriuserupdate = updateUser + `/${selectedFiles.id}`;
+    uriuserupdate = updateUser + `/${selectedUser.id}`;
+    console.log(uriuserupdate);
 
     try {
-      console.log("Response from API:", response.data);
+      // console.log("Response from API:", response.data);
       const response = await axios.put(uriuserupdate, data);
-      const jsondata = response.data;
-      // Lakukan apa pun yang perlu Anda lakukan setelah berhasil menyimpan data
-      // Misalnya, tampilkan pesan sukses atau perbarui tampilan data di aplikasi Anda
+      // const jsondata = response.data;
+      setModalVisibleEdit(false);
       setIsThereNewData(true);
-      // setSelectedOption("");
-      // setSelectedImg(null);
     } catch (error) {
       // Jika request gagal, Anda dapat menangani error di sini
       console.log("Error:", error);
       console.log(NamaLengkap);
       console.log(UserName);
       console.log("ini password", password);
-      console.log(password);
       console.log(NomorHp);
       console.log(roleValue);
-
-      // Lakukan apa pun yang perlu Anda lakukan jika ada kesalahan dalam menyimpan data
-      // Misalnya, tampilkan pesan error kepada pengguna atau log pesan error
     }
   };
-
 
   function assignItem(item){
     setNamaLengkap(item.NamaLengkap);
