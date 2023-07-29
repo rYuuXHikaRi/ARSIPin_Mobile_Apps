@@ -28,7 +28,7 @@ export default function App() {
             options={{ headerShown: false}}
         /> */}
 
-        {/* <Stack.Screen
+        <Stack.Screen
           name="manajemenakun"
           component={ManajemenAkun}
           options={{ headerShown: false }}
@@ -44,7 +44,7 @@ export default function App() {
           name="dashboard"
           component={DashBoard}
           options={{ headerShown: false }}
-        /> */}
+        />
         <Stack.Screen
           name="profilepage"
           component={ProfilePage}

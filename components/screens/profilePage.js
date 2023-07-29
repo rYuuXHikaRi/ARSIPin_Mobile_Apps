@@ -8,6 +8,8 @@ import Navbar from '../partials/navbar';
 import Header from '../partials/header';
 import { apiEndpoint, editProfile, profileUser } from '../middleware/apiEndpoint';
 import axios from 'axios';
+import * as DocumentPicker from "expo-document-picker";
+
 
 const ProfilePage = () => {
   const [selectedImg, setSelectedImg] = useState(null);
@@ -32,16 +34,77 @@ const ProfilePage = () => {
       const data = await response.json();
       setUsers(data);
 
-      console.log(password)
+      console.log(users)
 
       setNamaLengkap(users.NamaLengkap);
       setUserName(users.UserName);
       setNomorHp(users.NomorHp);
+      setSelectedImg(null);
+      setFoto("");
      
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  const handleFilePick = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: false, // Set to true if you want to allow multiple files
+        type: "image/*", // Adjust the file type based on your requirements
+      });
+  
+      console.log(result);
+      if (result.type === "success") {
+        if (result.type === "success" && result.uri) {
+          // Perform automatic cropping for images only
+          if (result.type.startsWith('image/')) {
+            // Crop the image
+            const croppedResult = await ImageManipulator.manipulateAsync(
+              result.uri,
+              [{ crop: { originX: 0, originY: 0, width: 300, height: 300 } }],
+              { compress: 1, format: ImageManipulator.SaveFormat.JPEG }
+            );
+  
+            // Now croppedResult.uri contains the cropped image URI
+            console.log('Cropped image URI:', croppedResult.uri);
+  
+            // Use the cropped URI for further processing or set it in the state for uploading
+        // Store the URI in the selectedFiles state
+            const file = {
+              uri: croppedResult.uri,
+              name: result.name, // Use the original file name
+              mimeType: result.mimeType,
+              size: result.size,
+              type: result.type
+
+            };
+            setFoto(file);
+            console.log(1)
+          } else {
+          // Store the URI in the selectedFiles state
+            const file = {
+              uri: result.uri,
+              name: result.name, // Use the original file name
+              type: result.mimeType,
+              size: result.size,
+              type: result.type
+            };
+            setFoto(file);
+            console.log(2)
+          }
+  
+          console.log('File URI:', result.uri);
+        }
+      } else if (result.type === "cancel") {
+        console.log("User cancelled document picker");
+      }
+    } catch (error) {
+      console.log("DocumentPicker Error: ", error);
+    }
+  };
+
+
 
   
 
@@ -58,6 +121,19 @@ const ProfilePage = () => {
 
       if (!result.canceled) {
         setSelectedImg(result.assets[0].uri);
+        const lastDotIndex = result.assets[0].uri.lastIndexOf(".");
+        const substringAfterLastDot = result.assets[0].uri.slice(lastDotIndex + 1);
+        console.log('ini 3 digit terakhir',substringAfterLastDot)
+        const file = {
+          mimeType:`image/${substringAfterLastDot}`,
+          name: 'profile.jpg',
+          type: 'success',
+          uri: result.assets[0].uri,
+    
+        
+        };
+        setFoto(JSON.stringify(file));
+        console.log('ini file',JSON.stringify(file))
       }
     } catch (error) {
       console.log('ImagePicker Error: ', error);
@@ -67,6 +143,7 @@ const ProfilePage = () => {
 
   const handleUpdate = async () => {
     console.log('test')
+    gambar= JSON.stringify(Foto);
 
 
     const data = {
@@ -75,6 +152,7 @@ const ProfilePage = () => {
       NomorHp: NomorHp,
       password: password,
       passwordBaru: passwordBaru,
+      Foto: gambar,
     };
 
     console.log(data)
@@ -144,7 +222,8 @@ const ProfilePage = () => {
     <View style={styles.profileImageContainer}>
       <Image
         style={styles.profileImage}
-        source={{uri: apiEndpoint+`/assets/images/${users.Foto}`}}
+        source={Foto=== "" ? {uri: apiEndpoint+`/assets/images/${users.Foto}`} : {uri:Foto.uri }}
+        
       />
       <LinearGradient
                 colors={['#90C13B', '#7CB53C', '#378D3F']}
@@ -152,7 +231,7 @@ const ProfilePage = () => {
                 end={[1, 0.5]}
                 style={styles.changePhotoButton}
       > 
-        <TouchableOpacity onPress={pickImage}>
+        <TouchableOpacity onPress={handleFilePick}>
           <Text style={styles.changePhotoButtonText}>Ganti Foto</Text>
         </TouchableOpacity>
       </LinearGradient>
