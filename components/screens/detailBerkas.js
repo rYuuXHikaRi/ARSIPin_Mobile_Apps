@@ -243,10 +243,10 @@ const DetailBerkas = ({route}) => {
 
               <View style={styles.styletitle4}>
                 <Text style={styles.titleformupload}>Upload File</Text>
-                <TextInput
-                  style={styles.inputFile}
-                  placeholder="Pilih"
-                ></TextInput>
+                <Button title="Pilih File" onPress={handleFilePick} />
+                {selectedFiles.map((file, index) => (
+                  <Text key={index}>{file.name}</Text>
+                ))}
               </View>
             </View>
 
@@ -305,14 +305,15 @@ const DetailBerkas = ({route}) => {
           </View>
    
       </View>
-      <View style={styles.row}>
+      <View>
         {renderOpsiModal()}
       </View>
+ 
 
       <View style={styles.row}>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => handleOpenDocumentPicker()}
+          onPress={() => setModalVisible(true)}
         >
           <Text style={styles.buttonText}>+ Tambah Dokumen</Text>
         </TouchableOpacity>

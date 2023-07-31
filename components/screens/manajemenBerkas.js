@@ -89,30 +89,6 @@ const ManajemenBerkas = ({ navigation }) => {
 
   const handleFilePick = async () => {
     try {
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
       const result = await DocumentPicker.getDocumentAsync({
         multiple: true,
         type: "application/pdf", // Adjust the file type based on your requirements
