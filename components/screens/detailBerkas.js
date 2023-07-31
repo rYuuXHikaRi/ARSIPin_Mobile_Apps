@@ -11,23 +11,16 @@ import {
   FlatList
 } from "react-native";
 import { AntDesign, MaterialCommunityIcons ,FontAwesome,Feather} from '@expo/vector-icons';
-import { Table, Row } from 'react-native-table-component';
-import DropDownPicker from "react-native-dropdown-picker";
-import { LinearGradient } from 'expo-linear-gradient';
-import AndroidSafeView from "../AndroidSafeView";
 import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
-import { WebView } from 'react-native-webview';
-import * as MediaLibrary from 'expo-media-library';
-import * as Sharing from 'expo-sharing';
 import * as Linking from 'expo-linking';
+import axios from "axios";
+
 
 //local
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { getListDocApi, downloadDocApi,DeleteArsipFileName } from "../middleware/apiEndpoint";
-
-
 
 const DetailBerkas = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -42,15 +35,12 @@ const DetailBerkas = ({route}) => {
   const [showWebView, setShowWebView] = useState(false);
   const { arsip } = route.params;
   const folderName= arsip.NamaDokumen +'-'+arsip.LokasiPenyimpanan;
+  const idtodelete = arsip.id;
   const [modalDelete, setModalDelete] = useState(false);
-  const [FileIdToDelete, setFileIdToDelete] = useState("");
-
-
+  const [FileIdToDelete, setFileIdToDelete] = useState(null);
+  const [isThereNewData, setIsThereNewData] = useState(true);
 
   console.log(folderName)
-
-  console.log(arsip);
-  console.log('dsfisghdkjsdhkfgsdgdkjvhvkjdsg');
 
   useEffect(() => {
     fetchDataFromServer();
@@ -117,7 +107,7 @@ const DetailBerkas = ({route}) => {
     <TouchableOpacity
                 style={styles.opsiButton}
                 onPress={() => {
-                  handleDelete(item.id,item.filename);
+                  handleDelete(arsip.id,item.filename);
                 }}
               >
                 <Feather name="trash" size={30} color="black" />
@@ -128,6 +118,23 @@ const DetailBerkas = ({route}) => {
   
   console.log(fileDetail);
   // Unused code in here was moved to /dump/unusedCode -> detailBerkas - 01
+
+  const DeleteArsipFile = () => {
+    cek = DeleteArsipFileName + `/${FileIdToDelete}`+ `/${FileNameToDelete}`;
+    console.log(cek)
+    console.log(FileIdToDelete);
+    axios
+      .delete(DeleteArsipFileName + `/${FileIdToDelete}`+ `/${FileNameToDelete}`)
+      .then((response) => {
+        // Proses respons API jika diperlukan
+        console.log("Arsip deleted successfully");
+        setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+        setIsThereNewData(true);
+      })
+      .catch((error) => {
+        console.error("Error deleting File:", error);
+      });
+  };
 
   const handleDelete = (FileId, FileName) => {
     console.log("Delete user with ID:", FileId);
@@ -157,7 +164,7 @@ const DetailBerkas = ({route}) => {
                   <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
                 </View>
               </TouchableOpacity>
-              <TouchableOpacity onPress={DeleteArsipFileName}>
+              <TouchableOpacity onPress={DeleteArsipFile}>
                 <View style={styles.buttonModalDel}>
                   <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
                 </View>

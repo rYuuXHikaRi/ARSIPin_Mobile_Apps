@@ -1,4 +1,4 @@
-export const apiEndpoint = 'http://192.168.189.213:8000';
+export const apiEndpoint = 'http://192.168.206.213:8000';
 export const dataArsipsApi = apiEndpoint + '/api/arsips';
 export const dataUsersApi = apiEndpoint + '/api/users';
 export const storeArsip = apiEndpoint + '/api/arsips/store';
@@ -11,4 +11,4 @@ export const destroyArsip = apiEndpoint + '/api/arsips/destroy';
 export const LoginUrl = apiEndpoint + '/api/login';
 export const downloadDocApi = apiEndpoint + '/api/download';
 export const loginUserApi = apiEndpoint + '/api/login';
-export const DeleteArsipFileName = apiEndpoint + '/api/arips/destroy';
+export const DeleteArsipFileName = apiEndpoint + '/api/arsips/destroy';
