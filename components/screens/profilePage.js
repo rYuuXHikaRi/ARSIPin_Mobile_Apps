@@ -29,7 +29,7 @@ const ProfilePage = () => {
   }, [isThereNewData]);
 
   const fetchUsers = async () => {
-    profilUrl=profileUser+`/7`
+    profilUrl=profileUser+'/1'
     try {
       const response = await fetch(profilUrl);
       const data = await response.json();
@@ -42,6 +42,7 @@ const ProfilePage = () => {
       setNomorHp(users.NomorHp);
       setSelectedImg(null);
       setFoto("");
+      setIsThereNewData(false);
      
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -163,7 +164,7 @@ const ProfilePage = () => {
     //   Foto: gambar,
     // };
 
-    console.log(datanew)
+   
     console.log(datanew)
   
 
@@ -183,7 +184,7 @@ const ProfilePage = () => {
   
   
     try {
-      editUrl=editProfile+'/7'
+      editUrl=editProfile+'/1'
       
       // Ganti URL endpoint dengan URL untuk update data
   
@@ -216,6 +217,7 @@ const ProfilePage = () => {
       setNomorHp('');
       setpassword('');
       setpasswordBaru('');
+      setFoto('')
       setIsThereNewData(true);
     } catch (error) {
       console.error("Error updating data:", error);
@@ -280,7 +282,7 @@ const ProfilePage = () => {
         <TextInput style={styles.attributeValue} placeholder="Masukkan Password Baru" secureTextEntry={true} onChangeText={(text) => setpasswordBaru(text)}/>
       </View>
     </View>
-    <TouchableOpacity onPress={handleUpdate}>
+    <TouchableOpacity onPress={() => {handleUpdate();fetchUsers()}}>
     <LinearGradient
                 colors={['#90C13B', '#7CB53C', '#378D3F']}
                 start={[0, 0.5]}
