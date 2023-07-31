@@ -17,3 +17,4 @@ web-build/
 .metro-health-check*
 
 package-lock.json
+components/middleware/apiEndpoint.js

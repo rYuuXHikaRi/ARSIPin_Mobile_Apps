@@ -23,12 +23,11 @@ import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from "react";
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { dataUsersApi } from "../middleware/apiEndpoint";
+import { dataUsersApi, storeUser, destroyUser } from "../middleware/apiEndpoint";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { SvgXml } from 'react-native-svg';
 import { loginBg } from '../../assets/img/svgAssets';
-import { storeUser, destroyUser } from "../middleware/apiEndpoint";
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -47,6 +46,9 @@ const ManajemenAkun = () => {
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [userIdToDelete, setUserIdToDelete] = useState(null);
   const [userNameToDelete, setUserNameToDelete] = useState("");
+  const [isThereNewData, setIsThereNewData] = useState(true);
+  const [searchKeyword, setSearchKeyword] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState([]);
 
   const pickImage = async () => {
     try {
@@ -80,11 +82,11 @@ const ManajemenAkun = () => {
       if (selectedImg.length > 0) {
         const fileUri = selectedImg[0];
         const fileName = fileUri.split("/").pop();
-        formData.append("Foto", {
-          uri: fileUri,
-          name: fileName,
-          type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
-        });
+        // formData.append("Foto", {
+        //   uri: fileUri,
+        //   name: fileName,
+        //   type: "image/jpeg", // Ganti sesuai tipe gambar yang diunggah
+        // });
       }
     }
 
@@ -127,17 +129,31 @@ const ManajemenAkun = () => {
 
   useEffect(() => {
     fetchUsers();
-  }, []);
+  }, [isThereNewData]);
 
   const fetchUsers = async () => {
     try {
       const response = await fetch(dataUsersApi);
       const data = await response.json();
       setUsers(data);
+      setIsThereNewData(false);
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   };
+
+  console.log(users);
+
+  const searchUsers = (query) => {
+    setSearchKeyword(query);
+    const filteringData = users.filter(
+      (item) => {
+        return item.NamaLengkap.toLowerCase().includes(query.toLowerCase());
+      }
+    )
+    setFilteredUsers(filteringData);
+    console.log(filteredUsers);
+  }
   const handleEdit = (userId) => {
     console.log("Edit user with ID:", userId);
     const user = users.find((user) => user.id === userId);
@@ -161,6 +177,7 @@ const ManajemenAkun = () => {
       // Proses respons API jika diperlukan
       console.log('User deleted successfully');
       setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+      setIsThereNewData(true);
     })
     .catch((error) => {
       console.error('Error deleting user:', error);
@@ -476,7 +493,7 @@ const ManajemenAkun = () => {
       <View style={styles.card2}>
         <View style={styles.containertabel}>
           <FlatList
-            data={users}
+            data={searchKeyword === '' ? users : filteredUsers}
             renderItem={renderUserItem}
             keyExtractor={(item) => item.id.toString()}
             ListHeaderComponent={
@@ -519,6 +536,8 @@ const ManajemenAkun = () => {
             <TextInput
               placeholder="Cari data..."
               style={styles.searchButtonText}
+              value={searchKeyword}
+              onChangeText={(text) => {searchUsers(text)}}
             />
           </View>
         </View>
@@ -946,11 +965,6 @@ const styles = StyleSheet.create({
 
     paddingLeft: 7,
   },
-  searchButtonText: {
-    color: "black",
-    fontWeight: "bold",
-    textAlign: "left",
-  },
   header: {
     height: 50,
     backgroundColor: "#A6D17A",
@@ -976,7 +990,7 @@ const styles = StyleSheet.create({
   },
   searchButtonText: {
     color: "black",
-    fontWeight: "bold",
+    fontWeight: "400",
     textAlign: "left",
   },
   tableText: {

@@ -5,10 +5,11 @@ import { StyleSheet, Text, View, Dimensions, Image,
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
+import axios from 'axios';
 // Local
 import GradientText from '../partials/gradientText';
-
 import { loginBg } from '../../assets/img/svgAssets';
+import { loginUserApi } from '../middleware/apiEndpoint';
 
 const screenWidth = Dimensions.get('window').width;
 const logoWidth = 113 * 1.3; const logoHeight = 57 * 1.3;
@@ -16,6 +17,7 @@ const logoWidth = 113 * 1.3; const logoHeight = 57 * 1.3;
 const LoginPage = ({navigation}) => {
   const [loginData, setLoginData] = useState({username: '', password: ''});
   const [keyBoardStat, setKeyboardStat] = useState('notshowed');
+  const [tokenSession, setTokenSession] = useState(null);
 
   useEffect(() => {
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
@@ -34,8 +36,42 @@ const LoginPage = ({navigation}) => {
     };
   }, []);
 
+  const updateUserName = (userNameValue) => {
+    setLoginData({...loginData, username: userNameValue});
+  }
+
+  const updatePassWord = (passWordValue) => {
+    setLoginData({...loginData, password: passWordValue});
+  }
+
+  const handleLogin = () => {
+    const username = loginData.username;
+    const password = loginData.password;
+    axios.post(loginUserApi, {username, password})
+    .then (response => {
+          const token = response.data.token;
+          setTokenSession(token);
+          console.log("Token " + tokenSession);
+       }).catch (error => {
+         console.error(error);
+     })
+    // fetch(loginUserApi, {
+    //   method: "POST",
+    //   headers: {
+    //     "Content-Type": "multipart/form-data",
+    //   },
+    //   body: loginForm,
+    // }).then (response => {
+    //     console.log("Token " + response.data);
+    // }).catch (error => {
+    //   console.error(error);
+    // })
+  }
+
+  const fetchUserData = () => {
+    
+  }
   console.log(keyBoardStat);
-  console.log(loginData)
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
         <View style={{backgroundColor: '#F0E5E5'}}> 
@@ -63,16 +99,19 @@ const LoginPage = ({navigation}) => {
                           <View style={[styles.loginCompShape, styles.loginInput]}>
                             <TextInput
                                         placeholder='Nama Pengguna / E-mail'
+                                        onChangeText={(usrnm) => updateUserName(usrnm)}
                             />
                           </View>
 
                           <View style={[styles.loginCompShape, styles.loginInput]}>
                             <TextInput
                                           placeholder='Kata Sandi'
+                                          secureTextEntry={true}
+                                          onChangeText={(pwd) => updatePassWord(pwd)}
                             />
                           </View>
 
-                          <Pressable onPress={() => {navigation.navigate('dashboard')}} style={{marginTop: 7}}>
+                          <Pressable onPress={() => {handleLogin()}} style={{marginTop: 7}}>
                             <LinearGradient
                                             colors={['#90C13B', '#7CB53C', '#378D3F']}
                                             start={[0, 0.5]}
