@@ -12,3 +12,5 @@ export const LoginUrl = apiEndpoint + '/api/login';
 export const downloadDocApi = apiEndpoint + '/api/download';
 export const loginUserApi = apiEndpoint + '/api/login';
 export const DeleteArsipFileName = apiEndpoint + '/api/arsips/destroy';
+export const profileUser = apiEndpoint + '/api/users/profile';
+export const editProfile = apiEndpoint + '/api/users/profile/edit'

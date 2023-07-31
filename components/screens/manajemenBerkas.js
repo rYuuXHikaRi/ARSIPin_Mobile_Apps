@@ -82,6 +82,30 @@ const ManajemenBerkas = ({ navigation }) => {
 
   const handleFilePick = async () => {
     try {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
       const result = await DocumentPicker.getDocumentAsync({
         multiple: true,
         type: "application/pdf", // Adjust the file type based on your requirements
@@ -176,10 +200,13 @@ const ManajemenBerkas = ({ navigation }) => {
       //     "Content-Type": "application/x-www-form-urlencoded",
       //   },
       // };
-  
+      const headers = {
+        'Content-Type': 'multipart/form-data', // Set the appropriate content type for your request
+        // Add more headers as needed
+      };
       // Kirim data ke server menggunakan axios.put dengan FormData sebagai payload
-
-      const response = await axios.put(updateUrl, data);
+ 
+      const response = await axios.put(updateUrl, data,{headers});
       const jsondata = response.data;
       // const response = await fetch(updateUrl, config);
       // const data = await response.json();
