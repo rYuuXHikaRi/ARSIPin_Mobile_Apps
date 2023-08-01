@@ -8,7 +8,8 @@ import {
   Modal,
   TextInput,
   ScrollView,
-  FlatList
+  FlatList,
+  Button
 } from "react-native";
 import { AntDesign, MaterialCommunityIcons ,FontAwesome,Feather} from '@expo/vector-icons';
 import { Table, Row } from 'react-native-table-component';
@@ -25,7 +26,7 @@ import * as Linking from 'expo-linking';
 //local
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { getListDocApi, downloadDocApi } from "../middleware/apiEndpoint";
+import { getListDocApi, downloadDocApi, addFile } from "../middleware/apiEndpoint";
 
 
 
@@ -42,6 +43,7 @@ const DetailBerkas = ({route}) => {
   const [showWebView, setShowWebView] = useState(false);
   const { arsip } = route.params;
   const folderName= arsip.NamaDokumen +'-'+arsip.LokasiPenyimpanan;
+  const [files, setFiles] = useState([]);
 
   console.log(folderName)
 
@@ -95,6 +97,68 @@ const DetailBerkas = ({route}) => {
     } catch (error) {
       console.error('Error downloading and saving file:', error);
       // Handle error scenario
+    }
+  };
+
+
+  const handleFilePick = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: true,
+        type: "application/pdf", // Adjust the file type based on your requirements
+      });
+
+      console.log(result);
+      if (result.type === "success") {
+        setSelectedFile([result.uri]); // Store the URI in the selectedFiles state
+        const file = {
+          uri: result.uri,
+          name: result.name,
+          type: result.mimeType,
+        };
+        setFiles(file);
+        console.log(file);
+      } else if (result.type === "cancel") {
+        console.log("User cancelled document picker");
+      }
+    } catch (error) {
+      console.log("DocumentPicker Error: ", error);
+    }
+  };
+
+
+  const handleCreate = async () => {
+    // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 02
+    console.log(files);
+    const formData = new FormData();
+    formData.append("file", files);
+    console.log(formData)
+
+    // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 03
+
+    try {
+      // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
+      console.log(formData);
+      const config = {
+        body: formData,
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 04
+
+      let response = await fetch(addFile+'/1', config);
+      
+
+      console.log("Data created successfully:", response.data);
+      // Reset input fields if needed
+      console.log("berhasil");
+      setModalVisible(false);
+      setIsThereNewData(true);
+    } catch (error) {
+      console.error("Error creating data:", error);
     }
   };
   
@@ -198,68 +262,25 @@ const DetailBerkas = ({route}) => {
                 Tambah Arsip Baru
               </Text>
             </View>
-            <View>
-              <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Nama Dokumen</Text>
-                <TextInput
-                  style={[styles.input]}
-                  placeholder="Nama Dokumen"
-                  onChangeText={(text) => setNamaDokumen(text)}
-                />
-              </View>
-
-              <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Keterangan</Text>
-                <TextInput
-                  style={styles.inputketerangan}
-                  placeholder="Keterangan"
-                  onChangeText={(text) => setketerangan(text)}
-                />
-              </View>
-            </View>
-            <Text style={styles.titleform}>Tahun</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Tahun"
-              onChangeText={(text) => setTahun(text)}
-            />
-
-            <Text style={styles.titleform}>Nama Desa</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Nama Desa"
-              onChangeText={(text) => setNamaDesa(text)}
-            />
-
-            <View>
-              <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Loker"
-                  onChangeText={(text) => setTahun(text)}
-                />
-              </View>
+      
 
               <View style={styles.styletitle4}>
                 <Text style={styles.titleformupload}>Upload File</Text>
                 <Button title="Pilih File" onPress={handleFilePick} />
-                {selectedFiles.map((file, index) => (
-                  <Text key={index}>{file.name}</Text>
-                ))}
+
               </View>
             </View>
 
             <View style={styles.btnsave}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonSave]}
-                onPress={handleSave}
+                onPress={handleCreate}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+     
       </Modal>
     );
   };
