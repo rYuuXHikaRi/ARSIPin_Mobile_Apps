@@ -1,23 +1,49 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Dimensions, Image, 
-         ImageBackground, TextInput, Pressable, Keyboard, TouchableWithoutFeedback} from 'react-native';
+         ImageBackground, TextInput, Pressable, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
+import { useSelector,useDispatch } from 'react-redux';
+
 // Local
 import GradientText from '../partials/gradientText';
 import { loginBg } from '../../assets/img/svgAssets';
 import { loginUserApi } from '../middleware/apiEndpoint';
+
+// Local middleware
+import { UserContext } from '../middleware/Contexts/userContext';
+import { loginRequest } from '../middleware/actions/loginAction';
+
 
 const screenWidth = Dimensions.get('window').width;
 const logoWidth = 113 * 1.3; const logoHeight = 57 * 1.3;
 
 const LoginPage = ({navigation}) => {
   const [loginData, setLoginData] = useState({username: '', password: ''});
+  const { userData } = useContext(UserContext);
   const [keyBoardStat, setKeyboardStat] = useState('notshowed');
+  const [isLoggedInPressed, setIsLoggedInPressed] = useState(false);
+  const token = useSelector((state) => state.tokenSession);
   const [tokenSession, setTokenSession] = useState(null);
+  const dispatch = useDispatch();
+
+
+  const updateUserName = (userNameValue) => {
+    setLoginData({...loginData, username: userNameValue});
+  }
+
+  const updatePassWord = (passWordValue) => {
+    setLoginData({...loginData, password: passWordValue});
+  }
+
+  const handleLogin = () => {
+    console.log("Handle login called!")
+    
+    
+  }
 
   useEffect(() => {
     const keyboardDidHideListener = Keyboard.addListener('keyboardDidHide', () => {
@@ -36,41 +62,21 @@ const LoginPage = ({navigation}) => {
     };
   }, []);
 
-  const updateUserName = (userNameValue) => {
-    setLoginData({...loginData, username: userNameValue});
-  }
+  useEffect(() => {
+    if(isLoggedInPressed){
+      dispatch(loginRequest(loginData.username, loginData.password));
+      setIsLoggedInPressed(false);
+    }
+  }, [isLoggedInPressed, dispatch])
 
-  const updatePassWord = (passWordValue) => {
-    setLoginData({...loginData, password: passWordValue});
-  }
+  useEffect(() => {
+    if(token) {
+      console.log("Token changed!");
+      console.log("Token: ", token);
+      navigation.navigate('loadlogin');
+    }
+  }, [token])
 
-  const handleLogin = () => {
-    const username = loginData.username;
-    const password = loginData.password;
-    axios.post(loginUserApi, {username, password})
-    .then (response => {
-          const token = response.data.token;
-          setTokenSession(token);
-          console.log("Token " + tokenSession);
-       }).catch (error => {
-         console.error(error);
-     })
-    // fetch(loginUserApi, {
-    //   method: "POST",
-    //   headers: {
-    //     "Content-Type": "multipart/form-data",
-    //   },
-    //   body: loginForm,
-    // }).then (response => {
-    //     console.log("Token " + response.data);
-    // }).catch (error => {
-    //   console.error(error);
-    // })
-  }
-
-  const fetchUserData = () => {
-    
-  }
   console.log(keyBoardStat);
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -111,7 +117,7 @@ const LoginPage = ({navigation}) => {
                             />
                           </View>
 
-                          <Pressable onPress={() => {handleLogin()}} style={{marginTop: 7}}>
+                          <TouchableOpacity onPress={() => {console.log('Button Login Pressed'); setIsLoggedInPressed(true)}} style={{marginTop: 7}}>
                             <LinearGradient
                                             colors={['#90C13B', '#7CB53C', '#378D3F']}
                                             start={[0, 0.5]}
@@ -120,7 +126,7 @@ const LoginPage = ({navigation}) => {
                             >
                               <Text style={styles.loginButtonText}>Masuk</Text>
                             </LinearGradient>
-                          </Pressable>
+                          </TouchableOpacity>
                       </View>
                     </View>
 

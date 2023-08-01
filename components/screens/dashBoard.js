@@ -2,6 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, StatusBar } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
+import { useSelector } from 'react-redux';
 
 // local
 import Header from '../partials/header';
@@ -9,6 +10,8 @@ import Navbar from '../partials/navbar';
 import GradientText from '../partials/gradientText';
 
 const DashBoard = () => {
+  const userData = useSelector((state) => state.userData);
+  console.log(userData);
   return (
     <SafeAreaView style={styles.container}>
       <View style={{position: 'absolute', top: 0}}>
@@ -18,7 +21,7 @@ const DashBoard = () => {
                     colors={['#90C13C', '#3C903F']} 
                     x1={0} y1={0.5} x2={1} y2={0.5}
                     style={styles.title}
-      >Halo, {'\n'}Administrator</GradientText>
+      >Halo, {'\n'}{userData.NamaLengkap}</GradientText>
       <LinearGradient
                       colors={['#197B40', '#79B33B', '#A6CE39']}
                       start={[0, 0.5]}
