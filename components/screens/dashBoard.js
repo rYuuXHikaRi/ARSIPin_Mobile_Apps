@@ -1,8 +1,9 @@
 import React from 'react';
-import { View, Text, StyleSheet, StatusBar } from 'react-native';
+import { View, Text, StyleSheet, StatusBar as StatBar, Platform} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useSelector } from 'react-redux';
+import { StatusBar } from 'expo-status-bar';
 
 // local
 import Header from '../partials/header';
@@ -14,65 +15,65 @@ const DashBoard = () => {
   console.log(userData);
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{position: 'absolute', top: 0}}>
-        <Header />
-      </View>
-      <GradientText 
-                    colors={['#90C13C', '#3C903F']} 
-                    x1={0} y1={0.5} x2={1} y2={0.5}
-                    style={styles.title}
-      >Halo, {'\n'}{userData.NamaLengkap}</GradientText>
-      <LinearGradient
-                      colors={['#197B40', '#79B33B', '#A6CE39']}
-                      start={[0, 0.5]}
-                      end={[1, 0.5]}
-                      style={[styles.card]}
-      > 
-        <Text style={styles.cardTitle}>Statistik</Text>
-      </LinearGradient>
-      <View style={styles.row}>
-        <View style={styles.column}>
-          <LinearGradient
-                            colors={['#60CE39', '#D6DF20']}
-                            start={[0, 0.5]}
-                            end={[1, 0.5]}
-                            style={[styles.card1, { height: 246 }]}
-          > 
-              <Text style={styles.cardTitle}>Jumlah Akun</Text>
-              <Text style={[styles.cardTitle, {fontSize: 24, textAlign: 'center'}]}>{'\n'}Admin</Text>
-              <Text style={styles.cardValue}>1</Text>
-              <Text style={[styles.cardTitle, {fontSize: 24,textAlign: 'center'}]}>Petugas</Text>
-              <Text style={styles.cardValue}>1</Text>
-          </LinearGradient>
-        </View>
-        <View style={styles.column2}>
-          <View>
-            <View style={styles.card2}>
-              <Text style={styles.cardTitle}>Kategori Arsip</Text>
-            </View>
-            <View style={styles.card3}>
-              <Text style={[styles.cardValue, { color: '#FBA919' }]}>6</Text>
-            </View>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
+      <View style={{ flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
+        <GradientText 
+                      colors={['#90C13C', '#3C903F']} 
+                      x1={0} y1={0.5} x2={1} y2={0.5}
+                      style={styles.title}
+        >Halo, {'\n'}{userData.NamaLengkap}</GradientText>
+        <LinearGradient
+                        colors={['#197B40', '#79B33B', '#A6CE39']}
+                        start={[0, 0.5]}
+                        end={[1, 0.5]}
+                        style={[styles.card]}
+        > 
+          <Text style={styles.cardTitle}>Statistik</Text>
+        </LinearGradient>
+        <View style={styles.row}>
+          <View style={styles.column}>
+            <LinearGradient
+                              colors={['#60CE39', '#D6DF20']}
+                              start={[0, 0.5]}
+                              end={[1, 0.5]}
+                              style={[styles.card1, { height: 246 }]}
+            > 
+                <Text style={styles.cardTitle}>Jumlah Akun</Text>
+                <Text style={[styles.cardTitle, {fontSize: 24, textAlign: 'center'}]}>{'\n'}Admin</Text>
+                <Text style={styles.cardValue}>1</Text>
+                <Text style={[styles.cardTitle, {fontSize: 24,textAlign: 'center'}]}>Petugas</Text>
+                <Text style={styles.cardValue}>1</Text>
+            </LinearGradient>
           </View>
+          <View style={styles.column2}>
+            <View>
+              <View style={styles.card2}>
+                <Text style={styles.cardTitle}>Kategori Arsip</Text>
+              </View>
+              <View style={styles.card3}>
+                <Text style={[styles.cardValue, { color: '#FBA919' }]}>6</Text>
+              </View>
+            </View>
 
-          <View style={{marginTop: 0}}>
-            <View style={styles.card2}>
-              <Text style={styles.cardTitle}>Jumlah Arsip</Text>
-            </View>
-            <View style={styles.card3}>
-              <Text style={[styles.cardValue, { color: '#FBA919' }]}>27</Text>
+            <View style={{marginTop: 0}}>
+              <View style={styles.card2}>
+                <Text style={styles.cardTitle}>Jumlah Arsip</Text>
+              </View>
+              <View style={styles.card3}>
+                <Text style={[styles.cardValue, { color: '#FBA919' }]}>27</Text>
+              </View>
             </View>
           </View>
         </View>
-      </View>
-      <View style={styles.card4}>
-        <Text style={styles.cardTitle}>Jumlah Arsip Diunduh</Text>
-      </View>
-          <View style={styles.card5}>
-            <Text style={[styles.cardValue, { color: '#FBA919' }]}>627</Text>
-          </View>
-      <View style={{position: 'absolute', bottom: 0}}>
-        <Navbar whichPage='home' />
+        <View style={styles.card4}>
+          <Text style={styles.cardTitle}>Jumlah Arsip Diunduh</Text>
+        </View>
+            <View style={styles.card5}>
+              <Text style={[styles.cardValue, { color: '#FBA919' }]}>627</Text>
+            </View>
+        <View style={{position: 'absolute', bottom: 0}}>
+          <Navbar whichPage='home' />
+        </View>
       </View>
       <StatusBar style='auto' />
     </SafeAreaView>
@@ -82,12 +83,10 @@ const DashBoard = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: '#F0E5E5',
+    backgroundColor: 'white',
   },
   title: {
-    marginTop: 72,
-    marginBottom:30,
+    marginBottom: 8,
     fontSize: 36,
     fontWeight: '800',
   },

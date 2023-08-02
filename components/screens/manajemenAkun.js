@@ -6,10 +6,9 @@ import {
   TouchableOpacity,
   Modal,
   TextInput,
-  Pressable,
-  ScrollView,
-  Picker,
   FlatList,
+  Platform,
+  StatusBar as StatBar
 } from "react-native";
 import {
   AntDesign,
@@ -21,13 +20,16 @@ import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { useEffect } from "react";
+import * as ImagePicker from "expo-image-picker";
+import axios from "axios";
+import { StatusBar } from "expo-status-bar";
+
+
+import { SvgXml } from 'react-native-svg';
+import { loginBg } from '../../assets/img/svgAssets';
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import { dataUsersApi, storeUser, destroyUser } from "../middleware/apiEndpoint";
-import * as ImagePicker from "expo-image-picker";
-import axios from "axios";
-import { SvgXml } from 'react-native-svg';
-import { loginBg } from '../../assets/img/svgAssets';
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -479,69 +481,69 @@ const ManajemenAkun = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ position: "absolute", top: 0 }}>
-        <Header />
-      </View>
-      <LinearGradient
-        colors={["#197B40", "#79B33B", "#A6CE39"]}
-        start={[0, 0.5]}
-        end={[1, 0.5]}
-        style={[styles.card]}
-      >
-        <Text style={styles.cardTitle}>Manajemen Akun</Text>
-      </LinearGradient>
-      <View style={styles.card2}>
-        <View style={styles.containertabel}>
-          <FlatList
-            data={searchKeyword === '' ? users : filteredUsers}
-            renderItem={renderUserItem}
-            keyExtractor={(item) => item.id.toString()}
-            ListHeaderComponent={
-              <View style={styles.tableHeader}>
-                <Text style={styles.headerText}>Nama Lengkap</Text>
-                <Text style={styles.headerText}>Roles</Text>
-                <Text style={styles.headerText}>Aksi</Text>
-              </View>
-            }
-          />
-        </View>
-      </View>
-
-      <View style={styles.row}>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
+      <View style={{ flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
         <LinearGradient
-          colors={["#90C13B", "#7CB53C", "#378D3F"]}
+          colors={["#197B40", "#79B33B", "#A6CE39"]}
           start={[0, 0.5]}
           end={[1, 0.5]}
-          style={styles.button}
+          style={[styles.card]}
         >
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Text style={styles.buttonText}>+ Tambah Akun Baru</Text>
-          </TouchableOpacity>
+          <Text style={styles.cardTitle}>Manajemen Akun</Text>
         </LinearGradient>
-      </View>
-      <TouchableOpacity style={styles.button}>
-        <View style={styles.row}>{renderOpsiModalAdd()}</View>
-      </TouchableOpacity>
-      <View
-        style={{ position: "absolute", bottom: 0, backgroundColor: "#F0E5E5" }}
-      >
-        <View
-          style={[
-            styles.row,
-            { paddingLeft: 18, paddingRight: 18, marginBottom: 20 },
-          ]}
-        >
-          <View style={styles.searchButton}>
-            <AntDesign name="search1" size={20} color="black" />
-            <TextInput
-              placeholder="Cari data..."
-              style={styles.searchButtonText}
-              value={searchKeyword}
-              onChangeText={(text) => {searchUsers(text)}}
+        <View style={styles.card2}>
+          <View style={styles.containertabel}>
+            <FlatList
+              data={searchKeyword === '' ? users : filteredUsers}
+              renderItem={renderUserItem}
+              keyExtractor={(item) => item.id.toString()}
+              ListHeaderComponent={
+                <View style={styles.tableHeader}>
+                  <Text style={styles.headerText}>Nama Lengkap</Text>
+                  <Text style={styles.headerText}>Roles</Text>
+                  <Text style={styles.headerText}>Aksi</Text>
+                </View>
+              }
             />
           </View>
         </View>
-        <Navbar whichPage="userList" />
+
+        <View style={styles.row}>
+          <LinearGradient
+            colors={["#90C13B", "#7CB53C", "#378D3F"]}
+            start={[0, 0.5]}
+            end={[1, 0.5]}
+            style={styles.button}
+          >
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text style={styles.buttonText}>+ Tambah Akun Baru</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </View>
+        <TouchableOpacity style={styles.button}>
+          <View style={styles.row}>{renderOpsiModalAdd()}</View>
+        </TouchableOpacity>
+        <View
+          style={{ position: "absolute", bottom: 0, backgroundColor: "#F0E5E5" }}
+        >
+          <View
+            style={[
+              styles.row,
+              { paddingLeft: 18, paddingRight: 18, marginBottom: 20 },
+            ]}
+          >
+            <View style={styles.searchButton}>
+              <AntDesign name="search1" size={20} color="black" />
+              <TextInput
+                placeholder="Cari data..."
+                style={styles.searchButtonText}
+                value={searchKeyword}
+                onChangeText={(text) => {searchUsers(text)}}
+              />
+            </View>
+          </View>
+          <Navbar whichPage="userList" />
+        </View>
       </View>
     </SafeAreaView>
   );
@@ -880,12 +882,10 @@ const styles = StyleSheet.create({
 
   container: {
     flex: 1,
-    padding: 20,
-    backgroundColor: "#F0E5E5",
+    backgroundColor: 'white',
   },
   card: {
     borderRadius: 8,
-    marginTop: 76,
     paddingLeft: 12,
     height: 43,
 

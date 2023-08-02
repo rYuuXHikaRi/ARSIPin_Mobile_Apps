@@ -4,11 +4,12 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   Modal,
   TextInput,
   Button,
   FlatList,
+  Platform,
+  StatusBar as StatBar
 } from "react-native";
 
 import {
@@ -16,10 +17,12 @@ import {
   Feather,
 } from "@expo/vector-icons";
 
+import { StatusBar } from "expo-status-bar";
 import { LinearGradient } from "expo-linear-gradient";
 import { useEffect } from "react";
 import * as DocumentPicker from "expo-document-picker";
 import { MenuProvider, MenuOption } from "react-native-popup-menu";
+import { SafeAreaView } from "react-native-safe-area-context";
 
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
@@ -474,76 +477,76 @@ const ManajemenBerkas = ({ navigation }) => {
           </View>
         </View>
       </ModalEditDoc>
-      <View style={{ position: "absolute", top: 0 }}>
-        <Header />
-      </View>
-
-      <LinearGradient
-        colors={["#197B40", "#79B33B", "#A6CE39"]}
-        start={[0, 0.5]}
-        end={[1, 0.5]}
-        style={[styles.card]}
-      >
-        <Text style={styles.cardTitle}>Manajemen Berkas</Text>
-      </LinearGradient>
-      <View style={styles.card2}>
-        <View style={styles.row}>
-          <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
-        </View>
-
-        {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 09 */ }
-
-          <MenuProvider style={styles.containertabel}>
-            <FlatList
-              data={searchKeyword === '' ? archives : filteredArchives}
-              renderItem={renderArchiveItem}
-              keyExtractor={(item) => item.id.toString()}
-              ListHeaderComponent={
-                <View style={styles.tableHeader}>
-                  <Text style={styles.headerText}>Nama Dokumen</Text>
-                  <Text style={styles.headerText}>Aksi</Text>
-                </View>
-              }
-
-            />
-          </MenuProvider>
-      </View>
-
-      <View style={styles.row}>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
+      <View style={{ position: 'relative', flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
         <LinearGradient
-          colors={["#90C13B", "#7CB53C", "#378D3F"]}
+          colors={["#197B40", "#79B33B", "#A6CE39"]}
           start={[0, 0.5]}
           end={[1, 0.5]}
-          style={styles.button}
+          style={[styles.card]}
         >
-          <View>{renderOpsiModal()}</View>
-          <TouchableOpacity onPress={() => setModalVisible(true)}>
-            <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
-          </TouchableOpacity>
+          <Text style={styles.cardTitle}>Manajemen Berkas</Text>
         </LinearGradient>
-      </View>
-
-      <View
-        style={{ position: "absolute", bottom: 0, backgroundColor: "#F0E5E5" }}
-      >
-        <View
-          style={[
-            styles.row,
-            { paddingLeft: 18, paddingRight: 18, marginBottom: 20 },
-          ]}
-        >
-          <View style={styles.searchButton}>
-            <AntDesign name="search1" size={20} color="black" />
-            <TextInput
-              placeholder="Cari data..."
-              style={styles.searchButtonText}
-              onChangeText={(text) => {searchArchives(text)}}
-              value={searchKeyword}
-            />
+        <View style={styles.card2}>
+          <View style={styles.row}>
+            <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
           </View>
+
+          {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 09 */ }
+
+            <MenuProvider style={styles.containertabel}>
+              <FlatList
+                data={searchKeyword === '' ? archives : filteredArchives}
+                renderItem={renderArchiveItem}
+                keyExtractor={(item) => item.id.toString()}
+                ListHeaderComponent={
+                  <View style={styles.tableHeader}>
+                    <Text style={styles.headerText}>Nama Dokumen</Text>
+                    <Text style={styles.headerText}>Aksi</Text>
+                  </View>
+                }
+
+              />
+            </MenuProvider>
         </View>
-        <Navbar whichPage="arsip" />
+
+        <View style={styles.row}>
+          <LinearGradient
+            colors={["#90C13B", "#7CB53C", "#378D3F"]}
+            start={[0, 0.5]}
+            end={[1, 0.5]}
+            style={styles.button}
+          >
+            <View>{renderOpsiModal()}</View>
+            <TouchableOpacity onPress={() => setModalVisible(true)}>
+              <Text style={styles.buttonText}>+ Tambah Arsip Baru</Text>
+            </TouchableOpacity>
+          </LinearGradient>
+        </View>
+
+        <View
+          style={{ position: "absolute", bottom: 0, backgroundColor: "#F0E5E5" }}
+        >
+          <View
+            style={[
+              styles.row,
+              { paddingLeft: 18, paddingRight: 18, marginBottom: 20 },
+            ]}
+          >
+            <View style={styles.searchButton}>
+              <AntDesign name="search1" size={20} color="black" />
+              <TextInput
+                placeholder="Cari data..."
+                style={styles.searchButtonText}
+                onChangeText={(text) => {searchArchives(text)}}
+                value={searchKeyword}
+              />
+            </View>
+          </View>
+          <Navbar whichPage="arsip" />
+        </View>
       </View>
+      <StatusBar style="auto"/>
     </SafeAreaView>
   );
 };
@@ -763,12 +766,10 @@ const styles = StyleSheet.create({
   //--end
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: "#F0E5E5",
+    backgroundColor: 'white',
   },
   card: {
     borderRadius: 8,
-    marginTop: 76,
     paddingLeft: 12,
     height: 43,
 

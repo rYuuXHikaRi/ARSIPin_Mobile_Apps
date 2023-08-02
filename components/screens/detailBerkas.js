@@ -4,29 +4,28 @@ import {
   Text,
   StyleSheet,
   TouchableOpacity,
-  SafeAreaView,
   Modal,
   TextInput,
-  ScrollView,
-  FlatList
+  FlatList,
+  Platform,
+  StatusBar as StatBar,
 } from "react-native";
+import { StatusBar } from "expo-status-bar";
+import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign, MaterialCommunityIcons ,FontAwesome,Feather} from '@expo/vector-icons';
-import { Table, Row } from 'react-native-table-component';
-import DropDownPicker from "react-native-dropdown-picker";
-import { LinearGradient } from 'expo-linear-gradient';
-import AndroidSafeView from "../AndroidSafeView";
+// import { Table, Row } from 'react-native-table-component';
+// import DropDownPicker from "react-native-dropdown-picker";
+// import { LinearGradient } from 'expo-linear-gradient';
 import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
-import { WebView } from 'react-native-webview';
-import * as MediaLibrary from 'expo-media-library';
-import * as Sharing from 'expo-sharing';
+// import { WebView } from 'react-native-webview';
+// import * as MediaLibrary from 'expo-media-library';
+// import * as Sharing from 'expo-sharing';
 import * as Linking from 'expo-linking';
 
 //local
 import Header from "../partials/header";
-import Navbar from "../partials/navbar";
 import { getListDocApi, downloadDocApi } from "../middleware/apiEndpoint";
-
 
 
 const DetailBerkas = ({route}) => {
@@ -266,66 +265,59 @@ const DetailBerkas = ({route}) => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <View style={{ position: "absolute", top: 0 }}>
-        <Header />
-      </View>
-      <View style={styles.card}>
-        <Text style={[styles.cardTitle, styles.boldText]}>Manajemen Berkas</Text>
-      </View>
-      <View style={styles.card2}>
-        <View style={styles.row}>
-          <Text style={[styles.cardTitle2, styles.bottomLine]}>Detail Arsip</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Nama : {arsip.NamaDokumen}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Tahun: {arsip.Tahun}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Desa : {arsip.NamaDesa}</Text>
-        </View>
-        <View style={styles.row}>
-          <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : {arsip.LokasiPenyimpanan}</Text>
-        </View>
-        
-    
-          <View style={styles.containertabel}>
-            <FlatList
-             data={fileDetail}
-             renderItem={renderFileItem}
-              keyExtractor={(item) => item.filename}
-              ListHeaderComponent={
-                <View style={styles.tableHeader}>
-                  <Text style={styles.headerText}>Nama File</Text>
-                  <Text style={styles.headerText}>Aksi</Text>
-                </View>
-              }
-            />
-          </View>
-   
-      </View>
-      <View style={styles.row}>
-        {renderOpsiModal()}
-      </View>
+      <Header pageType="detailPage" namePage="Detail Arsip" style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
 
-      <View style={styles.row}>
-        <TouchableOpacity
-          style={styles.button}
-          onPress={() => handleOpenDocumentPicker()}
-        >
-          <Text style={styles.buttonText}>+ Tambah Dokumen</Text>
-        </TouchableOpacity>
+      <View style={{ flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
+        <View style={styles.card2}>
+          <View style={styles.row}>
+            <Text style={[styles.cardTitle2, styles.bottomLine]}>{arsip.NamaDokumen}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={[styles.cardTitle2]}>Tahun: {arsip.Tahun}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={[styles.cardTitle2]}>Desa : {arsip.NamaDesa}</Text>
+          </View>
+          <View style={styles.row}>
+            <Text style={[styles.cardTitle2]}>Lokasi Penyimpanan : {arsip.LokasiPenyimpanan}</Text>
+          </View>
+          
+      
+            <View style={styles.containertabel}>
+              <FlatList
+              data={fileDetail}
+              renderItem={renderFileItem}
+                keyExtractor={(item) => item.filename}
+                ListHeaderComponent={
+                  <View style={styles.tableHeader}>
+                    <Text style={styles.headerText}>Nama File</Text>
+                    <Text style={styles.headerText}>Aksi</Text>
+                  </View>
+                }
+              />
+            </View>
+    
+        </View>
+        <View style={styles.row}>
+          {renderOpsiModal()}
+        </View>
+
+        <View style={styles.row}>
+          <TouchableOpacity
+            style={styles.button}
+            onPress={() => handleOpenDocumentPicker()}
+          >
+            <Text style={styles.buttonText}>+ Tambah Dokumen</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.row}>
+          <TouchableOpacity style={styles.searchButton}>
+            <AntDesign name="search1" size={24} color="black" />
+            <Text style={styles.searchButtonText}> Pencarian...</Text>
+          </TouchableOpacity>
+        </View>
       </View>
-      <View style={styles.row}>
-        <TouchableOpacity style={styles.searchButton}>
-          <AntDesign name="search1" size={24} color="black" />
-          <Text style={styles.searchButtonText}> Pencarian...</Text>
-        </TouchableOpacity>
-      </View>
-      <View style={{ position: "absolute", bottom: 0 }}>
-        <Navbar whichPage="arsip" />
-      </View>
+      <StatusBar style="auto"/>
     </SafeAreaView>
   );
 };
@@ -485,8 +477,7 @@ const styles = StyleSheet.create({
   //--end
   container: {
     flex: 1,
-    padding: 16,
-    backgroundColor: "#F0E5E5",
+    backgroundColor: 'white',
   },
   card: {
     backgroundColor: "#6EAD3B",
@@ -500,7 +491,6 @@ const styles = StyleSheet.create({
     borderRadius: 8,
     padding: 16,
     marginBottom: 5,
-    marginTop: 30,
     height: 460,
     width: 350,
   },

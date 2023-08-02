@@ -5,9 +5,12 @@ import {
     SafeAreaView,
     Pressable,
     Image,
-    Dimensions
+    Dimensions,
+    Text,
+    StatusBar
 } from "react-native";
 import { useNavigation  } from "@react-navigation/native";
+import { AntDesign } from "@expo/vector-icons";
 
 class Header extends Component {
     render() {
@@ -15,17 +18,30 @@ class Header extends Component {
         const logoWidth = 113 * 1.2; const logoHeight = 57 * 1.2;
         const { navigation } = this.props;
         return (
-            <SafeAreaView>
-                <View style={[styles.container, {backgroundColor: "white", width: screenWidth}]}>
-                   <View style={styles.pingIndicator}/>
-                    <Image source={require('../../assets/img/logoGGP.png')} style={{width: logoWidth, height: logoHeight}}/>  
-                    <Pressable style={{width: 50, height: 50, justifyContent: 'center', alignItems: 'center'}} onPress={() => {console.log('test')}}>
-                        <View style={styles.profileContainer}>
-                            <Image source={require('../../assets/img/profileTmp.jpeg')} style={styles.croppedProfile}/>
-                        </View>
-                    </Pressable>
-                </View>
-            </SafeAreaView>
+            <View>
+                {this.props.pageType === "detailPage" ? (
+                    <View style={[styles.container, {backgroundColor: "white", width: screenWidth}]}>
+                        <Pressable onPress={() => this.props.navigation.goBack()}>
+                            <AntDesign name="arrowleft" size={24} color="#6EAD3B" />
+                        </Pressable>
+                        <Text style={styles.hdrTittle}>
+                            {this.props.namePage}
+                        </Text>
+                        {/* <Image source={require('../../assets/img/logoGGP.png')} style={{width: logoWidth, height: logoHeight}}/>   */}
+                        <View/>
+                    </View>
+                ) : (
+                    <View style={[styles.container, {backgroundColor: "white", width: screenWidth}]}>
+                        <View style={styles.pingIndicator}/>
+                        <Image source={require('../../assets/img/logoGGP.png')} style={{width: logoWidth, height: logoHeight}}/>  
+                        <Pressable style={{width: 50, height: 50, justifyContent: 'center', alignItems: 'center'}} onPress={() => {console.log('test')}}>
+                            <View style={styles.profileContainer}>
+                                <Image source={require('../../assets/img/profileTmp.jpeg')} style={styles.croppedProfile}/>
+                            </View>
+                        </Pressable>
+                    </View>
+                )}
+            </View>
         );
     }
 }
@@ -66,4 +82,11 @@ const styles = StyleSheet.create({
         borderRadius: 50,
         borderColor: "#197b40",
     },
+
+    hdrTittle :{
+        fontSize: 18,
+        fontWeight: "bold",
+        color: "#6EAD3B",
+        marginLeft: -25,
+    }
 });
