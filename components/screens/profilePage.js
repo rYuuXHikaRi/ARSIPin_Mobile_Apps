@@ -29,7 +29,7 @@ const ProfilePage = () => {
   }, [isThereNewData]);
 
   const fetchUsers = async () => {
-    profilUrl=profileUser+'/7'
+    profilUrl=profileUser+'/1'
     try {
       const response = await fetch(profilUrl);
       const data = await response.json();
@@ -184,7 +184,7 @@ const ProfilePage = () => {
   
   
     try {
-      editUrl=editProfile+'/7'
+      editUrl=editProfile+'/1'
       
       // Ganti URL endpoint dengan URL untuk update data
   

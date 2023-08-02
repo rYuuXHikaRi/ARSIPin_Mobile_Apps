@@ -449,8 +449,8 @@ const ManajemenBerkas = ({ navigation }) => {
               </View>
 
               <View style={styles.styletitle4}>
-                <Text style={styles.titleformupload}>Upload File</Text>
-                <Button title="Pilih File" onPress={handleFilePick} />
+                <Text style={styles.titleformupload}>Upload File   </Text>
+                <Button title="Pilih File"onPress={handleFilePick} color="#6EAD3B" style={styles.buttonplh} />
                 {selectedFiles.map((file, index) => (
                   <Text key={index}>{file.name}</Text>
                 ))}
@@ -983,4 +983,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  buttonplh: {
+      backgroundColor: '#6EAD3B',
+      borderRadius: 6,
+      marginLeft: 5,
+    },
+    buttonplh: {
+      backgroundColor: '#6EAD3B',
+      marginLeft: 5,
+    },
 });

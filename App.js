@@ -55,6 +55,11 @@ export default function App() {
             component={DetailBerkas}
             options={{ headerShown: false}}
         /> 
+        <Stack.Screen
+            name="riwayatunduhan"
+            component={RiwayatUnduhan}
+            options={{ headerShown: false}}
+        /> 
       </Stack.Navigator>
     </NavigationContainer>
   );

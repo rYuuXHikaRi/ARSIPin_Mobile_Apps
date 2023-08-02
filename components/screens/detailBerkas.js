@@ -41,6 +41,7 @@ const DetailBerkas = ({route}) => {
   const [fileDetail, setFileDetail] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [showWebView, setShowWebView] = useState(false);
+  const [isThereNewData,setIsThereNewData]= useState(false);
   const { arsip } = route.params;
   const folderName= arsip.NamaDokumen +'-'+arsip.LokasiPenyimpanan;
   const [files, setFiles] = useState([]);
@@ -52,7 +53,7 @@ const DetailBerkas = ({route}) => {
 
   useEffect(() => {
     fetchDataFromServer();
-  }, []);
+  }, [isThereNewData]);
 
   // useEffect(() => {
   //   // Lakukan pengambilan data detail file dari endpoint Laravel menggunakan fileId
@@ -149,13 +150,14 @@ const DetailBerkas = ({route}) => {
 
       // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 04
 
-      let response = await fetch(addFile+'/1', config);
+      let response = await fetch(addFile+'/'+arsip.id, config);
       
 
       console.log("Data created successfully:", response.data);
       // Reset input fields if needed
       console.log("berhasil");
       setModalVisible(false);
+      setFiles([]);
       setIsThereNewData(true);
     } catch (error) {
       console.error("Error creating data:", error);
@@ -265,9 +267,8 @@ const DetailBerkas = ({route}) => {
       
 
               <View style={styles.styletitle4}>
-                <Text style={styles.titleformupload}>Upload File</Text>
-                <Button title="Pilih File" onPress={handleFilePick} />
-
+                <Text style={styles.titleformupload}>Upload File   </Text>
+                <Button title="Pilih File"onPress={handleFilePick} color="#6EAD3B" style={styles.buttonplh} />
               </View>
             </View>
 
@@ -364,7 +365,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: 354,
-    height: 624,
+    height: 100,
     marginLeft: 20,
     marginRight: 20,
     marginTop: -130,
