@@ -40,32 +40,39 @@ export default function App() {
               options={{ headerShown: false}}
             />
             <Stack.Screen
-              name="manajemenakun"
-              component={ManajemenAkun}
-              options={{ headerShown: false }}
-            />
-
-                      <Stack.Screen
-              name="manajemenberkas"
-              component={ManajemenBerkas}
-              options={{ headerShown: false }}
-            />
-
-            <Stack.Screen
               name="dashboard"
               component={DashBoard}
               options={{ headerShown: false }}
             />
+
             <Stack.Screen
-              name="profilepage"
-              component={ProfilePage}
+              name="manajemenberkas"
+              component={ManajemenBerkas}
               options={{ headerShown: false }}
             />
             <Stack.Screen
                 name="detailberkas"
                 component={DetailBerkas}
                 options={{ headerShown: false}}
-            /> 
+            />
+
+            <Stack.Screen
+              name="riwayatunduhan"
+              component={RiwayatUnduhan}
+              options={{ headerShown: false }}
+            />        
+
+            <Stack.Screen
+              name="manajemenakun"
+              component={ManajemenAkun}
+              options={{ headerShown: false }}
+            />
+
+            <Stack.Screen
+              name="profilepage"
+              component={ProfilePage}
+              options={{ headerShown: false }}
+            />
             </Stack.Navigator>
         </NavigationContainer>
       </UserProvider>
