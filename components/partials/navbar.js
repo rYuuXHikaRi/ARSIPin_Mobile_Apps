@@ -24,6 +24,8 @@ import {
   userListInActive,
 } from "../../assets/img/iconSet";
 
+
+
 class Navbar extends Component {
   render() {
     const curPgStyle = (typeStyle, pageName, value1, value2) => {
@@ -126,6 +128,7 @@ class Navbar extends Component {
         </ImageBackground>
 
         {/* UserList */}
+        {this.props.role === "1" && (
         <ImageBackground
           source={
             this.props.whichPage === "userList"
@@ -149,7 +152,8 @@ class Navbar extends Component {
               Data Akun
             </Text>
           </Pressable>
-        </ImageBackground>
+        </ImageBackground>)}
+
 
         {/* UserSetting */}
         <ImageBackground
