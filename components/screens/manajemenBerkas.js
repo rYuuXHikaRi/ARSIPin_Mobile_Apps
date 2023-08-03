@@ -1,4 +1,4 @@
-import React, { useState, memo  } from "react";
+import React, { useState  } from "react";
 import {
   View,
   Text,
@@ -23,6 +23,7 @@ import { useEffect } from "react";
 import * as DocumentPicker from "expo-document-picker";
 import { MenuProvider, MenuOption } from "react-native-popup-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
+import { useSelector } from "react-redux";
 
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
@@ -58,6 +59,8 @@ const ManajemenBerkas = ({ navigation }) => {
   const [isThereNewData, setIsThereNewData] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filteredArchives, setFilteredArchives] = useState([]);
+  const userData = useSelector((state) => state.userData);
+  
 
   useEffect(() => {
     fetchArchives();
@@ -265,10 +268,12 @@ const ManajemenBerkas = ({ navigation }) => {
 
           {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 07 */ }
 
-          <PopUpMenu>
+          <PopUpMenu >
+            
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalVisibleEdit(true);}}>
               <Feather name="edit" size={20} color="white" />
-            </MenuOption>
+            </MenuOption> 
+
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {console.log("Moved to detail document page at " + item.NamaDokumen + " document"); navigation.navigate('detailberkas', {arsip: item})}}>
               <Feather name="eye" size={20} color="white" />
             </MenuOption>
