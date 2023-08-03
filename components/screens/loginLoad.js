@@ -21,6 +21,7 @@ const LoadLogin = ({navigation}) => {
   
   
   console.log("Token from loadingscreen: ", token);
+  console.log(userData);
   return (
     <View style={styles.container}>
       <Text>Loading Screen</Text>
