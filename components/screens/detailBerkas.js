@@ -5,10 +5,10 @@ import {
   StyleSheet,
   TouchableOpacity,
   Modal,
-  TextInput,
   FlatList,
   Platform,
   StatusBar as StatBar,
+  Button
 } from "react-native";
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
@@ -25,7 +25,8 @@ import * as Linking from 'expo-linking';
 
 //local
 import Header from "../partials/header";
-import { getListDocApi, downloadDocApi } from "../middleware/apiEndpoint";
+import Navbar from "../partials/navbar";
+import { getListDocApi, downloadDocApi, addFile } from "../middleware/apiEndpoint";
 
 
 const DetailBerkas = ({route}) => {
@@ -39,8 +40,10 @@ const DetailBerkas = ({route}) => {
   const [fileDetail, setFileDetail] = useState([]);
   const [selectedFile, setSelectedFile] = useState(null);
   const [showWebView, setShowWebView] = useState(false);
+  const [isThereNewData,setIsThereNewData]= useState(false);
   const { arsip } = route.params;
   const folderName= arsip.NamaDokumen +'-'+arsip.LokasiPenyimpanan;
+  const [files, setFiles] = useState([]);
 
   console.log(folderName)
 
@@ -49,7 +52,7 @@ const DetailBerkas = ({route}) => {
 
   useEffect(() => {
     fetchDataFromServer();
-  }, []);
+  }, [isThereNewData]);
 
   // useEffect(() => {
   //   // Lakukan pengambilan data detail file dari endpoint Laravel menggunakan fileId
@@ -94,6 +97,69 @@ const DetailBerkas = ({route}) => {
     } catch (error) {
       console.error('Error downloading and saving file:', error);
       // Handle error scenario
+    }
+  };
+
+
+  const handleFilePick = async () => {
+    try {
+      const result = await DocumentPicker.getDocumentAsync({
+        multiple: true,
+        type: "application/pdf", // Adjust the file type based on your requirements
+      });
+
+      console.log(result);
+      if (result.type === "success") {
+        setSelectedFile([result.uri]); // Store the URI in the selectedFiles state
+        const file = {
+          uri: result.uri,
+          name: result.name,
+          type: result.mimeType,
+        };
+        setFiles(file);
+        console.log(file);
+      } else if (result.type === "cancel") {
+        console.log("User cancelled document picker");
+      }
+    } catch (error) {
+      console.log("DocumentPicker Error: ", error);
+    }
+  };
+
+
+  const handleCreate = async () => {
+    // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 02
+    console.log(files);
+    const formData = new FormData();
+    formData.append("file", files);
+    console.log(formData)
+
+    // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 03
+
+    try {
+      // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
+      console.log(formData);
+      const config = {
+        body: formData,
+        method: "POST",
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      };
+
+      // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 04
+
+      let response = await fetch(addFile+'/'+arsip.id, config);
+      
+
+      console.log("Data created successfully:", response.data);
+      // Reset input fields if needed
+      console.log("berhasil");
+      setModalVisible(false);
+      setFiles([]);
+      setIsThereNewData(true);
+    } catch (error) {
+      console.error("Error creating data:", error);
     }
   };
   
@@ -197,68 +263,24 @@ const DetailBerkas = ({route}) => {
                 Tambah Arsip Baru
               </Text>
             </View>
-            <View>
-              <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Nama Dokumen</Text>
-                <TextInput
-                  style={[styles.input]}
-                  placeholder="Nama Dokumen"
-                  onChangeText={(text) => setNamaDokumen(text)}
-                />
-              </View>
-
-              <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Keterangan</Text>
-                <TextInput
-                  style={styles.inputketerangan}
-                  placeholder="Keterangan"
-                  onChangeText={(text) => setketerangan(text)}
-                />
-              </View>
-            </View>
-            <Text style={styles.titleform}>Tahun</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Tahun"
-              onChangeText={(text) => setTahun(text)}
-            />
-
-            <Text style={styles.titleform}>Nama Desa</Text>
-            <TextInput
-              style={styles.input}
-              placeholder="Nama Desa"
-              onChangeText={(text) => setNamaDesa(text)}
-            />
-
-            <View>
-              <View style={styles.styletitle2}>
-                <Text style={styles.titleform}>Lokasi Penyimpanan</Text>
-                <TextInput
-                  style={styles.input}
-                  placeholder="Loker"
-                  onChangeText={(text) => setTahun(text)}
-                />
-              </View>
+      
 
               <View style={styles.styletitle4}>
-                <Text style={styles.titleformupload}>Upload File</Text>
-                <TextInput
-                  style={styles.inputFile}
-                  placeholder="Pilih"
-                ></TextInput>
+                <Text style={styles.titleformupload}>Upload File   </Text>
+                <Button title="Pilih File"onPress={handleFilePick} color="#6EAD3B" style={styles.buttonplh} />
               </View>
             </View>
 
             <View style={styles.btnsave}>
               <TouchableOpacity
                 style={[styles.button, styles.buttonSave]}
-                onPress={handleSave}
+                onPress={handleCreate}
               >
                 <Text style={styles.textStyle}>Simpan</Text>
               </TouchableOpacity>
             </View>
           </View>
-        </View>
+     
       </Modal>
     );
   };
@@ -305,7 +327,7 @@ const DetailBerkas = ({route}) => {
         <View style={styles.row}>
           <TouchableOpacity
             style={styles.button}
-            onPress={() => handleOpenDocumentPicker()}
+            onPress={() => setModalVisible(true)}
           >
             <Text style={styles.buttonText}>+ Tambah Dokumen</Text>
           </TouchableOpacity>
@@ -334,7 +356,7 @@ const styles = StyleSheet.create({
   },
   modalView: {
     width: 354,
-    height: 624,
+    height: 100,
     marginLeft: 20,
     marginRight: 20,
     marginTop: -130,

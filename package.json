@@ -42,7 +42,8 @@
     "react-redux": "^8.1.1",
     "redux": "^4.2.1",
     "redux-saga": "^1.2.3",
-    "rn-fetch-blob": "^0.12.0"
+    "rn-fetch-blob": "^0.12.0",
+    "undefined": "expo-module-scripts/tsconfig.base"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0"

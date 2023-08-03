@@ -29,7 +29,8 @@ import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
-import { dataArsipsApi, storeArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
+import { dataArsipsApi, storeArsip, updateArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
+import axios from "axios";
 
 
 const ManajemenBerkas = ({ navigation }) => {
@@ -39,7 +40,6 @@ const ManajemenBerkas = ({ navigation }) => {
   const [keterangan, setketerangan] = useState("");
   const [tahun, settahun] = useState("");
   const [namadesa, setnamadesa] = useState("");
-  const [lokasipenyimpanan, setlokasipenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
   const [tableData, setTableData] = useState([]);
   const [users, setUsers] = useState([]);
@@ -118,6 +118,9 @@ const ManajemenBerkas = ({ navigation }) => {
     }
   };
 
+
+  
+
   const handleCreate = async () => {
     // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 02
     console.log(files);
@@ -130,6 +133,8 @@ const ManajemenBerkas = ({ navigation }) => {
     $folderName = NamaDokumen + "-" + LokasiPenyimpanan;
     formData.append("NamaFile", $folderName);
     formData.append("file", files);
+
+    console.log(formData)
 
     // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 03
 
@@ -164,7 +169,85 @@ const ManajemenBerkas = ({ navigation }) => {
     }
   };
 
+  const handleUpdate = async () => {
+
+    const folderName = NamaDokumen + "-" + LokasiPenyimpanan;
+
+    const data = {
+      NamaDokumen: NamaDokumen,
+      Keterangan: Keterangan,
+      Tahun: Tahun,
+      NamaDesa: NamaDesa,
+      LokasiPenyimpanan: LokasiPenyimpanan,
+      NamaFile: folderName,
+    };
+  
+
+    // const formData = new FormData();
+    // formData.append("NamaDokumen",NamaDokumen);
+    // formData.append("Keterangan", Keterangan);
+    // formData.append("Tahun", Tahun);
+    // formData.append("NamaDesa", NamaDesa);
+    // formData.append("LokasiPenyimpanan", LokasiPenyimpanan);
+    // const folderName = NamaDokumen + "-" + LokasiPenyimpanan;
+    // formData.append("NamaFile", folderName);
+    // console.log(formData)
+
+    
+    updateUrl=updateArsip+`/${curDocSelect.id}`;
+
+  
+  
+    try {
+      // Ganti URL endpoint dengan URL untuk update data
+  
+      // const config = {
+      //   body: formData.toString(),
+      //   method: "PUT", // Ganti metode HTTP menjadi PUT
+      //   headers: {
+      //     "Content-Type": "application/x-www-form-urlencoded",
+      //   },
+      // };
+      const headers = {
+        'Content-Type': 'multipart/form-data', // Set the appropriate content type for your request
+        // Add more headers as needed
+      };
+      // Kirim data ke server menggunakan axios.put dengan FormData sebagai payload
+ 
+      const response = await axios.put(updateUrl, data,{headers});
+      const jsondata = response.data;
+      // const response = await fetch(updateUrl, config);
+      // const data = await response.json();
+    
+  
+      console.log("Data updated successfully:", data);
+      // Reset input fields if needed
+      console.log("berhasil");
+      setModalVisibleEdit(false);
+      setNamaDesa('');
+      setNamaDokumen('');
+      setTahun('');
+      setLokasiPenyimpanan('');
+      setKeterangan('');
+      setIsThereNewData(true);
+    } catch (error) {
+      console.error("Error updating data:", error);
+    }
+
+  };
+  
+
+
+
   const tableHead = ["Nama Folder", "Aksi"];
+
+  function assignItem(item){
+    setNamaDokumen(item.NamaDokumen);
+    setTahun(item.Tahun);
+    setNamaDesa(item.NamaDesa);
+    setKeterangan(item.Keterangan);
+    setLokasiPenyimpanan(item.LokasiPenyimpanan);
+  }
 
   function renderOpsiIcons() {
  
@@ -192,7 +275,7 @@ const ManajemenBerkas = ({ navigation }) => {
               >
                 <Feather name="edit" size={30} color="black" />
                 <Text style={styles.opsiText}>Edit</Text>
-                <View>{renderOpsiModalEdit()}</View>
+                <View>{}</View>
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.opsiButton}
@@ -270,7 +353,7 @@ const ManajemenBerkas = ({ navigation }) => {
 
           <PopUpMenu >
             
-            <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); setModalVisibleEdit(true);}}>
+            <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); assignItem(item); setModalVisibleEdit(true);}}>
               <Feather name="edit" size={20} color="white" />
             </MenuOption> 
 
@@ -286,7 +369,7 @@ const ManajemenBerkas = ({ navigation }) => {
     </View>
   );
   
-  //const MemoizedRenderUserItem = memo(RenderUserItem);
+
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -332,7 +415,7 @@ const ManajemenBerkas = ({ navigation }) => {
                   style={[styles.input]}
                   placeholder="Nama Dokumen"
                   value={NamaDokumen}                         
-                  onChangeText={(text) => setNamaDokumen(text)}
+                  onChange={(text) => setNamaDokumen(text)}
                 />
               </View>
 
@@ -374,8 +457,8 @@ const ManajemenBerkas = ({ navigation }) => {
               </View>
 
               <View style={styles.styletitle4}>
-                <Text style={styles.titleformupload}>Upload File</Text>
-                <Button title="Pilih File" onPress={handleFilePick} />
+                <Text style={styles.titleformupload}>Upload File   </Text>
+                <Button title="Pilih File"onPress={handleFilePick} color="#6EAD3B" style={styles.buttonplh} />
                 {selectedFiles.map((file, index) => (
                   <Text key={index}>{file.name}</Text>
                 ))}
@@ -432,7 +515,7 @@ const ManajemenBerkas = ({ navigation }) => {
               style={styles.inputketerangan}
               placeholder={curDocSelect !== null ? curDocSelect.Keterangan : "Keterangan"}
               value={Keterangan}
-              onChangeText={(text) => setKeterangan(text)}
+              onChangeText={(text) => {text === '' ? setKeterangan(curDocSelect.Keterangan) : setKeterangan(text)} }
               />
               </View>
             </View>
@@ -462,19 +545,11 @@ const ManajemenBerkas = ({ navigation }) => {
               onChangeText={(text) => setLokasiPenyimpanan(text)}
               />
               </View>
-
-              <View style={styles.styletitle4}>
-              <Text style={styles.titleformupload}>Upload File</Text>
-              <Button title="Pilih File" onPress={handleFilePick} />
-              {selectedFiles.map((file, index) => (
-              <Text key={index}>{file.name}</Text>
-              ))}
-              </View>
             </View>
             <View style={styles.btnsave}>
             <TouchableOpacity
               style={[styles.button, styles.buttonSave]}
-              onPress={() => {setCurDocSelect(null); handleCreate}}
+              onPress={handleUpdate}
             >
               <Text style={styles.textStyle}>Simpan</Text>
             </TouchableOpacity>
@@ -914,4 +989,13 @@ const styles = StyleSheet.create({
     shadowRadius: 4,
     elevation: 5,
   },
+  buttonplh: {
+      backgroundColor: '#6EAD3B',
+      borderRadius: 6,
+      marginLeft: 5,
+    },
+    buttonplh: {
+      backgroundColor: '#6EAD3B',
+      marginLeft: 5,
+    },
 });
