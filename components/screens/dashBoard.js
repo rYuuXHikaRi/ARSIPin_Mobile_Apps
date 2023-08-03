@@ -12,7 +12,6 @@ import GradientText from '../partials/gradientText';
 
 const DashBoard = () => {
   const userData = useSelector((state) => state.userData);
-  console.log(userData);
   return (
     <SafeAreaView style={styles.container}>
       <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
@@ -72,7 +71,7 @@ const DashBoard = () => {
               <Text style={[styles.cardValue, { color: '#FBA919' }]}>627</Text>
             </View>
         <View style={{position: 'absolute', bottom: 0}}>
-          <Navbar whichPage='home' />
+          <Navbar whichPage='home' role={userData.Roles}/>
         </View>
       </View>
       <StatusBar style='auto' />
