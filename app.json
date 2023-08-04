@@ -6,7 +6,10 @@
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
-    "platforms": ["ios", "android"],
+    "platforms": [
+      "ios",
+      "android"
+    ],
     "splash": {
       "image": "./assets/splash.png",
       "resizeMode": "cover",
@@ -23,11 +26,18 @@
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#ffffff"
       },
-      "permissions": ["MANAGE_EXTERNAL_STORAGE"]
-
+      "permissions": [
+        "MANAGE_EXTERNAL_STORAGE"
+      ],
+      "package": "com.KP_ITERA_GGP.ARSIPin"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "0716d786-0401-471c-9b67-bb644abc7b58"
+      }
     }
   }
 }
