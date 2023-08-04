@@ -1,4 +1,4 @@
-export const apiEndpoint = 'http://192.168.53.34:8000';
+export const apiEndpoint = 'http://192.168.22.34:8000';
 export const dataArsipsApi = apiEndpoint + '/api/arsips';
 export const dataUsersApi = apiEndpoint + '/api/users';
 export const storeArsip = apiEndpoint + '/api/arsips/store';
@@ -8,7 +8,7 @@ export const storeUser = apiEndpoint + '/api/users/store';
 export const destroyUser = apiEndpoint + '/api/users/destroy';
 export const LoginUrl = apiEndpoint + '/api/login';
 export const profileUser = apiEndpoint + '/api/users/profile';
-export const editProfile = apiEndpoint + '/api/users/profile/edit'
+export const editProfile = apiEndpoint + '/api/users/profile/edit';
 export const downloadDocApi = apiEndpoint + '/api/download';
 export const loginUserApi = apiEndpoint + '/api/login';
 export const userDataApi = apiEndpoint + '/api/user';
