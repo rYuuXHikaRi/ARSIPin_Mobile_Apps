@@ -1,4 +1,4 @@
-export const apiEndpoint = 'http://192.168.35.34:8000';
+export const apiEndpoint = 'http://192.168.53.34:8000';
 export const dataArsipsApi = apiEndpoint + '/api/arsips';
 export const dataUsersApi = apiEndpoint + '/api/users';
 export const storeArsip = apiEndpoint + '/api/arsips/store';
