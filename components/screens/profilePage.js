@@ -6,13 +6,17 @@ import { LinearGradient } from 'expo-linear-gradient';
 import * as ImagePicker from 'expo-image-picker';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSelector, useDispatch } from 'react-redux';
+import axios from 'axios';
+import * as DocumentPicker from "expo-document-picker";
+import { focusProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
 import Navbar from '../partials/navbar';
 import Header from '../partials/header';
 import { apiEndpoint, editProfile, profileUser } from '../middleware/apiEndpoint';
-import axios from 'axios';
-import * as DocumentPicker from "expo-document-picker";
-import { focusProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
+import { getUserFromStore } from "../middleware/actions/loginAction";
+
+
 
 
 const ProfilePage = () => {
@@ -26,23 +30,29 @@ const ProfilePage = () => {
   const [Foto,setFoto] = useState("");
   const [isThereNewData, setIsThereNewData] = useState(true);
 
+  const userData = useSelector((state) => state.userData);
+  const token = useSelector((state) => state.tokenSession);
+  const dispatch = useDispatch();
+
 
   useEffect(() => {
     fetchUsers();
-  }, [isThereNewData]);
+    dispatch(getUserFromStore(token));
+  }, [isThereNewData, dispatch]);
 
   const fetchUsers = async () => {
-    profilUrl=profileUser+'/1'
     try {
-      const response = await fetch(profilUrl);
-      const data = await response.json();
-      setUsers(data);
+      // const response = await fetch(profilUrl);
+      // const data = await response.json();
+      // setUsers(data);
 
-      console.log(users)
+      console.log("From Fetch Function: ", userData);
 
-      setNamaLengkap(users.NamaLengkap);
-      setUserName(users.UserName);
-      setNomorHp(users.NomorHp);
+      profilUrl=profileUser + "/" + userData.id;
+
+      setNamaLengkap(userData.NamaLengkap);
+      setUserName(userData.UserName);
+      setNomorHp(userData.NomorHp);
       setSelectedImg(null);
       setFoto("");
       setIsThereNewData(false);
@@ -187,7 +197,7 @@ const ProfilePage = () => {
   
   
     try {
-      editUrl=editProfile+'/1'
+      editUrl=editProfile + "/" + userData.id;
       
       // Ganti URL endpoint dengan URL untuk update data
   
@@ -200,7 +210,7 @@ const ProfilePage = () => {
       // };
   
       // Kirim data ke server menggunakan axios.put dengan FormData sebagai payload
-    
+      console.log("Testing Upload on ", editUrl, "..........")
       const response = await axios.post(editUrl, datanew, {
         headers: {
           "Content-Type": "multipart/form-data" // Set the Content-Type header to multipart/form-data
@@ -234,12 +244,12 @@ const ProfilePage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }} source={Foto=== "" ? {uri: apiEndpoint+`/assets/images/${userData.Foto}`} : {uri:Foto.uri }}/>
       <View style={{ flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
         <View style={styles.profileImageContainer}>
           <Image
             style={styles.profileImage}
-            source={Foto=== "" ? {uri: apiEndpoint+`/assets/images/${users.Foto}`} : {uri:Foto.uri }}
+            source={Foto=== "" ? {uri: apiEndpoint+`/assets/images/${userData.Foto}`} : {uri:Foto.uri }}
           />
           <LinearGradient
                     colors={['#90C13B', '#7CB53C', '#378D3F']}
@@ -256,19 +266,19 @@ const ProfilePage = () => {
         <View style={styles.attributeContainer}>
           <Text style={styles.attributeTitle}>Nama:</Text>
           <View style={styles.attributeValueContainer}>
-            <TextInput style={styles.attributeValue} placeholder={users.NamaLengkap} onChangeText={(text) => setNamaLengkap(text)}/>
+            <TextInput style={styles.attributeValue} placeholder={userData.NamaLengkap} onChangeText={(text) => setNamaLengkap(text)}/>
           </View>
         </View>
         <View style={styles.attributeContainer}>
           <Text style={styles.attributeTitle}>Username:</Text>
           <View style={styles.attributeValueContainer}>
-            <TextInput style={styles.attributeValue} placeholder={users.UserName} onChangeText={(text) => setUserName(text)}/>
+            <TextInput style={styles.attributeValue} placeholder={userData.UserName} onChangeText={(text) => setUserName(text)}/>
           </View>
         </View>
         <View style={styles.attributeContainer}>
           <Text style={styles.attributeTitle}>No HP:</Text>
           <View style={styles.attributeValueContainer}>
-            <TextInput style={styles.attributeValue} placeholder={users.NomorHp} onChangeText={(text) => setNomorHp(text)}/>
+            <TextInput style={styles.attributeValue} placeholder={userData.NomorHp} onChangeText={(text) => setNomorHp(text)}/>
           </View>
         </View>
         <View style={styles.attributeContainer}>
