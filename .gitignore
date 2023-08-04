@@ -18,3 +18,4 @@ web-build/
 
 package-lock.json
 components/middleware/apiEndpoint.js
+credentials.json
