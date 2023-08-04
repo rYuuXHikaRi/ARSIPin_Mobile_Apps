@@ -11,7 +11,6 @@ import { useSelector,useDispatch } from 'react-redux';
 // Local
 import GradientText from '../partials/gradientText';
 import { loginBg } from '../../assets/img/svgAssets';
-import { loginUserApi } from '../middleware/apiEndpoint';
 
 // Local middleware
 import { UserContext } from '../middleware/Contexts/userContext';

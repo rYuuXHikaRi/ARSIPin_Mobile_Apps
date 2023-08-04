@@ -13,7 +13,7 @@ import { focusProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
 import Navbar from '../partials/navbar';
 import Header from '../partials/header';
-import { apiEndpoint, editProfile, profileUser } from '../middleware/apiEndpoint';
+import { apiEndpoint, editProfile, profileUser }  from "../middleware/api";
 import { getUserFromStore } from "../middleware/actions/loginAction";
 
 

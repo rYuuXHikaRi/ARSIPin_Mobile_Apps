@@ -17,7 +17,7 @@ const RiwayatUnduhan = () => {
   
   const fetchHistory = async () => {
     try {
-      const response = await fetch("http://192.168.35.34:8000/api/getHistory");
+      const response = await fetch("http://192.168.22.34:8000/api/getHistory");
       const data = await response.json();
       const formattedData = data.map(item => ({
         ...item,

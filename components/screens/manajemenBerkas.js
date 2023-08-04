@@ -29,7 +29,7 @@ import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
-import { dataArsipsApi, storeArsip, updateArsip } from "../middleware/apiEndpoint"; // API ENDPOINT
+import { dataArsipsApi, storeArsip, updateArsip } from "../middleware/api"; // API ENDPOINT
 import axios from "axios";
 
 

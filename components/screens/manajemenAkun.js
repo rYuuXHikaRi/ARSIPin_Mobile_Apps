@@ -29,7 +29,7 @@ import { SvgXml } from 'react-native-svg';
 import { loginBg } from '../../assets/img/svgAssets';
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { dataUsersApi, storeUser, destroyUser } from "../middleware/apiEndpoint";
+import { dataUsersApi, storeUser, destroyUser } from "../middleware/api";
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);

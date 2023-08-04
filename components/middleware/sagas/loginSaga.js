@@ -4,9 +4,7 @@ import axios from 'axios';
 //local
 import { LOGIN_REQUEST, loginSuccess, loginFailure,
          GET_USER_REQUEST, getUserSuccess, getUserFailure } from '../actions/loginAction';
-import { loginUserApi, userDataApi } from '../apiEndpoint';
-import { UserContext } from '../Contexts/userContext';
-import userReducer from '../reducers';
+import { loginUserApi, userDataApi } from "../api";
 
 function* login(action) {
   try {

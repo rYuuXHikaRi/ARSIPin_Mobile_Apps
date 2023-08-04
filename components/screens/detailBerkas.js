@@ -26,7 +26,7 @@ import * as Linking from 'expo-linking';
 //local
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { getListDocApi, downloadDocApi, addFile } from "../middleware/apiEndpoint";
+import { getListDocApi, downloadDocApi, addFile } from "../middleware/api";
 
 
 const DetailBerkas = ({route}) => {
