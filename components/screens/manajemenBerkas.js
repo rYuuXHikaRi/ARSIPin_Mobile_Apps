@@ -29,28 +29,22 @@ import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
-import { dataArsipsApi, storeArsip, updateArsip } from "../middleware/api"; // API ENDPOINT
+import { dataArsipsApi, storeArsip, updateArsip, destroyArsip } from "../middleware/api"; // API ENDPOINT
 import axios from "axios";
 
 
 const ManajemenBerkas = ({ navigation }) => {
   const [modalVisible, setModalVisible] = useState(false);
   const [modalVisibleEdit, setModalVisibleEdit] = useState(false);
-  const [namadokumen, setnamadokumen] = useState("");
-  const [keterangan, setketerangan] = useState("");
-  const [tahun, settahun] = useState("");
-  const [namadesa, setnamadesa] = useState("");
-  const [namafile, setnamafile] = useState("");
-  const [tableData, setTableData] = useState([]);
-  const [users, setUsers] = useState([]);
+  const [modalDelete, setModalDelete] = useState(false);
+  const [arsipIdToDelete, setArsipIdToDelete] = useState(null);
+  const [arsipNameToDelete, setArsipNameToDelete] = useState("");
   const [archives, setArchives] = useState([]);
-  const [rowData, setRowData] = useState([]);
   const [NamaDokumen, setNamaDokumen] = useState("");
   const [Keterangan, setKeterangan] = useState("");
   const [Tahun, setTahun] = useState("");
   const [NamaDesa, setNamaDesa] = useState("");
   const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
-  const [NamaFile, setNamaFile] = useState("");
   const [showPopover, setShowPopover] = useState("");
   const [selectedFiles, setSelectedFiles] = useState([]);
   const [selectedArchive, setSelectedArchive] = useState([]);
@@ -118,9 +112,6 @@ const ManajemenBerkas = ({ navigation }) => {
     }
   };
 
-
-  
-
   const handleCreate = async () => {
     // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 02
     console.log(files);
@@ -133,10 +124,6 @@ const ManajemenBerkas = ({ navigation }) => {
     $folderName = NamaDokumen + "-" + LokasiPenyimpanan;
     formData.append("NamaFile", $folderName);
     formData.append("file", files);
-
-    console.log(formData)
-
-    // commented code in here moved to /dump/unusedCode -> manajemenBerkas - 03
 
     try {
       // Kirim data ke server menggunakan axios.post dengan FormData sebagai payload
@@ -181,18 +168,6 @@ const ManajemenBerkas = ({ navigation }) => {
       LokasiPenyimpanan: LokasiPenyimpanan,
       NamaFile: folderName,
     };
-  
-
-    // const formData = new FormData();
-    // formData.append("NamaDokumen",NamaDokumen);
-    // formData.append("Keterangan", Keterangan);
-    // formData.append("Tahun", Tahun);
-    // formData.append("NamaDesa", NamaDesa);
-    // formData.append("LokasiPenyimpanan", LokasiPenyimpanan);
-    // const folderName = NamaDokumen + "-" + LokasiPenyimpanan;
-    // formData.append("NamaFile", folderName);
-    // console.log(formData)
-
     
     updateUrl=updateArsip+`/${curDocSelect.id}`;
 
@@ -236,9 +211,6 @@ const ManajemenBerkas = ({ navigation }) => {
 
   };
   
-
-
-
   const tableHead = ["Nama Folder", "Aksi"];
 
   function assignItem(item){
@@ -250,8 +222,6 @@ const ManajemenBerkas = ({ navigation }) => {
   }
 
   function renderOpsiIcons() {
- 
-   
     return (
       <View style={styles.opsiContainer}>
         {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 05 */ }
@@ -275,7 +245,7 @@ const ManajemenBerkas = ({ navigation }) => {
               >
                 <Feather name="edit" size={30} color="black" />
                 <Text style={styles.opsiText}>Edit</Text>
-                <View>{}</View>
+                {/* <View>{renderOpsiModalEdit()}</View> */}
               </TouchableOpacity>
               <TouchableOpacity
                 style={styles.opsiButton}
@@ -339,14 +309,10 @@ const ManajemenBerkas = ({ navigation }) => {
       onPress={()=>moveToDetailBerkas(item.id)}>
         <Text style={styles.userName}>{item.NamaDokumen}</Text>
       </TouchableOpacity>
-      {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 06 */ }
-      
-      
       <View style={styles.actionsContainer}>
         <TouchableOpacity
           style={styles.editButton}
-          onPress={() => catchArchiveId(item.id)}
-          
+          onPress={() => catchArchiveId(item.id)} 
         >
 
           {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 07 */ }
@@ -360,7 +326,7 @@ const ManajemenBerkas = ({ navigation }) => {
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {console.log("Moved to detail document page at " + item.NamaDokumen + " document"); navigation.navigate('detailberkas', {arsip: item})}}>
               <Feather name="eye" size={20} color="white" />
             </MenuOption>
-            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}}>
+            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); handleDelete(item.id,item.NamaDokumen);}}>
               <Feather name="trash" size={20} color="white" />
             </MenuOption>
           </PopUpMenu>
@@ -368,19 +334,59 @@ const ManajemenBerkas = ({ navigation }) => {
       </View>
     </View>
   );
-  
 
+  const DeleteArsip = () => {
+    console.log(arsipIdToDelete);
+    axios
+      .delete(destroyArsip + `/${arsipIdToDelete}`)
+      .then((response) => {
+        // Proses respons API jika diperlukan
+        console.log("User deleted successfully");
+        setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+        setIsThereNewData(true);
+      })
+      .catch((error) => {
+        console.error("Error deleting user:", error);
+      });
+  };
 
-  const handleSave = () => {
-    // Lakukan sesuatu dengan data yang diisi
-    console.log("namadokumen:", namadokumen);
-    console.log("Nama Lengkap:", keterangan);
-    console.log("tahun:", tahun);
-    console.log("namadesa:", namadesa);
-    console.log("namafile:", namafile);
+  const handleDelete = (ArsipId, ArsipNamaDokumen) => {
+    console.log("Delete user with ID:", ArsipId);
+    setArsipIdToDelete(ArsipId);
+    setArsipNameToDelete(ArsipNamaDokumen);
+    setModalDelete(true);
+  };
 
-    // Setelah melakukan sesuatu, tutup modal
-    setModalVisible(false);
+  const renderModalDelete = () => {
+    return (
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalDelete}
+        onRequestClose={() => setModalDelete(false)}
+      >
+        <View style={styles.modalContainerdelete}>
+          <View style={styles.modalContentdelete}>
+            <Text style={styles.modalTextdelete}>
+              Apakah Anda Yakin Ingin Menghapus Folder :{" "}
+              <Text style={styles.modalTextdeleteName}>{arsipNameToDelete}</Text>
+            </Text>
+            <View style={styles.buttonContainerdelete}>
+              <TouchableOpacity onPress={() => setModalDelete(false)}>
+                <View style={styles.buttonModalDelClose}>
+                  <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={DeleteArsip}>
+                <View style={styles.buttonModalDel}>
+                  <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
+    );
   };
 
   const renderOpsiModal = () => {
@@ -694,6 +700,67 @@ const styles = StyleSheet.create({
     fontSize: 16,
     fontWeight: "bold",
   },
+
+  //Modal style Delete
+  modalContainerdelete: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  modalContentdelete: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 8,
+    width: "90%",
+    height: "20%",
+  },
+  modalTextdelete: {
+    fontSize: 18,
+    marginBottom: 20,
+    fontWeight: '450',
+    textAlign: "center",
+  },
+  buttonContainerdelete: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  cancelButtonmodaldelete: {
+    color: "#6EAD3B",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign:'center',
+  },
+  confirmButtonmodaldelete: {
+    fontSize: 18,
+    color: "white",
+    textAlign:'center',
+  },
+  modalTextdeleteName: {
+    color: "#6EAD3B",
+  },
+  buttonModalDel: {
+    backgroundColor: "#6EAD3B",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#6EAD3B",
+    marginTop: 20,
+    width:150,
+  },
+  buttonModalDelClose: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#6EAD3B",
+    marginTop: 20,
+    width:150,
+  },
+  //end modal delete
+  
   //Modal Style
   centeredView: {
     flex: 1,

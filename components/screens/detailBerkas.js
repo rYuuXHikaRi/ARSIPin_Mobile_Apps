@@ -13,21 +13,16 @@ import {
 import { StatusBar } from "expo-status-bar";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { AntDesign, MaterialCommunityIcons ,FontAwesome,Feather} from '@expo/vector-icons';
-// import { Table, Row } from 'react-native-table-component';
-// import DropDownPicker from "react-native-dropdown-picker";
-// import { LinearGradient } from 'expo-linear-gradient';
 import * as FileSystem from 'expo-file-system';
 import * as DocumentPicker from 'expo-document-picker';
-// import { WebView } from 'react-native-webview';
-// import * as MediaLibrary from 'expo-media-library';
-// import * as Sharing from 'expo-sharing';
 import * as Linking from 'expo-linking';
+import axios from "axios";
+
 
 //local
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { getListDocApi, downloadDocApi, addFile } from "../middleware/api";
-
+import { getListDocApi, downloadDocApi, addFile, DeleteArsipFileName } from "../middleware/api";
 
 const DetailBerkas = ({route}) => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -38,33 +33,23 @@ const DetailBerkas = ({route}) => {
   const [LokasiPenyimpanan, setLokasiPenyimpanan] = useState("");
   const [namafile, setnamafile] = useState("");
   const [fileDetail, setFileDetail] = useState([]);
-  const [selectedFile, setSelectedFile] = useState(null);
+  const [FileNameToDelete, setFileNameToDelete] = useState(null);
   const [showWebView, setShowWebView] = useState(false);
   const [isThereNewData,setIsThereNewData]= useState(false);
   const { arsip } = route.params;
   const folderName= arsip.NamaDokumen +'-'+arsip.LokasiPenyimpanan;
   const [files, setFiles] = useState([]);
+  const idtodelete = arsip.id;
+  const [modalDelete, setModalDelete] = useState(false);
+  const [FileIdToDelete, setFileIdToDelete] = useState(null);
+  const [isThereNewData, setIsThereNewData] = useState(true);
 
   console.log(folderName)
-
-  console.log(arsip);
-  console.log('dsfisghdkjsdhkfgsdgdkjvhvkjdsg');
 
   useEffect(() => {
     fetchDataFromServer();
   }, [isThereNewData]);
 
-  // useEffect(() => {
-  //   // Lakukan pengambilan data detail file dari endpoint Laravel menggunakan fileId
-  //   fetch(`http://192.168.248.249:8000/api/arsips/2`)
-  //   .then(response => response.json())
-  //   .then(data => {
-  //     setFileDetail(data);
-  //   })
-  //   .catch(error => {
-  //     console.error('Error fetching user detail:', error);
-  //   });
-  // }, [arsip.id]);
   const fetchDataFromServer = async () => {
     try {
       const response = await fetch(getListDocApi + `/${arsip.id}`);
@@ -189,9 +174,7 @@ const DetailBerkas = ({route}) => {
     <TouchableOpacity
                 style={styles.opsiButton}
                 onPress={() => {
-                  // Logika ketika tombol "Trash" ditekan
-                  moveconsole.log("Trash button pressed");
-                  setShowPopover(false);
+                  handleDelete(arsip.id,item.filename);
                 }}
               >
                 <Feather name="trash" size={30} color="black" />
@@ -203,28 +186,62 @@ const DetailBerkas = ({route}) => {
   console.log(fileDetail);
   // Unused code in here was moved to /dump/unusedCode -> detailBerkas - 01
 
+  const DeleteArsipFile = () => {
+    cek = DeleteArsipFileName + `/${FileIdToDelete}`+ `/${FileNameToDelete}`;
+    console.log(cek)
+    console.log(FileIdToDelete);
+    axios
+      .delete(DeleteArsipFileName + `/${FileIdToDelete}`+ `/${FileNameToDelete}`)
+      .then((response) => {
+        // Proses respons API jika diperlukan
+        console.log("Arsip deleted successfully");
+        setModalDelete(false); // Sembunyikan modal setelah penghapusan berhasil
+        setIsThereNewData(true);
+      })
+      .catch((error) => {
+        console.error("Error deleting File:", error);
+      });
+  };
 
-  function renderOpsiIcons() {
+  const handleDelete = (FileId, FileName) => {
+    console.log("Delete user with ID:", FileId);
+    setFileIdToDelete(FileId);
+    setFileNameToDelete(FileName);
+    setModalDelete(true);
+  };
+
+
+  const renderModalDelete = () => {
     return (
-        <View style={styles.opsiContainer}>
-        <TouchableOpacity style={[styles.opsiButton, styles.greenButton]}>
-          <MaterialCommunityIcons
-            name="eye"
-            size={25}
-            color="black"
-          />
-        </TouchableOpacity>
-
-        <TouchableOpacity style={[styles.opsiButton, styles.yellowButton]}>
-          <FontAwesome
-            name="trash"
-            size={25}
-            color="black"
-          />
-        </TouchableOpacity>
-      </View>
+      <Modal
+        animationType="fade"
+        transparent={true}
+        visible={modalDelete}
+        onRequestClose={() => setModalDelete(false)}
+      >
+        <View style={styles.modalContainerdelete}>
+          <View style={styles.modalContentdelete}>
+            <Text style={styles.modalTextdelete}>
+              Apakah Anda Yakin Ingin Menghapus Dokumen :
+              <Text style={styles.modalTextdeleteName}>{FileNameToDelete}</Text>
+            </Text>
+            <View style={styles.buttonContainerdelete}>
+              <TouchableOpacity onPress={() => setModalDelete(false)}>
+                <View style={styles.buttonModalDelClose}>
+                  <Text style={styles.cancelButtonmodaldelete}>Tutup</Text>
+                </View>
+              </TouchableOpacity>
+              <TouchableOpacity onPress={DeleteArsipFile}>
+                <View style={styles.buttonModalDel}>
+                  <Text style={styles.confirmButtonmodaldelete}>Hapus</Text>
+                </View>
+              </TouchableOpacity>
+            </View>
+          </View>
+        </View>
+      </Modal>
     );
-  }
+  };
 
   const handleSave = () => {
     // Lakukan sesuatu dengan data yang diisi
@@ -323,6 +340,7 @@ const DetailBerkas = ({route}) => {
         <View style={styles.row}>
           {renderOpsiModal()}
         </View>
+        <View>{renderModalDelete()}</View>
 
         <View style={styles.row}>
           <TouchableOpacity
@@ -347,6 +365,66 @@ const DetailBerkas = ({route}) => {
 export default DetailBerkas;
 
 const styles = StyleSheet.create({
+  //Modal style Delete
+  modalContainerdelete: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.1)",
+  },
+  modalContentdelete: {
+    backgroundColor: "white",
+    padding: 20,
+    borderRadius: 8,
+    width: "90%",
+    height: "23%",
+  },
+  modalTextdelete: {
+    fontSize: 18,
+    marginBottom: 20,
+    fontWeight: "450",
+    textAlign: "center",
+  },
+  buttonContainerdelete: {
+    flexDirection: "row",
+    justifyContent: "space-around",
+  },
+  cancelButtonmodaldelete: {
+    color: "#6EAD3B",
+    fontSize: 18,
+    fontWeight: "bold",
+    textAlign: "center",
+  },
+  confirmButtonmodaldelete: {
+    fontSize: 18,
+    color: "white",
+    textAlign: "center",
+  },
+  modalTextdeleteName: {
+    color: "#6EAD3B",
+  },
+  buttonModalDel: {
+    backgroundColor: "#6EAD3B",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#6EAD3B",
+    marginTop: 20,
+    width: 150,
+  },
+  buttonModalDelClose: {
+    backgroundColor: "white",
+    paddingVertical: 10,
+    paddingHorizontal: 20,
+    borderRadius: 20,
+    borderWidth: 2,
+    borderColor: "#6EAD3B",
+    marginTop: 20,
+    width: 150,
+  },
+  //end modal delete
+  
   //Modal Style
   centeredView: {
     flex: 1,
