@@ -35,7 +35,6 @@ const DetailBerkas = ({route}) => {
   const [fileDetail, setFileDetail] = useState([]);
   const [FileNameToDelete, setFileNameToDelete] = useState(null);
   const [showWebView, setShowWebView] = useState(false);
-  const [isThereNewData,setIsThereNewData]= useState(false);
   const { arsip } = route.params;
   const folderName= arsip.NamaDokumen +'-'+arsip.LokasiPenyimpanan;
   const [files, setFiles] = useState([]);
