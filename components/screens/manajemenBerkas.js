@@ -629,7 +629,7 @@ const ManajemenBerkas = ({ navigation }) => {
               />
             </View>
           </View>
-          <Navbar whichPage="arsip" />
+          <Navbar whichPage="arsip" role={userData.Roles}/>
         </View>
       </View>
       <StatusBar style="auto"/>

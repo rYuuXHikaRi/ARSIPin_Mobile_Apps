@@ -307,7 +307,7 @@ const ProfilePage = () => {
         </TouchableOpacity>
 
         <View style={{position: 'absolute', bottom: 0}}>
-          <Navbar whichPage="userSetting"/>
+          <Navbar whichPage="userSetting" role={userData.Roles}/>
         </View>
       </View>
     </SafeAreaView>

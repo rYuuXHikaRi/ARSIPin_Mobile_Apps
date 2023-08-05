@@ -5,19 +5,22 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
 import { StatusBar } from 'expo-status-bar';
 import { format } from 'date-fns';
+import { useSelector } from 'react-redux';
 
 //local
 import Header from '../partials/header';
 import Navbar from '../partials/navbar';
+import { getHistory } from '../middleware/api';
 
 
 
 const RiwayatUnduhan = () => {
   const [dataHistory, setDataHistory] = useState(null);
+  const userData = useSelector((state) => state.userData);
   
   const fetchHistory = async () => {
     try {
-      const response = await fetch("http://192.168.22.34:8000/api/getHistory");
+      const response = await fetch(getHistory);
       const data = await response.json();
       const formattedData = data.map(item => ({
         ...item,
@@ -85,7 +88,7 @@ const RiwayatUnduhan = () => {
             
           </View>
           <View style={{position: 'absolute', bottom: 0}}>
-            <Navbar whichPage='unduhan'/>
+            <Navbar whichPage='unduhan' role={userData.Roles}/>
           </View>
         </View>
     </SafeAreaView>
