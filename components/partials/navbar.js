@@ -78,13 +78,14 @@ class Navbar extends Component {
         </ImageBackground>
 
         {/* Unduhan */}
-        <ImageBackground
+        {this.props.role === "1" && (
+          <ImageBackground
           source={
             this.props.whichPage === "unduhan"
               ? require("../../assets/img/navbarBg.png")
               : require("../../assets/img/navbarBgNone.png")
           }
-        >
+          >
           <Pressable
             style={styles.itemNavbar}
             onPress={() => this.props.navigation.replace("riwayatunduhan")}
@@ -100,7 +101,9 @@ class Navbar extends Component {
               Unduhan
             </Text>
           </Pressable>
-        </ImageBackground>
+          </ImageBackground>
+        )}
+
 
         {/* Home */}
         <ImageBackground
