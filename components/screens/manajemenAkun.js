@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   View,
   Text,
@@ -19,7 +19,7 @@ import {
 import DropDownPicker from "react-native-dropdown-picker";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { LinearGradient } from "expo-linear-gradient";
-import { useEffect } from "react";
+import { useSelector } from "react-redux"; 
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { StatusBar } from "expo-status-bar";
@@ -49,6 +49,7 @@ const ManajemenAkun = () => {
   const [isThereNewData, setIsThereNewData] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filteredUsers, setFilteredUsers] = useState([]);
+  const userData = useSelector((state) => state.userData);
 
   const pickImage = async () => {
     try {
@@ -607,7 +608,7 @@ const ManajemenAkun = () => {
               />
             </View>
           </View>
-          <Navbar whichPage="userList" />
+          <Navbar whichPage="userList"  role={userData.Roles}/>
         </View>
       </View>
     </SafeAreaView>
@@ -696,7 +697,7 @@ const styles = StyleSheet.create({
   modalTextdelete: {
     fontSize: 18,
     marginBottom: 20,
-    fontWeight: "450",
+    fontWeight: "400",
     textAlign: "center",
   },
   buttonContainerdelete: {
