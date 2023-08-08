@@ -1,4 +1,4 @@
-export const apiEndpoint = 'http://192.168.208.34:8000';
+export const apiEndpoint = 'https://capital-legal-horse.ngrok-free.app';
 export const dataArsipsApi = apiEndpoint + '/api/arsips';
 export const dataUsersApi = apiEndpoint + '/api/users';
 export const storeArsip = apiEndpoint + '/api/arsips/store';
@@ -17,3 +17,5 @@ export const userDataApi = apiEndpoint + '/api/user';
 export const addFile = apiEndpoint + '/api/addfiles';
 export const DeleteArsipFileName = apiEndpoint + '/api/arsips/destroy';
 export const getHistory = apiEndpoint + "/api/getHistory";
+export const getDashboardStat = apiEndpoint + "/api/getDashboardStat";
+export const getImg = apiEndpoint + "/assets/images/";
