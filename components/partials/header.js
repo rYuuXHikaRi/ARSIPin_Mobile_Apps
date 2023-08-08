@@ -36,7 +36,7 @@ class Header extends Component {
                         <Image source={require('../../assets/img/logoGGP.png')} style={{width: logoWidth, height: logoHeight}}/>  
                         <Pressable style={{width: 50, height: 50, justifyContent: 'center', alignItems: 'center'}} onPress={() => {console.log('test')}}>
                             <View style={styles.profileContainer}>
-                                <Image source={this.props.source} style={styles.croppedProfile}/>
+                                <Image source={{uri: this.props.imgUri}} style={styles.croppedProfile}/>
                             </View>
                         </Pressable>
                     </View>

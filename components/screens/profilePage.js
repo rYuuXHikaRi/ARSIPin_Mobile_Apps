@@ -13,7 +13,7 @@ import { focusProps } from 'react-native-web/dist/cjs/modules/forwardedProps';
 
 import Navbar from '../partials/navbar';
 import Header from '../partials/header';
-import { apiEndpoint, editProfile, profileUser }  from "../middleware/api";
+import { apiEndpoint, editProfile, profileUser, getImg }  from "../middleware/api";
 import { getUserFromStore } from "../middleware/actions/loginAction";
 
 
@@ -244,7 +244,9 @@ const ProfilePage = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }} source={Foto=== "" ? {uri: apiEndpoint+`/assets/images/${userData.Foto}`} : {uri:Foto.uri }}/>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}
+        imgUri={getImg + userData.Foto}
+      />
       <View style={{ flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
         <View style={styles.profileImageContainer}>
           <Image

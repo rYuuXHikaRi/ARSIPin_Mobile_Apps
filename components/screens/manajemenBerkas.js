@@ -29,7 +29,7 @@ import Header from "../partials/header";
 import Navbar from "../partials/navbar";
 import PopUpMenu from "../partials/popUpMenu/popUpMenu";
 import ModalEditDoc from "../partials/modals/modalEditDoc";
-import { dataArsipsApi, storeArsip, updateArsip, destroyArsip } from "../middleware/api"; // API ENDPOINT
+import { dataArsipsApi, storeArsip, updateArsip, destroyArsip, getImg } from "../middleware/api"; // API ENDPOINT
 import axios from "axios";
 
 
@@ -563,7 +563,9 @@ const ManajemenBerkas = ({ navigation }) => {
           </View>
         </View>
       </ModalEditDoc>
-      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}
+              imgUri={getImg + userData.Foto}
+      />
       <View style={{ position: 'relative', flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
         <LinearGradient
           colors={["#197B40", "#79B33B", "#A6CE39"]}

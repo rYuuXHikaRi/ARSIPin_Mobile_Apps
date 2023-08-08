@@ -28,7 +28,7 @@ import { SvgXml } from 'react-native-svg';
 import { loginBg } from '../../assets/img/svgAssets';
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
-import { dataUsersApi, storeUser, destroyUser,   editUser,  updateUser,} from "../middleware/api";
+import { dataUsersApi, storeUser, destroyUser,   getImg,  updateUser,} from "../middleware/api";
 
 const ManajemenAkun = () => {
   const [modalVisible, setModalVisible] = useState(false);
@@ -547,7 +547,9 @@ const ManajemenAkun = () => {
 
   return (
     <SafeAreaView style={styles.container}>
-      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}
+        imgUri={getImg + userData.Foto}
+      />
       <View style={{ flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
         <LinearGradient
           colors={["#197B40", "#79B33B", "#A6CE39"]}

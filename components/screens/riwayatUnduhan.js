@@ -10,7 +10,7 @@ import { useSelector } from 'react-redux';
 //local
 import Header from '../partials/header';
 import Navbar from '../partials/navbar';
-import { getHistory } from '../middleware/api';
+import { getHistory, getImg } from '../middleware/api';
 
 
 
@@ -40,7 +40,9 @@ const RiwayatUnduhan = () => {
   console.log(dataHistory)
   return (
     <SafeAreaView style={styles.container}>
-        <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}
+              imgUri={getImg + userData.Foto}
+      />
 
         <View style={{ flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
           <View>
