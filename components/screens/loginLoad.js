@@ -1,27 +1,42 @@
-import React, {  useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { useSelector,useDispatch } from "react-redux";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { getUserFromStore } from "../middleware/actions/loginAction";
 
 const LoadLogin = ({navigation}) => {
   const token = useSelector((state) => state.tokenSession);
   const userData = useSelector((state) => state.userData);
+  const [tokenSession, setTokenSession] = useState(null);
   const dispatch = useDispatch();
 
+  const getTokenOnLocalStorage = async () => {
+    try {
+      console.log("From Login Load, Getting Token From Local Storage...");
+      const value = await AsyncStorage.getItem('token');
+      if(value) {
+        setTokenSession(value);
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
   useEffect(() => {
-    dispatch(getUserFromStore(token));
-  }, [dispatch]);
+     getTokenOnLocalStorage();
+  }, [])
+
+  useEffect(() => {
+    dispatch(getUserFromStore(tokenSession));
+  }, [tokenSession, dispatch]);
   
   useEffect(() => {
-    if(userData) {
+    if(userData !== null) {
         navigation.replace('dashboard');
     }
   }, [userData])
   
-  
-  console.log("Token from loadingscreen: ", token);
-  console.log(userData);
   return (
     <View style={styles.container}>
       <Text>Loading Screen</Text>
