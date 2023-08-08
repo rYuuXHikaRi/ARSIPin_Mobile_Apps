@@ -1,12 +1,14 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View, Dimensions, Image, 
-         ImageBackground, TextInput, Pressable, Keyboard, TouchableWithoutFeedback, TouchableOpacity} from 'react-native';
+         ImageBackground, TextInput, Pressable, 
+         Keyboard, TouchableWithoutFeedback, TouchableOpacity, } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { SvgXml } from 'react-native-svg';
 import { LinearGradient } from 'expo-linear-gradient';
 import axios from 'axios';
 import { useSelector,useDispatch } from 'react-redux';
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 // Local
 import GradientText from '../partials/gradientText';
@@ -38,10 +40,23 @@ const LoginPage = ({navigation}) => {
     setLoginData({...loginData, password: passWordValue});
   }
 
-  const handleLogin = () => {
-    console.log("Handle login called!")
-    
-    
+  const checkTokenOnLocalStorage = async () => {
+    try {
+      const value = await AsyncStorage.getItem('token');
+      if(value !== null) {
+        navigation.navigate('loadlogin');
+      }
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
+  }
+
+  const setTokenOnLocalStorage = async (token) => {
+    try {
+      await AsyncStorage.setItem('token', token);
+    } catch (error) {
+      console.error('Error loading data:', error);
+    }
   }
 
   useEffect(() => {
@@ -62,6 +77,10 @@ const LoginPage = ({navigation}) => {
   }, []);
 
   useEffect(() => {
+    checkTokenOnLocalStorage();
+  }, [])
+
+  useEffect(() => {
     if(isLoggedInPressed){
       dispatch(loginRequest(loginData.username, loginData.password));
       setIsLoggedInPressed(false);
@@ -70,9 +89,12 @@ const LoginPage = ({navigation}) => {
 
   useEffect(() => {
     if(token) {
-      console.log("Token changed!");
-      console.log("Token: ", token);
+      console.log("Token Get Success");
+      setTokenOnLocalStorage(token);
+      // console.log("Token changed!");
+      // console.log("Token: ", token);
       navigation.navigate('loadlogin');
+      
     }
   }, [token])
 
