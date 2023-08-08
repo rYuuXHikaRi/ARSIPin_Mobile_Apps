@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { View, Text, StyleSheet, StatusBar as StatBar, Platform} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { LinearGradient } from 'expo-linear-gradient';
@@ -9,12 +9,31 @@ import { StatusBar } from 'expo-status-bar';
 import Header from '../partials/header';
 import Navbar from '../partials/navbar';
 import GradientText from '../partials/gradientText';
+import { getDashboardStat, getImg } from '../middleware/api';
 
 const DashBoard = () => {
   const userData = useSelector((state) => state.userData);
+  const [dashboardStat, setDashboardStat] = useState({});
+
+  const fetchDashboardStat = async () => {
+    try {
+      const response = await fetch(getDashboardStat);
+      const data = await response.json();
+      setDashboardStat(data);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchDashboardStat();
+  }, [])
+
   return (
     <SafeAreaView style={styles.container}>
-      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}/>
+      <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}
+              imgUri={getImg + userData.Foto}
+      />
       <View style={{ flex: 1, padding: 16, backgroundColor: '#F0E5E5' }}>
         <GradientText 
                       colors={['#90C13C', '#3C903F']} 
@@ -39,18 +58,18 @@ const DashBoard = () => {
             > 
                 <Text style={styles.cardTitle}>Jumlah Akun</Text>
                 <Text style={[styles.cardTitle, {fontSize: 24, textAlign: 'center'}]}>{'\n'}Admin</Text>
-                <Text style={styles.cardValue}>1</Text>
+                <Text style={styles.cardValue}>{dashboardStat.jumlahAdmin}</Text>
                 <Text style={[styles.cardTitle, {fontSize: 24,textAlign: 'center'}]}>Petugas</Text>
-                <Text style={styles.cardValue}>1</Text>
+                <Text style={styles.cardValue}>{dashboardStat.jumlahUser}</Text>
             </LinearGradient>
           </View>
           <View style={styles.column2}>
             <View>
               <View style={styles.card2}>
-                <Text style={styles.cardTitle}>Kategori Arsip</Text>
+                <Text style={styles.cardTitle}>Jumlah Dokumen</Text>
               </View>
               <View style={styles.card3}>
-                <Text style={[styles.cardValue, { color: '#FBA919' }]}>6</Text>
+                <Text style={[styles.cardValue, { color: '#FBA919' }]}>{dashboardStat.jumlahArsip}</Text>
               </View>
             </View>
 
@@ -68,7 +87,7 @@ const DashBoard = () => {
           <Text style={styles.cardTitle}>Jumlah Arsip Diunduh</Text>
         </View>
             <View style={styles.card5}>
-              <Text style={[styles.cardValue, { color: '#FBA919' }]}>627</Text>
+              <Text style={[styles.cardValue, { color: '#FBA919' }]}>{dashboardStat.riwayatUnduhan}</Text>
             </View>
         <View style={{position: 'absolute', bottom: 0}}>
           <Navbar whichPage='home' role={userData.Roles}/>
