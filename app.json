@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "ARSIPin_Mobile_Apps",
+    "name": "ARSIPin Mobile",
     "slug": "ARSIPin_Mobile_Apps",
     "version": "0.0.1",
     "orientation": "portrait",
@@ -23,7 +23,7 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
+        "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
       },
       "permissions": [
@@ -32,7 +32,7 @@
       "package": "com.KP_ITERA_GGP.ARSIPin"
     },
     "web": {
-      "favicon": "./assets/favicon.png"
+      "favicon": "./assets/icon.png"
     },
     "extra": {
       "eas": {
