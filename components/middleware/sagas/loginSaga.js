@@ -14,7 +14,12 @@ function* login(action) {
     yield put(loginSuccess(tokenSession));
     console.log(tokenSession);
   } catch (error) {
-    console.log(error.message)
+    if (error.message == "Request failed with status code 422") {
+      alert("Nama pengguna atau kata sandi tidak terisi");
+    } else {
+      alert("Nama Pengguna atau password salah!");
+    }
+    
     yield put(loginFailure(error.message));
   }
 }
