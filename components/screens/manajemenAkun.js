@@ -1,19 +1,12 @@
 import React, { useState, useEffect } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  FlatList,
-  Platform,
-  StatusBar as StatBar
+  View, Text, StyleSheet,
+  TouchableOpacity, Modal, TextInput,
+  FlatList, Platform, StatusBar as StatBar,
+  BackHandler,
 } from "react-native";
 import {
-  AntDesign,
-  MaterialCommunityIcons,
-  FontAwesome,
+  AntDesign, MaterialCommunityIcons, FontAwesome,
   Feather,
 } from "@expo/vector-icons";
 import DropDownPicker from "react-native-dropdown-picker";
@@ -23,8 +16,9 @@ import { useSelector } from "react-redux";
 import * as ImagePicker from "expo-image-picker";
 import axios from "axios";
 import { StatusBar } from "expo-status-bar";
-
 import { SvgXml } from 'react-native-svg';
+import { useBackHandler } from "@react-native-community/hooks";
+
 import { loginBg } from '../../assets/img/svgAssets';
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
@@ -165,7 +159,7 @@ const ManajemenAkun = () => {
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
   };
-
+  
   useEffect(() => {
     fetchUsers();
   }, [isThereNewData]);
@@ -392,7 +386,7 @@ const ManajemenAkun = () => {
         transparent={true}
         visible={modalVisibleEdit}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
+          // Alert.alert("Modal has been closed.");
           setModalVisibleEdit(!modalVisibleEdit);
         }}
       >
@@ -544,7 +538,8 @@ const ManajemenAkun = () => {
       </View>
     </View>
   );
-
+  
+  // useBackHandler(backHandlerAction());
   return (
     <SafeAreaView style={styles.container}>
       <Header style={{position: 'absolute', top: Platform.OS === 'android' ? StatBar.currentHeight : 0 }}
