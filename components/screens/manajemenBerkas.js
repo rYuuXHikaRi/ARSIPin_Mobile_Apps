@@ -1,20 +1,13 @@
 import React, { useState  } from "react";
 import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Modal,
-  TextInput,
-  Button,
-  FlatList,
-  Platform,
-  StatusBar as StatBar
+  View, Text, StyleSheet,
+  TouchableOpacity, Modal, TextInput,
+  Button, FlatList, Platform,
+  StatusBar as StatBar, BackHandler, Alert
 } from "react-native";
 
 import {
-  AntDesign,
-  Feather,
+  AntDesign, Feather,
 } from "@expo/vector-icons";
 
 import { StatusBar } from "expo-status-bar";
@@ -24,6 +17,7 @@ import * as DocumentPicker from "expo-document-picker";
 import { MenuProvider, MenuOption } from "react-native-popup-menu";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useSelector } from "react-redux";
+import { useBackHandler } from "@react-native-community/hooks";
 
 import Header from "../partials/header";
 import Navbar from "../partials/navbar";
@@ -54,7 +48,22 @@ const ManajemenBerkas = ({ navigation }) => {
   const [searchKeyword, setSearchKeyword] = useState('');
   const [filteredArchives, setFilteredArchives] = useState([]);
   const userData = useSelector((state) => state.userData);
-  
+
+
+  // const backActionHandler = () => {
+  //   Alert.alert("Are you sure you want to exit app?", [
+  //     {
+  //       text: "Cancel",
+  //       onPress: () => null,
+  //       style: "cancel"
+  //     },
+  //     { text: "YES", onPress: () => BackHandler.exitApp() }
+  //   ]);
+  //   return true;
+  // };
+
+  // // hook which handles event listeners under the hood
+  // useBackHandler(backActionHandler)
 
   useEffect(() => {
     fetchArchives();
@@ -211,8 +220,6 @@ const ManajemenBerkas = ({ navigation }) => {
 
   };
   
-  const tableHead = ["Nama Folder", "Aksi"];
-
   function assignItem(item){
     setNamaDokumen(item.NamaDokumen);
     setTahun(item.Tahun);
@@ -281,22 +288,23 @@ const ManajemenBerkas = ({ navigation }) => {
       </View>
     );
   }
-  const catchArchiveId = (archiveId) => {
-    console.log("Catch archive with ID:", archiveId);
-    const archive = archives.find((archive) => archive.id === archiveId);
-    setSelectedArchive(archive);
-    setShowPopover(true);
-    renderOpsiIcons();
-    console.log("yey");
-  };
+  // const catchArchiveId = (archiveId) => {
+  //   console.log("Catch archive with ID:", archiveId);
+  //   const archive = archives.find((archive) => archive.id === archiveId);
+  //   setSelectedArchive(archive);
+  //   setShowPopover(true);
+  //   renderOpsiIcons();
+  //   console.log("yey");
+  // };
 
-  const moveToDetailBerkas = (archiveId) => {
-    console.log(archiveId);
-    const archive = archives.find((archive) => archive.id === archiveId);
-    setSelectedArchive(archive);
-    navigation.navigate("detailberkas", { archive })
+  // const moveToDetailBerkas = (archiveId) => {
+  //   console.log(archiveId);
+  //   const archive = archives.find((archive) => archive.id === archiveId);
+  //   setSelectedArchive(archive);
+  //   navigation.navigate("detailberkas", { archive })
 
-  };
+  // };
+
   const handleEditModal = () => {
     setModalVisibleEdit(true);
     console.log('cek modal edit')
@@ -304,16 +312,8 @@ const ManajemenBerkas = ({ navigation }) => {
 
   const renderArchiveItem = ({ item }) => (
     <View style={styles.userItem}>
-      <TouchableOpacity 
-      style={{ flex:2 }}
-      onPress={()=>moveToDetailBerkas(item.id)}>
-        <Text style={styles.userName}>{item.NamaDokumen}</Text>
-      </TouchableOpacity>
+      <Text style={styles.userName}>{item.NamaDokumen}</Text>
       <View style={styles.actionsContainer}>
-        <TouchableOpacity
-          style={styles.editButton}
-          onPress={() => catchArchiveId(item.id)} 
-        >
 
           {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 07 */ }
 
@@ -326,11 +326,10 @@ const ManajemenBerkas = ({ navigation }) => {
             <MenuOption style={{backgroundColor: 'green', borderRadius: 8}} onSelect={() => {console.log("Moved to detail document page at " + item.NamaDokumen + " document"); navigation.navigate('detailberkas', {arsip: item})}}>
               <Feather name="eye" size={20} color="white" />
             </MenuOption>
-            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); handleDelete(item.id,item.NamaDokumen);}}>
+            <MenuOption style={{backgroundColor: 'orange', borderRadius: 8}} onSelect={() => {setCurDocSelect(item); handleDelete(item.id, item.NamaDokumen);}}>
               <Feather name="trash" size={20} color="white" />
             </MenuOption>
           </PopUpMenu>
-        </TouchableOpacity>
       </View>
     </View>
   );
@@ -351,7 +350,6 @@ const ManajemenBerkas = ({ navigation }) => {
   };
 
   const handleDelete = (ArsipId, ArsipNamaDokumen) => {
-    console.log("Delete user with ID:", ArsipId);
     setArsipIdToDelete(ArsipId);
     setArsipNameToDelete(ArsipNamaDokumen);
     setModalDelete(true);
@@ -396,7 +394,6 @@ const ManajemenBerkas = ({ navigation }) => {
         transparent={true}
         visible={modalVisible}
         onRequestClose={() => {
-          Alert.alert("Modal has been closed.");
           setModalVisible(!modalVisible);
         }}
       >
@@ -484,12 +481,14 @@ const ManajemenBerkas = ({ navigation }) => {
       </Modal>
     );
   };
-
+  
+  
   //commented code in here moved to /dump/unusedCode -> manajemenBerkas - 08
   
   return (
     <SafeAreaView style={styles.container}>
       {/* Modal for Edit Document */}
+      <View>{renderModalDelete()}</View>
       <ModalEditDoc isVisible={modalVisibleEdit}>
         <View style={styles.centeredView}>
           <View style={styles.modalView}>
@@ -575,13 +574,14 @@ const ManajemenBerkas = ({ navigation }) => {
         >
           <Text style={styles.cardTitle}>Manajemen Berkas</Text>
         </LinearGradient>
+        
         <View style={styles.card2}>
           <View style={styles.row}>
             <Text style={[styles.cardTitle2, styles.bottomLine]}>Data Arsip</Text>
           </View>
 
           {/*commented code in here moved to /dump/unusedCode -> manajemenBerkas - 09 */ }
-
+        
             <MenuProvider style={styles.containertabel}>
               <FlatList
                 data={searchKeyword === '' ? archives : filteredArchives}
