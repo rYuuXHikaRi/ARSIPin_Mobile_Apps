@@ -44,7 +44,7 @@ const LoginPage = ({navigation}) => {
     try {
       const value = await AsyncStorage.getItem('token');
       if(value !== null) {
-        navigation.navigate('loadlogin');
+        navigation.replace('loadlogin');
       }
     } catch (error) {
       console.error('Error loading data:', error);
@@ -93,7 +93,7 @@ const LoginPage = ({navigation}) => {
       setTokenOnLocalStorage(token);
       // console.log("Token changed!");
       // console.log("Token: ", token);
-      navigation.navigate('loadlogin');
+      navigation.replace('loadlogin');
       
     }
   }, [token])
